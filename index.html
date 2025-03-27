@@ -45,6 +45,13 @@
             --matched-item-border: #9ca3af;
             --modal-overlay-bg: rgba(15, 23, 42, 0.6); /* Dark blue overlay */
             --modal-bg: #ffffff;
+            --lesson-stat-text: #475569;
+            --lesson-perfect-bg: #e0fadf; /* Lighter green */
+            --lesson-perfect-border: #54c780;
+            --lesson-perfect-text: #065f46;
+            --lesson-imperfect-bg: #ffe9e9; /* Lighter red */
+            --lesson-imperfect-border: #f79494;
+            --lesson-imperfect-text: #b91c1c;
         }
 
         body.dark-theme {
@@ -86,6 +93,13 @@
             --matched-item-border: #64748b;
             --modal-overlay-bg: rgba(0, 0, 0, 0.7); /* Darker overlay */
             --modal-bg: #1e293b;
+            --lesson-stat-text: #94a3b8;
+            --lesson-perfect-bg: #064e3b; /* Dark Green */
+            --lesson-perfect-border: #10b981;
+            --lesson-perfect-text: #a7f3d0;
+            --lesson-imperfect-bg: #7f1d1d; /* Dark Red */
+            --lesson-imperfect-border: #f87171;
+            --lesson-imperfect-text: #fecaca;
         }
 
 
@@ -110,114 +124,49 @@
             color: var(--text-color);
             padding: 40px 20px;
         }
-        #welcome-view h1 {
-            font-size: 28px;
-            color: var(--text-heading);
-            margin-bottom: 15px;
-        }
-        #welcome-view p {
-            font-size: 16px;
-            color: var(--text-muted);
-            max-width: 600px;
-            line-height: 1.6;
-            margin-bottom: 25px;
-        }
-        #welcome-view .info-section {
-            margin-bottom: 20px;
-            font-size: 14px;
-        }
-        #welcome-view .info-section strong {
-            display: block;
-            margin-bottom: 5px;
-            color: var(--text-heading);
-        }
-        #welcome-view .get-started-btn {
-            margin-top: 30px;
-        }
+        #welcome-view h1 { font-size: 28px; color: var(--text-heading); margin-bottom: 15px; }
+        #welcome-view p { font-size: 16px; color: var(--text-muted); max-width: 600px; line-height: 1.6; margin-bottom: 25px; }
+        #welcome-view .info-section { margin-bottom: 20px; font-size: 14px; }
+        #welcome-view .info-section strong { display: block; margin-bottom: 5px; color: var(--text-heading); }
+        #welcome-view .get-started-btn { margin-top: 30px; }
 
-        /* --- Main Container (Initially hidden if welcome is shown) --- */
+        /* --- Main Container --- */
         .container {
-            max-width: 1200px;
-            margin: 20px auto; /* Added margin */
-            background-color: var(--container-bg);
-            padding: 20px 30px;
-            border-radius: 12px;
-            box-shadow: 0 2px 10px var(--shadow-color);
-            border: 1px solid var(--border-color);
-            transition: background-color 0.3s ease, border-color 0.3s ease, opacity 0.5s ease;
-            opacity: 1; /* Default opacity */
+            max-width: 1200px; margin: 20px auto; background-color: var(--container-bg);
+            padding: 20px 30px; border-radius: 12px; box-shadow: 0 2px 10px var(--shadow-color);
+            border: 1px solid var(--border-color); transition: background-color 0.3s ease, border-color 0.3s ease, opacity 0.5s ease;
+            opacity: 1;
         }
-        .container.initially-hidden {
-            opacity: 0;
-            pointer-events: none; /* Prevent interaction when hidden */
-        }
-
+        .container.initially-hidden { opacity: 0; pointer-events: none; }
 
         .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            text-align: left;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
+            display: flex; justify-content: space-between; align-items: center;
+            text-align: left; margin-bottom: 20px; padding-bottom: 15px;
             border-bottom: 1px solid var(--border-color);
         }
-
-        .header h1 {
-            font-size: 24px;
-            margin: 0;
-            color: var(--text-heading);
-        }
+        .header h1 { font-size: 24px; margin: 0; color: var(--text-heading); }
 
         /* --- Settings Button --- */
         #settings-btn {
-            background: none;
-            border: 1px solid var(--button-border);
-            color: var(--text-muted);
-            padding: 6px 10px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 20px; /* Adjust size for icon */
-            line-height: 1;
-            transition: all 0.2s ease;
+            background: none; border: 1px solid var(--button-border); color: var(--text-muted);
+            padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 20px;
+            line-height: 1; transition: all 0.2s ease;
         }
-        #settings-btn:hover {
-            background-color: var(--button-hover-bg);
-            border-color: var(--border-color-hover);
-            color: var(--text-color);
-        }
+        #settings-btn:hover { background-color: var(--button-hover-bg); border-color: var(--border-color-hover); color: var(--text-color); }
 
-
-        /* Nav Section hiding */
+        /* Nav Section */
         .nav-section {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin-bottom: 20px;
-             transition: opacity 0.3s ease, max-height 0.3s ease, visibility 0.3s ease, margin 0.3s ease, padding 0.3s ease;
-             overflow: hidden;
-             max-height: 500px; /* Adjust if nav gets taller */
-             opacity: 1;
-             visibility: visible;
+            display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;
+            transition: opacity 0.3s ease, max-height 0.3s ease, visibility 0.3s ease, margin 0.3s ease, padding 0.3s ease;
+            overflow: hidden; max-height: 500px; opacity: 1; visibility: visible;
         }
-         .nav-section.hidden {
-             max-height: 0;
-             opacity: 0;
-             margin-bottom: 0;
-             padding-top: 0;
-             padding-bottom: 0;
-             border: none; /* Remove any potential borders when hidden */
-             visibility: hidden;
-         }
-
+        .nav-section.hidden { max-height: 0; opacity: 0; margin-bottom: 0; padding: 0; border: none; visibility: hidden; }
         .subjects { display: flex; flex-wrap: wrap; gap: 10px; }
         .secondary-nav { display: flex; gap: 10px; align-items: center; }
-
         .nav-btn {
             padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; font-size: 14px;
-            display: flex; align-items: center; gap: 6px;
-            background-color: var(--button-bg); border: 1px solid var(--button-border);
-            transition: all 0.2s ease; color: var(--button-text);
+            display: flex; align-items: center; gap: 6px; background-color: var(--button-bg);
+            border: 1px solid var(--button-border); transition: all 0.2s ease; color: var(--button-text);
         }
         .nav-btn:hover { background-color: var(--button-hover-bg); border-color: var(--border-color-hover); }
         .nav-btn.active { background-color: var(--button-active-bg); color: var(--button-active-text); border-color: var(--button-active-bg); }
@@ -225,36 +174,60 @@
             body.dark-theme & { filter: none; }
             body:not(.dark-theme) & { filter: brightness(0) invert(1); }
         }
-
-
         .semester-toggle { display: flex; gap: 5px; background-color: var(--feedback-bg); padding: 4px; border-radius: 6px; border: 1px solid var(--button-border); }
         .semester-btn { padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; background: none; color: var(--text-muted); transition: all 0.2s ease; }
         .semester-btn.active { background-color: var(--container-bg); color: var(--text-heading); box-shadow: 0 1px 3px var(--shadow-color); }
 
         /* --- Topic List Styles (#content) --- */
         #content { /* remains visible */ }
-        /* Container for Semester Title - Now separate */
-        .semester-title-container {
-             margin-bottom: 20px;
-             padding-bottom: 10px;
-             border-bottom: 1px solid var(--border-color);
-        }
-        .unit-title { /* Title for the Semester */
-            font-size: 20px; font-weight: 600; color: var(--text-heading); margin: 0; /* Remove default margins */
-        }
-        .section { /* Represents a Unit Box */
-            background-color: var(--container-bg); border-radius: 12px; padding: 20px 25px; box-shadow: 0 1px 3px var(--shadow-color); border: 1px solid var(--border-color); margin-bottom: 20px;
-        }
-        .semester-content > .section:last-of-type { margin-bottom: 0; } /* Last Unit Box in semester */
-        .section-title { /* Unit Title inside Unit Box */
-            font-size: 17px; font-weight: 600; margin-bottom: 15px; color: var(--text-heading);
-        }
+        .semester-title-container { margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--border-color); }
+        .unit-title { font-size: 20px; font-weight: 600; color: var(--text-heading); margin: 0; }
+        .section { background-color: var(--container-bg); border-radius: 12px; padding: 20px 25px; box-shadow: 0 1px 3px var(--shadow-color); border: 1px solid var(--border-color); margin-bottom: 20px; }
+        .semester-content > .section:last-of-type { margin-bottom: 0; }
+        .section-title { font-size: 17px; font-weight: 600; margin-bottom: 15px; color: var(--text-heading); }
         .section-content { /* Lesson Box */
-            padding: 15px; background-color: var(--button-bg); border-radius: 8px; border: 1px solid var(--button-border); margin-bottom: 10px; cursor: pointer; transition: all 0.2s ease; font-size: 15px; color: var(--button-text); display: flex; justify-content: space-between; align-items: center; text-align: left;
+            padding: 12px 15px; /* Adjusted padding */ background-color: var(--button-bg); border-radius: 8px;
+            border: 1px solid var(--button-border); margin-bottom: 10px; cursor: pointer;
+            transition: all 0.2s ease; font-size: 15px; color: var(--button-text);
+            display: flex; justify-content: space-between; align-items: center; text-align: left;
+            position: relative; /* For absolute positioned stats maybe */
+            overflow: hidden; /* Ensure border-radius applies */
+            border-left-width: 4px; /* Add space for status color */
+            border-left-color: transparent; /* Default */
         }
         .section-content:last-child { margin-bottom: 0; }
         .section-content:hover { background-color: var(--button-hover-bg); border-color: var(--border-color-hover); transform: translateY(-1px); }
-        .lesson-q-count { font-size: 0.85em; color: var(--text-muted); margin-left: 15px; font-weight: 400; white-space: nowrap; }
+
+        /* Lesson Box Status Styling */
+        .section-content.lesson-complete-perfect {
+            background-color: var(--lesson-perfect-bg);
+            border-color: var(--lesson-perfect-border);
+            border-left-color: var(--lesson-perfect-border); /* Colored left border */
+        }
+        .section-content.lesson-complete-perfect span, /* Target spans inside */
+        .section-content.lesson-complete-perfect .lesson-stats-display {
+            color: var(--lesson-perfect-text);
+        }
+        .section-content.lesson-complete-imperfect {
+            background-color: var(--lesson-imperfect-bg);
+            border-color: var(--lesson-imperfect-border);
+            border-left-color: var(--lesson-imperfect-border); /* Colored left border */
+        }
+        .section-content.lesson-complete-imperfect span, /* Target spans inside */
+        .section-content.lesson-complete-imperfect .lesson-stats-display {
+             color: var(--lesson-imperfect-text);
+        }
+
+        .lesson-title-text { /* Wrap lesson title for flex control */
+             flex-grow: 1; margin-right: 15px;
+        }
+        .lesson-q-count, .lesson-stats-display {
+            font-size: 0.8em; color: var(--lesson-stat-text); /* Use variable */
+            font-weight: 400; white-space: nowrap; flex-shrink: 0;
+        }
+        .lesson-q-count { margin-left: 10px; } /* Add some space */
+        .lesson-stats-display { margin-left: 10px; font-weight: 500; } /* Stats slightly bolder */
+
         .semester-content { display: none; }
         .semester-content.active { display: block; }
 
@@ -311,19 +284,24 @@
         .incorrect-option { background-color: var(--incorrect-bg) !important; border-color: var(--incorrect-border) !important; }
         .incorrect-option .option-text { color: var(--incorrect-text) !important; }
 
-        /* Button container */
+        /* --- Button container --- */
         #quiz-buttons-container { display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-end; margin-top: 25px; border-top: 1px solid var(--border-color); padding-top: 20px; }
-        .results-actions, .review-actions { justify-content: space-between; }
-        .results-actions { flex-wrap: wrap; justify-content: center; }
-         .results-actions .back-to-topics-btn { margin-left: auto; }
-        @media (max-width: 450px) { .results-actions { justify-content: center; } .results-actions .back-to-topics-btn { margin-left: 0; } }
+        .results-actions, .review-actions { justify-content: space-between; width: 100%; } /* Ensure full width */
+        .results-actions { flex-wrap: wrap; justify-content: center; gap: 15px; /* Added gap */ }
+        .results-actions .back-to-topics-btn { margin-left: auto; /* Pushes to right */ }
+        .review-actions .back-to-topics-btn { margin-left: auto; /* Pushes to right */}
+        @media (max-width: 550px) { /* Adjust breakpoint */
+            .results-actions, .review-actions { justify-content: center; } /* Center on smaller screens */
+            .results-actions .back-to-topics-btn,
+            .review-actions .back-to-topics-btn { margin-left: 0; }
+        }
 
-        /* Buttons */
-        .btn { padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-size: 15px; font-weight: 500; transition: all 0.2s ease; line-height: 1.5; background-color: var(--button-bg); color: var(--button-text); border: 1px solid var(--button-border); }
-        .btn:hover:not(:disabled) { background-color: var(--button-hover-bg); border-color: var(--border-color-hover); }
+        /* --- Buttons --- */
+        .btn { padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-size: 15px; font-weight: 500; transition: all 0.2s ease; line-height: 1.5; background-color: var(--button-bg); color: var(--button-text); border: 1px solid var(--button-border); display: inline-flex; align-items: center; gap: 6px; /* For icons */ }
+        .btn:hover:not(:disabled) { background-color: var(--button-hover-bg); border-color: var(--border-color-hover); transform: translateY(-1px); }
         .submit-btn { background-color: var(--accent-color); color: white; border-color: var(--accent-color); }
         .submit-btn:hover:not(:disabled) { background-color: var(--accent-color-dark); border-color: var(--accent-color-dark); }
-        .submit-btn:disabled { background-color: var(--button-disabled-bg); border-color: var(--button-disabled-bg); color: var(--text-muted); cursor: not-allowed; }
+        .submit-btn:disabled { background-color: var(--button-disabled-bg); border-color: var(--button-disabled-bg); color: var(--text-muted); cursor: not-allowed; transform: none; }
         .next-btn { background-color: var(--correct-border); color: var(--correct-text); border-color: var(--correct-border); }
         body.dark-theme .next-btn { color: white; }
         .next-btn:hover { filter: brightness(1.1); }
@@ -350,11 +328,9 @@
         .results-header { font-size: 28px; font-weight: 600; margin-bottom: 30px; color: var(--text-heading); }
         .results-score { margin: 30px 0 40px 0; }
         .score-circle {
-            width: 150px; height: 150px; border-radius: 50%;
-            background-color: var(--feedback-bg);
+            width: 150px; height: 150px; border-radius: 50%; background-color: var(--feedback-bg);
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            margin: 0 auto;
-            border: 8px solid var(--accent-color);
+            margin: 0 auto; border: 8px solid var(--accent-color);
             box-shadow: 0 0 20px color-mix(in srgb, var(--accent-color) 25%, transparent), inset 0 0 10px color-mix(in srgb, var(--accent-color) 15%, transparent);
             transition: border-color 0.3s ease;
         }
@@ -362,30 +338,13 @@
         .score-percent-sign { font-size: 20px; font-weight: 500; color: var(--text-muted); margin-top: 4px; }
         .results-details {
             max-width: 500px; margin: 0 auto 35px auto; text-align: left;
-            background-color: var(--feedback-bg);
-            padding: 20px 30px; border-radius: 10px;
-            border: 1px solid var(--feedback-border);
-            box-shadow: 0 2px 5px var(--shadow-color);
+            background-color: var(--feedback-bg); padding: 20px 30px; border-radius: 10px;
+            border: 1px solid var(--feedback-border); box-shadow: 0 2px 5px var(--shadow-color);
         }
-        .results-details p {
-            margin: 12px 0; font-size: 16px; color: var(--text-color);
-            display: flex; align-items: center; gap: 10px;
-        }
-        .results-details p strong { /* Label */
-            color: var(--text-heading); min-width: 80px; /* Reduced width */
-            display: inline-block; font-weight: 600;
-        }
-        .results-details p .detail-value { /* Value part */
-            color: var(--text-muted);
-            font-weight: 500;
-        }
-        .results-details p .detail-icon { /* Icon */
-            font-size: 18px;
-            color: var(--accent-color);
-            width: 20px; /* Fixed width for alignment */
-            text-align: center;
-        }
-
+        .results-details p { margin: 12px 0; font-size: 16px; color: var(--text-color); display: flex; align-items: center; gap: 10px; }
+        .results-details p strong { color: var(--text-heading); min-width: 80px; display: inline-block; font-weight: 600; }
+        .results-details p .detail-value { color: var(--text-muted); font-weight: 500; }
+        .results-details p .detail-icon { font-size: 18px; color: var(--accent-color); width: 20px; text-align: center; }
 
         /* --- Review Answers Styles --- */
         .review-container { padding: 10px 0; }
@@ -414,65 +373,43 @@
         .review-matching-column { flex: 1; min-width: 200px;}
         .review-matching-column div { padding: 5px 8px; margin-bottom: 5px; border-radius: 4px; border: 1px solid var(--border-color); background-color: var(--container-bg); }
         .review-matched-pair-correct { background-color: var(--correct-bg) !important; border-color: var(--correct-border) !important; color: var(--correct-text) !important; }
-        .review-matched-pair-incorrect { background-color: var(--incorrect-bg) !important; border-color: var(--incorrect-border) !important; color: var(--incorrect-text) !important; }
-        body.dark-theme .review-matched-pair-incorrect span { color: var(--incorrect-text) !important; }
-        body.dark-theme .review-matched-pair-incorrect span + span { color: var(--correct-text) !important; }
+        .review-matched-pair-incorrect { background-color: var(--incorrect-bg) !important; border-color: var(--incorrect-border) !important; /* Color handled by spans inside */}
+        body.dark-theme .review-matched-pair-incorrect span { color: var(--incorrect-text) !important; opacity: 0.7; }
+        body.dark-theme .review-matched-pair-incorrect span + span { color: var(--correct-text) !important; opacity: 1; }
+        body:not(.dark-theme) .review-matched-pair-incorrect span { color: var(--incorrect-text) !important; opacity: 0.7; }
+        body:not(.dark-theme) .review-matched-pair-incorrect span + span { color: var(--correct-text) !important; opacity: 1; }
+
 
         /* Review Ordering */
-        .review-ordering-list { margin-top: 10px; }
-        .review-ordering-list-item { display: flex; align-items: center; margin-bottom: 5px; padding: 5px 8px; border-radius: 4px; border: 1px solid var(--border-color); background-color: var(--container-bg); }
+        .review-ordering-list { margin-top: 10px; display: flex; flex-direction: column; gap: 5px; }
+        .review-ordering-list-item { display: flex; align-items: center; padding: 6px 10px; border-radius: 4px; border: 1px solid var(--border-color); background-color: var(--container-bg); }
         .review-order-number { font-weight: 600; margin-right: 8px; }
         .review-order-correct { color: var(--correct-text); }
-        .review-order-incorrect { color: var(--incorrect-text); text-decoration: line-through; }
-        /* Styles for numbers added in JS review function */
+        .review-order-incorrect { color: var(--incorrect-text); text-decoration: line-through; opacity: 0.8; }
 
 
         /* --- Settings Modal --- */
         #settings-modal {
-            position: fixed; inset: 0;
-            background-color: var(--modal-overlay-bg);
-            display: flex; justify-content: center; align-items: center;
-            z-index: 100;
-            opacity: 0; pointer-events: none;
-            transition: opacity 0.3s ease;
+            position: fixed; inset: 0; background-color: var(--modal-overlay-bg);
+            display: flex; justify-content: center; align-items: center; z-index: 100;
+            opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
         }
-        #settings-modal.visible {
-            opacity: 1; pointer-events: auto;
-        }
+        #settings-modal.visible { opacity: 1; pointer-events: auto; }
         .modal-content {
-            background-color: var(--modal-bg);
-            padding: 25px 30px;
-            border-radius: 12px;
-            box-shadow: 0 5px 20px var(--shadow-color);
-            width: 90%; max-width: 400px;
-            border: 1px solid var(--border-color);
-            position: relative;
-            transform: scale(0.95);
-            transition: transform 0.3s ease;
+            background-color: var(--modal-bg); padding: 25px 30px; border-radius: 12px;
+            box-shadow: 0 5px 20px var(--shadow-color); width: 90%; max-width: 400px;
+            border: 1px solid var(--border-color); position: relative;
+            transform: scale(0.95); transition: transform 0.3s ease;
         }
-        #settings-modal.visible .modal-content {
-            transform: scale(1);
-        }
-        .modal-header {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 20px; padding-bottom: 10px;
-            border-bottom: 1px solid var(--border-color);
-        }
+        #settings-modal.visible .modal-content { transform: scale(1); }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--border-color); }
         .modal-title { font-size: 20px; font-weight: 600; color: var(--text-heading); }
         .modal-close-btn { font-size: 24px; background: none; border: none; color: var(--text-muted); cursor: pointer; line-height: 1; padding: 0 5px; }
         .modal-section { margin-bottom: 20px; }
         .modal-section h4 { font-size: 16px; font-weight: 500; color: var(--text-heading); margin: 0 0 12px 0; }
-        .theme-options label {
-            display: flex; align-items: center; gap: 10px;
-            margin-bottom: 10px; cursor: pointer;
-            font-size: 15px; color: var(--text-color);
-        }
+        .theme-options label { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; cursor: pointer; font-size: 15px; color: var(--text-color); }
         .theme-options input[type="radio"] { accent-color: var(--accent-color); }
-        .modal-footer {
-            margin-top: 25px; padding-top: 15px;
-            border-top: 1px solid var(--border-color);
-            text-align: right;
-        }
+        .modal-footer { margin-top: 25px; padding-top: 15px; border-top: 1px solid var(--border-color); text-align: right; }
 
         /* --- END OF styles.css --- */
     </style>
@@ -483,28 +420,17 @@
     <div id="welcome-view">
         <h1>Welcome to the Interactive Question Bank!</h1>
         <p>Your place to practice and master course material.</p>
-
-        <div class="info-section">
-            <strong>Created By:</strong>
-            <span>[Your Name / Group Name Here]</span>
-        </div>
-        <div class="info-section">
-            <strong>Testers:</strong>
-            <span>[Tester Name 1], [Tester Name 2]</span>
-        </div>
-        <div class="info-section">
-            <strong>Honorable Mentions:</strong>
-            <span>[Mention Anyone Else Here]</span>
-        </div>
-
+        <div class="info-section"><strong>Created By:</strong><span>[Your Name / Group Name Here]</span></div>
+        <div class="info-section"><strong>Testers:</strong><span>[Tester Name 1], [Tester Name 2]</span></div>
+        <div class="info-section"><strong>Honorable Mentions:</strong><span>[Mention Anyone Else Here]</span></div>
         <button class="btn submit-btn get-started-btn">Get Started</button>
     </div>
 
-    <!-- Main Application Container (Initially Hidden by JS if welcome is shown) -->
+    <!-- Main Application Container -->
     <div class="container initially-hidden">
         <div class="header">
             <h1>Interactive Question Bank</h1>
-            <button id="settings-btn" title="Settings">⚙️</button> <!-- Settings Icon -->
+            <button id="settings-btn" title="Settings">⚙️</button>
         </div>
 
         <!-- Navigation -->
@@ -532,19 +458,12 @@
         <div id="quiz-view" class="hidden">
             <div id="quiz-header">
                 <h2 id="quiz-title">Quiz Title</h2>
-                <button class="btn back-to-topics-btn" onclick="showTopicList()">← Back to Topics</button>
+                <button class="btn back-to-topics-btn" onclick="showTopicList()">⬅️ Back to Topics</button>
             </div>
-            <div id="quiz-container">
-                 <!-- Quiz Question/Results/Review content loads here -->
-            </div>
-             <div id="feedback-container" class="feedback-container hidden">
-                 <!-- Feedback messages load here -->
-             </div>
-             <div id="quiz-buttons-container" class="quiz-buttons">
-                 <!-- Submit/Next/Review/Back buttons load here -->
-            </div>
+            <div id="quiz-container"></div>
+             <div id="feedback-container" class="feedback-container hidden"></div>
+             <div id="quiz-buttons-container" class="quiz-buttons"></div>
         </div>
-
     </div> <!-- End of .container -->
 
     <!-- Settings Modal -->
@@ -558,18 +477,14 @@
                 <div class="modal-section">
                     <h4>Theme</h4>
                     <div class="theme-options">
-                        <label>
-                            <input type="radio" name="theme" value="light"> Light Mode ☀️
-                        </label>
-                        <label>
-                            <input type="radio" name="theme" value="dark"> Dark Mode 🌙
-                        </label>
+                        <label><input type="radio" name="theme" value="light"> Light Mode ☀️</label>
+                        <label><input type="radio" name="theme" value="dark"> Dark Mode 🌙</label>
                     </div>
                 </div>
                 <div class="modal-section">
                     <h4>Data Management</h4>
                     <button class="btn reset-data-btn" id="reset-data-button">Reset Saved Data</button>
-                     <p style="font-size: 12px; color: var(--text-muted); margin-top: 8px;">Clears theme preference and shows the welcome screen on next load.</p>
+                     <p style="font-size: 12px; color: var(--text-muted); margin-top: 8px;">Clears theme, welcome screen status, and all saved lesson statistics.</p>
                 </div>
             </div>
             <div class="modal-footer">
@@ -578,190 +493,68 @@
         </div>
     </div>
 
-
     <script>
         // --- START OF topics.js ---
 
-        // FULL Topics data structure - RESTORED PLACEHOLDERS
+        // FULL Topics data structure
         const topicsData = {
-            "english": {
+            "english": { /* ... L1 data ... */
                 "first": {
                     "title": "First Semester",
-                    "units": [
-                        {
-                            "title": "Unit 1", // Unit Title
-                            "lessons": [ // Lessons within the unit
-                                {
-                                    "title": "Vocabulary & Grammar Basics", // Lesson Title
-                                    "questions": [
-                                        { "type": "multiple_choice", "question": "Device in 'curtain of night fell'?", "options": ["Simile", "Metaphor", "Alliteration", "Hyperbole"], "answer": "Metaphor" },
-                                        { "type": "multiple_choice", "question": "'Ambiguous' means:", "options": ["Clear", "Uncertain", "Definite", "Determined"], "answer": "Uncertain" },
-                                        { "type": "ordering", "question": "Order alphabetically:", "items": ["Banana", "Apple", "Cherry", "Date", "Fig"], "answer": ["Apple", "Banana", "Cherry", "Date", "Fig"] },
-                                        { "type": "matching", "question": "Match country and capital:", "prompts": ["France", "Japan", "Egypt", "Brazil", "Canada"], "matches": ["Cairo", "Tokyo", "Paris", "Brasília", "Ottawa"], "answer": { "0": 2, "1": 1, "2": 0, "3": 3, "4": 4 } },
-                                        { "type": "ordering", "question": "Order tea steps:", "items": ["Add tea bag", "Boil water", "Pour water"], "answer": ["Boil water", "Add tea bag", "Pour water"] }
-                                    ]
-                                },
-                                {
-                                    "title": "Past & Present Tenses & Question Tags",
-                                    "questions": [
-                                        { "type": "multiple_choice", "question": "Correct tense: 'She ___ school.'", "options": ["go", "goes", "going", "went"], "answer": "goes" },
-                                        { "type": "multiple_choice", "question": "Correct tag: 'You're coming, ___?'", "options": ["aren't you", "don't you", "isn't you", "won't you"], "answer": "aren't you" }
-                                    ]
-                                }
-                            ]
-                        },
-                        {
-                            "title": "Unit 2",
-                            "lessons": [
-                                { "title": "Reading and Vocabulary", "questions": [] },
-                                { "title": "Future Forms", "questions": [] }
-                            ]
-                        },
-                        {
-                            "title": "Unit 3",
-                            "lessons": [
-                                { "title": "Reading and Vocabulary", "questions": [] },
-                                { "title": "Habits & Clauses", "questions": [] }
-                            ]
-                        },
-                        {
-                            "title": "Unit 4",
-                            "lessons": [
-                                { "title": "Reading and Vocabulary", "questions": [] },
-                                { "title": "Narration & Inversion", "questions": [] }
-                            ]
-                        }
-                    ]
-                },
-                "second": {
-                    "title": "Second Semester",
-                    "units": [
-                        { "title": "Unit 1", "lessons": [ { "title": "Reading and Vocabulary", "questions": [] }, { "title": "Modal & Related & Articles", "questions": [] } ] },
-                        { "title": "Unit 2", "lessons": [ { "title": "Reading and Vocabulary", "questions": [] }, { "title": "Reported Speech & Reporting Verbs", "questions": [] } ] },
-                        { "title": "Unit 3", "lessons": [ { "title": "Reading and Vocabulary", "questions": [] }, { "title": "The Passive", "questions": [] } ] },
-                        { "title": "Unit 4", "lessons": [ { "title": "Reading and Vocabulary", "questions": [] }, { "title": "Conditionals & Modals", "questions": [] } ] },
-                        { "title": "Unit 5", "lessons": [ { "title": "Reading and Vocabulary", "questions": [] }, { "title": "Modals & Clauses", "questions": [] } ] }
-                    ]
-                }
-            },
-            "اللغة العربية": {
-                "first": {
-                    "title": "الفصل الأول",
-                    "units": [
-                        { "title": "الوحدة الأولى", "lessons": [ { "title": "من القيم الإنسانية في القرآن", "questions": [] }, { "title": "اسلوب الطلب وجوابه المجزوم والتشبيه المفرد", "questions": [] } ] },
-                        { "title": "الوحدة الثانية", "lessons": [ { "title": "عمانيات", "questions": [] }, { "title": "صور الفاعل والتشبيه التمثيلي", "questions": [] } ] },
-                        { "title": "الوحدة الثالثة", "lessons": [ { "title": "الزهايمر-الخرف المبكر", "questions": [] }, { "title": "صور المبتدأ والخبر والجملة الخبرية والإنشائية", "questions": [] } ] },
-                        { "title": "الوحدة الرابعة", "lessons": [ { "title": "الإعلام ومشروع النهوض باللغة العربية", "questions": [] }, { "title": "المفعول معه والأمر", "questions": [] } ] },
-                        { "title": "الوحدة الخامسة", "lessons": [ { "title": "التعليم التقني بوابة المستقبل في عالم متغير", "questions": [] }, { "title": "انواع ما والإستفهام", "questions": [] } ] }
-                    ]
-                },
-                "second": {
-                    "title": "الفصل الثاني",
-                    "units": [
-                         { "title": "الوحدة الأولى", "lessons": [ { "title": "في فتح القدس", "questions": [] }, { "title": "معاني حروف الجر والتشخيص", "questions": [] } ] },
-                         { "title": "الوحدة الثانية", "lessons": [ { "title": "قصة-حفنة تمر", "questions": [] }, { "title": "اسم الفاعل واسم المفعول والطباق والمقابلة", "questions": [] } ] },
-                         { "title": "الوحدة الثالثة", "lessons": [ { "title": "شاعرات من بلدي", "questions": [] }, { "title": "اسم الزمان واسم المكان وجمع التكسير (القلة والكثرة)", "questions": [] } ] },
-                         { "title": "الوحدة الرابعة", "lessons": [ { "title": "من مقامات بديع الزمان الهمذاني", "questions": [] }, { "title": "مصدر المرة ومصدر الهيئة والبحر المتدارك", "questions": [] } ] },
-                         { "title": "الوحدة الخامسة", "lessons": [ { "title": "الذكاء الاصطناعي-عالم جديد", "questions": [] }, { "title": "اسم الآلة", "questions": [] } ] }
-                    ]
-                }
-            },
-             "التاريخ": {
-                "first": {
-                    "title": "الفصل الأول",
-                    "units": [
-                        { "title": "الأردن في العصور القديمة", "lessons": [ { "title": "الأردن في العصور الحجرية", "questions": [] }, { "title": "الأردن في العصر الحديدي", "questions": [] }, { "title": "مملكة الأنباط", "questions": [] }, { "title": "مظاهر الحضارة اليونانية في الأردن", "questions": [] }, { "title": "مظاهر الحضارة الرومانية-البيزنطية في الأردن", "questions": [] } ] },
-                        { "title": "الأردن في صدر الإسلام", "lessons": [ { "title": "الأردن في صدر الإسلام", "questions": [] }, { "title": "الأردن في العصر الأموي", "questions": [] }, { "title": "الأردن في العصر العباسي", "questions": [] }, { "title": "الأردن خلال حملات الفرنجة", "questions": [] }, { "title": "الأردن في العصر الأيوبي", "questions": [] }, { "title": "الأردن في العصر المملوكي", "questions": [] } ] },
-                        { "title": "الأردن في العصر الحديث", "lessons": [ { "title": "الأوضاع السياسية والإدارية في الأردن في العهد العثماني", "questions": [] }, { "title": "الأوضاع الإجتماعية والإقتصادية الأردن في العهد العثماني", "questions": [] }, { "title": "الثورة العربية الكبرى", "questions": [] }, { "title": "الأردن في عهد المملكة العربية السورية والحكومات المحلية", "questions": [] } ] }
-                    ]
-                },
-                "second": {
-                    "title": "الفصل الثاني",
-                     "units": [
-                        { "title": "الحياة السياسية في الأردن", "lessons": [ { "title": "تأسيس الإمارة الأردنية", "questions": [] }, { "title": "استقلال المملكة الأردنية الهاشمية", "questions": [] }, { "title": "تطور الحياة السياسية في الأردن بين عامي (1948-1957)", "questions": [] }, { "title": "تطور الحياة السياسية في الأردن بين عامي (1958-1999)", "questions": [] }, { "title": "الحياة السياسية في الأردن منذ 1999", "questions": [] }, { "title": "الأردن والعلاقات العربية والدولية", "questions": [] }, { "title": "القوات المسلحة الأردنية - الجيش العربي", "questions": [] }, { "title": "الأجهزة الأمنية الأردنية", "questions": [] } ] },
-                        { "title": "الحياة الاقتصادية في الأردن", "lessons": [ { "title": "الحياة الاقتصادية في الأردن بين عامي (1921-1950)", "questions": [] }, { "title": "الحياة الاقتصادية في الأردن بين عامي (1951-1967)", "questions": [] }, { "title": "الحياة الاقتصادية في الأردن بين عامي (1968-1999)", "questions": [] }, { "title": "الحياة الاقتصادية في الأردن منذ عام 1999", "questions": [] } ] },
-                        { "title": "الحياة الاجتماعية في الأردن", "lessons": [ { "title": "الحياة الاجتماعية في الأردن بين عامي (1921-1950)", "questions": [] }, { "title": "الحياة الاجتماعية في الأردن بين عامي (1951-1999)", "questions": [] }, { "title": "الحياة الاجتماعية في الأردن منذ عام 1999", "questions": [] } ] },
-                        { "title": "التعليم والثقافة في الأردن", "lessons": [ { "title": "التعليم العام في الأردن بين عامي (1921-1950)", "questions": [] }, { "title": "التعليم العام في الأردن بين عامي (1951-1987)", "questions": [] }, { "title": "التعليم العام في الأردن بين عامي (1988-2024)", "questions": [] }, { "title": "التعليم العالي والبحث العلمي في الأردن منذ عام 1951", "questions": [] }, { "title": "الحياة الثقافية في الأردن في عهد الإمارة", "questions": [] }, { "title": "الحياة الثقافية في الأردن منذ عام 1946", "questions": [] } ] },
-                        { "title": "الأردن والقضية الفلسطينية", "lessons": [ { "title": "موقف الأردن من القضية الفلسطينية بين عامي (1916-1951)", "questions": [] }, { "title": "موقف الأردن من القضية الفلسطينية منذ عام 1951", "questions": [] }, { "title": "الوصاية والإعمار الهاشمي للمقدسات الدينية في القدس", "questions": [] } ] }
-                    ]
-                }
-            },
-             "دين": {
-                "first": {
-                    "title": "الفصل الأول",
-                    "units": [
-                         { "title": "الوحدة الأولى", "lessons": [ { "title": "سورة آل عمران (102-105)", "questions": [] }, { "title": "حديث اتقاء الشبهات", "questions": [] }, { "title": "من صور الضلال", "questions": [] }, { "title": "كرامة الإنسان في الشريعة", "questions": [] }, { "title": "الزواج-مشروعيته ومقدماته", "questions": [] }, { "title": "الجهاد في الإسلام", "questions": [] } ] },
-                         { "title": "الوحدة الثانية", "lessons": [ { "title": "جهود علماء المسلمين في خدمة القرآن", "questions": [] }, { "title": "العزيمة والرخصة", "questions": [] }, { "title": "معركة مؤتة (8 هجري)", "questions": [] }, { "title": "المحرمات من النساء", "questions": [] }, { "title": "التعايش الإنساني", "questions": [] }, { "title": "الحقوق الإجتماعية للمرأة في الإسلام", "questions": [] } ] },
-                         { "title": "الوحدة الثالثة", "lessons": [ { "title": "سورة آل عمران (169-174)", "questions": [] }, { "title": "حديث - رضا الله تعالى", "questions": [] }, { "title": "فتح مكة (8 هجري)", "questions": [] }, { "title": "من خصائص الشريعة - الإيجابية", "questions": [] }, { "title": "شروط صحة عقد الزواج", "questions": [] }, { "title": "الحقوق المالية للمرأة في الإسلام", "questions": [] } ] },
-                         { "title": "الوحدة الرابعة", "lessons": [ { "title": "سورة الروم (21-24)", "questions": [] }, { "title": "مكانة السنة النبوية في التشريع", "questions": [] }, { "title": "مراعاة الأعراف في الشريعة", "questions": [] }, { "title": "حقوق الزوجين", "questions": [] }, { "title": "تنظيم النسل وتحديده", "questions": [] }, { "title": "الأمن الغذائي في الإسلام", "questions": [] }, { "title": "الإسلام والوحدة الوطنية", "questions": [] } ] }
-                    ]
-                },
-                "second": {
-                    "title": "الفصل الثاني",
-                    "units": [
-                         { "title": "الوحدة الأولى", "lessons": [ { "title": "سورة البقرة (284-286)", "questions": [] }, { "title": "دلائل وجود الله تعالى", "questions": [] }, { "title": "إعجاز القرآن الكريم", "questions": [] }, { "title": "الأمر بالمعروف والنهي عن المنكر", "questions": [] }, { "title": "اليوم الآخر - احداثه وآثار الإيمان به", "questions": [] }, { "title": "الإجتهاد في الإسلام", "questions": [] } ] },
-                         { "title": "الوحدة الثانية", "lessons": [ { "title": "سورة الأعراف (31-34)", "questions": [] }, { "title": "مراعاة المصالح في الشريعة", "questions": [] }, { "title": "جهود علماء المسلمين في الحفاظ على السنة النبوية", "questions": [] }, { "title": "حديث - منهج الإسلام في الحياة", "questions": [] }, { "title": "رسائل النبي الى الملوك والزعماء في عصره", "questions": [] }, { "title": "يوم تبوك (9 هجري)", "questions": [] }, { "title": "الحقوق السياسية للمرأة في الإسلام", "questions": [] } ] },
-                         { "title": "الوحدة الثالثة", "lessons": [ { "title": "سورة الفرقان (63-77)", "questions": [] }, { "title": "الطلاق", "questions": [] }, { "title": "العدة", "questions": [] }, { "title": "الوصية في الشريعة", "questions": [] }, { "title": "الميراث في الشريعة", "questions": [] }, { "title": "من خصائص الشريعة - الوسطية", "questions": [] }, { "title": "مجالات الوقف ودورها في التنمية", "questions": [] } ] },
-                         { "title": "الوحدة الرابعة", "lessons": [ { "title": "حديث - مفهوم الإفلاس بين الدنيا والآخرة", "questions": [] }, { "title": "مقاصد الشريعة", "questions": [] }, { "title": "منهج الإسلام في مكافحة الجريمة", "questions": [] }, { "title": "من وصايا النبي في حجة الوداع", "questions": [] }, { "title": "المسؤولية المجتمعية في الإسلام", "questions": [] }, { "title": "حقوق الإنسان بين الإسلام والإعلان العالمي لحقوق الإنسان", "questions": [] } ] }
-                    ]
-                }
-            }
+                    "units": [ { "title": "Unit 1", "lessons": [ { "title": "Vocabulary & Grammar Basics", "questions": [ { "type": "multiple_choice", "question": "Device in 'curtain of night fell'?", "options": ["Simile", "Metaphor", "Alliteration", "Hyperbole"], "answer": "Metaphor" }, { "type": "multiple_choice", "question": "'Ambiguous' means:", "options": ["Clear", "Uncertain", "Definite", "Determined"], "answer": "Uncertain" }, { "type": "ordering", "question": "Order alphabetically:", "items": ["Banana", "Apple", "Cherry", "Date", "Fig"], "answer": ["Apple", "Banana", "Cherry", "Date", "Fig"] }, { "type": "matching", "question": "Match country and capital:", "prompts": ["France", "Japan", "Egypt", "Brazil", "Canada"], "matches": ["Cairo", "Tokyo", "Paris", "Brasília", "Ottawa"], "answer": { "0": 2, "1": 1, "2": 0, "3": 3, "4": 4 } }, { "type": "ordering", "question": "Order tea steps:", "items": ["Add tea bag", "Boil water", "Pour water"], "answer": ["Boil water", "Add tea bag", "Pour water"] } ] }, { "title": "Past & Present Tenses & Question Tags", "questions": [ { "type": "multiple_choice", "question": "Correct tense: 'She ___ school.'", "options": ["go", "goes", "going", "went"], "answer": "goes" }, { "type": "multiple_choice", "question": "Correct tag: 'You're coming, ___?'", "options": ["aren't you", "don't you", "isn't you", "won't you"], "answer": "aren't you" } ] } ] }, { "title": "Unit 2", "lessons": [ { "title": "Reading and Vocabulary", "questions": [] }, { "title": "Future Forms", "questions": [] } ] }, { "title": "Unit 3", "lessons": [ { "title": "Reading and Vocabulary", "questions": [] }, { "title": "Habits & Clauses", "questions": [] } ] }, { "title": "Unit 4", "lessons": [ { "title": "Reading and Vocabulary", "questions": [] }, { "title": "Narration & Inversion", "questions": [] } ] } ] }, "second": { "title": "Second Semester", "units": [ { "title": "Unit 1", "lessons": [ { "title": "Reading and Vocabulary", "questions": [] }, { "title": "Modal & Related & Articles", "questions": [] } ] }, { "title": "Unit 2", "lessons": [ { "title": "Reading and Vocabulary", "questions": [] }, { "title": "Reported Speech & Reporting Verbs", "questions": [] } ] }, { "title": "Unit 3", "lessons": [ { "title": "Reading and Vocabulary", "questions": [] }, { "title": "The Passive", "questions": [] } ] }, { "title": "Unit 4", "lessons": [ { "title": "Reading and Vocabulary", "questions": [] }, { "title": "Conditionals & Modals", "questions": [] } ] }, { "title": "Unit 5", "lessons": [ { "title": "Reading and Vocabulary", "questions": [] }, { "title": "Modals & Clauses", "questions": [] } ] } ] } },
+            "اللغة العربية": { /* ... L1 data ... */
+                "first": { "title": "الفصل الأول", "units": [ { "title": "الوحدة الأولى", "lessons": [ { "title": "من القيم الإنسانية في القرآن", "questions": [] }, { "title": "اسلوب الطلب وجوابه المجزوم والتشبيه المفرد", "questions": [] } ] }, { "title": "الوحدة الثانية", "lessons": [ { "title": "عمانيات", "questions": [] }, { "title": "صور الفاعل والتشبيه التمثيلي", "questions": [] } ] }, { "title": "الوحدة الثالثة", "lessons": [ { "title": "الزهايمر-الخرف المبكر", "questions": [] }, { "title": "صور المبتدأ والخبر والجملة الخبرية والإنشائية", "questions": [] } ] }, { "title": "الوحدة الرابعة", "lessons": [ { "title": "الإعلام ومشروع النهوض باللغة العربية", "questions": [] }, { "title": "المفعول معه والأمر", "questions": [] } ] }, { "title": "الوحدة الخامسة", "lessons": [ { "title": "التعليم التقني بوابة المستقبل في عالم متغير", "questions": [] }, { "title": "انواع ما والإستفهام", "questions": [] } ] } ] }, "second": { "title": "الفصل الثاني", "units": [ { "title": "الوحدة الأولى", "lessons": [ { "title": "في فتح القدس", "questions": [] }, { "title": "معاني حروف الجر والتشخيص", "questions": [] } ] }, { "title": "الوحدة الثانية", "lessons": [ { "title": "قصة-حفنة تمر", "questions": [] }, { "title": "اسم الفاعل واسم المفعول والطباق والمقابلة", "questions": [] } ] }, { "title": "الوحدة الثالثة", "lessons": [ { "title": "شاعرات من بلدي", "questions": [] }, { "title": "اسم الزمان واسم المكان وجمع التكسير (القلة والكثرة)", "questions": [] } ] }, { "title": "الوحدة الرابعة", "lessons": [ { "title": "من مقامات بديع الزمان الهمذاني", "questions": [] }, { "title": "مصدر المرة ومصدر الهيئة والبحر المتدارك", "questions": [] } ] }, { "title": "الوحدة الخامسة", "lessons": [ { "title": "الذكاء الاصطناعي-عالم جديد", "questions": [] }, { "title": "اسم الآلة", "questions": [] } ] } ] } },
+             "التاريخ": { /* ... L1 data ... */
+                 "first": { "title": "الفصل الأول", "units": [ { "title": "الأردن في العصور القديمة", "lessons": [ { "title": "الأردن في العصور الحجرية", "questions": [] }, { "title": "الأردن في العصر الحديدي", "questions": [] }, { "title": "مملكة الأنباط", "questions": [] }, { "title": "مظاهر الحضارة اليونانية في الأردن", "questions": [] }, { "title": "مظاهر الحضارة الرومانية-البيزنطية في الأردن", "questions": [] } ] }, { "title": "الأردن في صدر الإسلام", "lessons": [ { "title": "الأردن في صدر الإسلام", "questions": [] }, { "title": "الأردن في العصر الأموي", "questions": [] }, { "title": "الأردن في العصر العباسي", "questions": [] }, { "title": "الأردن خلال حملات الفرنجة", "questions": [] }, { "title": "الأردن في العصر الأيوبي", "questions": [] }, { "title": "الأردن في العصر المملوكي", "questions": [] } ] }, { "title": "الأردن في العصر الحديث", "lessons": [ { "title": "الأوضاع السياسية والإدارية في الأردن في العهد العثماني", "questions": [] }, { "title": "الأوضاع الإجتماعية والإقتصادية الأردن في العهد العثماني", "questions": [] }, { "title": "الثورة العربية الكبرى", "questions": [] }, { "title": "الأردن في عهد المملكة العربية السورية والحكومات المحلية", "questions": [] } ] } ] }, "second": { "title": "الفصل الثاني", "units": [ { "title": "الحياة السياسية في الأردن", "lessons": [ { "title": "تأسيس الإمارة الأردنية", "questions": [] }, { "title": "استقلال المملكة الأردنية الهاشمية", "questions": [] }, { "title": "تطور الحياة السياسية في الأردن بين عامي (1948-1957)", "questions": [] }, { "title": "تطور الحياة السياسية في الأردن بين عامي (1958-1999)", "questions": [] }, { "title": "الحياة السياسية في الأردن منذ 1999", "questions": [] }, { "title": "الأردن والعلاقات العربية والدولية", "questions": [] }, { "title": "القوات المسلحة الأردنية - الجيش العربي", "questions": [] }, { "title": "الأجهزة الأمنية الأردنية", "questions": [] } ] }, { "title": "الحياة الاقتصادية في الأردن", "lessons": [ { "title": "الحياة الاقتصادية في الأردن بين عامي (1921-1950)", "questions": [] }, { "title": "الحياة الاقتصادية في الأردن بين عامي (1951-1967)", "questions": [] }, { "title": "الحياة الاقتصادية في الأردن بين عامي (1968-1999)", "questions": [] }, { "title": "الحياة الاقتصادية في الأردن منذ عام 1999", "questions": [] } ] }, { "title": "الحياة الاجتماعية في الأردن", "lessons": [ { "title": "الحياة الاجتماعية في الأردن بين عامي (1921-1950)", "questions": [] }, { "title": "الحياة الاجتماعية في الأردن بين عامي (1951-1999)", "questions": [] }, { "title": "الحياة الاجتماعية في الأردن منذ عام 1999", "questions": [] } ] }, { "title": "التعليم والثقافة في الأردن", "lessons": [ { "title": "التعليم العام في الأردن بين عامي (1921-1950)", "questions": [] }, { "title": "التعليم العام في الأردن بين عامي (1951-1987)", "questions": [] }, { "title": "التعليم العام في الأردن بين عامي (1988-2024)", "questions": [] }, { "title": "التعليم العالي والبحث العلمي في الأردن منذ عام 1951", "questions": [] }, { "title": "الحياة الثقافية في الأردن في عهد الإمارة", "questions": [] }, { "title": "الحياة الثقافية في الأردن منذ عام 1946", "questions": [] } ] }, { "title": "الأردن والقضية الفلسطينية", "lessons": [ { "title": "موقف الأردن من القضية الفلسطينية بين عامي (1916-1951)", "questions": [] }, { "title": "موقف الأردن من القضية الفلسطينية منذ عام 1951", "questions": [] }, { "title": "الوصاية والإعمار الهاشمي للمقدسات الدينية في القدس", "questions": [] } ] } ] } },
+             "دين": { /* ... L1 data ... */
+                 "first": { "title": "الفصل الأول", "units": [ { "title": "الوحدة الأولى", "lessons": [ { "title": "سورة آل عمران (102-105)", "questions": [] }, { "title": "حديث اتقاء الشبهات", "questions": [] }, { "title": "من صور الضلال", "questions": [] }, { "title": "كرامة الإنسان في الشريعة", "questions": [] }, { "title": "الزواج-مشروعيته ومقدماته", "questions": [] }, { "title": "الجهاد في الإسلام", "questions": [] } ] }, { "title": "الوحدة الثانية", "lessons": [ { "title": "جهود علماء المسلمين في خدمة القرآن", "questions": [] }, { "title": "العزيمة والرخصة", "questions": [] }, { "title": "معركة مؤتة (8 هجري)", "questions": [] }, { "title": "المحرمات من النساء", "questions": [] }, { "title": "التعايش الإنساني", "questions": [] }, { "title": "الحقوق الإجتماعية للمرأة في الإسلام", "questions": [] } ] }, { "title": "الوحدة الثالثة", "lessons": [ { "title": "سورة آل عمران (169-174)", "questions": [] }, { "title": "حديث - رضا الله تعالى", "questions": [] }, { "title": "فتح مكة (8 هجري)", "questions": [] }, { "title": "من خصائص الشريعة - الإيجابية", "questions": [] }, { "title": "شروط صحة عقد الزواج", "questions": [] }, { "title": "الحقوق المالية للمرأة في الإسلام", "questions": [] } ] }, { "title": "الوحدة الرابعة", "lessons": [ { "title": "سورة الروم (21-24)", "questions": [] }, { "title": "مكانة السنة النبوية في التشريع", "questions": [] }, { "title": "مراعاة الأعراف في الشريعة", "questions": [] }, { "title": "حقوق الزوجين", "questions": [] }, { "title": "تنظيم النسل وتحديده", "questions": [] }, { "title": "الأمن الغذائي في الإسلام", "questions": [] }, { "title": "الإسلام والوحدة الوطنية", "questions": [] } ] } ] }, "second": { "title": "الفصل الثاني", "units": [ { "title": "الوحدة الأولى", "lessons": [ { "title": "سورة البقرة (284-286)", "questions": [] }, { "title": "دلائل وجود الله تعالى", "questions": [] }, { "title": "إعجاز القرآن الكريم", "questions": [] }, { "title": "الأمر بالمعروف والنهي عن المنكر", "questions": [] }, { "title": "اليوم الآخر - احداثه وآثار الإيمان به", "questions": [] }, { "title": "الإجتهاد في الإسلام", "questions": [] } ] }, { "title": "الوحدة الثانية", "lessons": [ { "title": "سورة الأعراف (31-34)", "questions": [] }, { "title": "مراعاة المصالح في الشريعة", "questions": [] }, { "title": "جهود علماء المسلمين في الحفاظ على السنة النبوية", "questions": [] }, { "title": "حديث - منهج الإسلام في الحياة", "questions": [] }, { "title": "رسائل النبي الى الملوك والزعماء في عصره", "questions": [] }, { "title": "يوم تبوك (9 هجري)", "questions": [] }, { "title": "الحقوق السياسية للمرأة في الإسلام", "questions": [] } ] }, { "title": "الوحدة الثالثة", "lessons": [ { "title": "سورة الفرقان (63-77)", "questions": [] }, { "title": "الطلاق", "questions": [] }, { "title": "العدة", "questions": [] }, { "title": "الوصية في الشريعة", "questions": [] }, { "title": "الميراث في الشريعة", "questions": [] }, { "title": "من خصائص الشريعة - الوسطية", "questions": [] }, { "title": "مجالات الوقف ودورها في التنمية", "questions": [] } ] }, { "title": "الوحدة الرابعة", "lessons": [ { "title": "حديث - مفهوم الإفلاس بين الدنيا والآخرة", "questions": [] }, { "title": "مقاصد الشريعة", "questions": [] }, { "title": "منهج الإسلام في مكافحة الجريمة", "questions": [] }, { "title": "من وصايا النبي في حجة الوداع", "questions": [] }, { "title": "المسؤولية المجتمعية في الإسلام", "questions": [] }, { "title": "حقوق الإنسان بين الإسلام والإعلان العالمي لحقوق الإنسان", "questions": [] } ] } ] } }
         };
 
-        // Generate HTML for topic lists (Handles sanitized IDs)
+        // Function to generate HTML for topic lists including stats placeholders
         function generateSemesterContent(subject, semester) {
             const sanitizedSubject = subject.replace(/\s+/g, '-');
-            const id = `${sanitizedSubject}-${semester}`; // ID used for the container
+            const id = `${sanitizedSubject}-${semester}`;
 
-            // Check data validity
             if (!topicsData[subject]?.[semester]) {
                 console.error(`Data missing for ${subject}, ${semester}`);
                 return `<div id="${id}" class="semester-content"><div class="section"><p>Content unavailable.</p></div></div>`;
             }
             const semesterData = topicsData[subject][semester];
 
-            // Start semester container
             let html = `<div id="${id}" class="semester-content">`;
+            html += `<div class="semester-title-container"><div class="unit-title">${semesterData.title}</div></div>`;
 
-            // Add Semester Title Container SEPARATELY
-            html += `<div class="semester-title-container">
-                         <div class="unit-title">${semesterData.title}</div>
-                    </div>`;
-
-            // Check units array - Render Unit Sections *after* the title container
             if (!semesterData.units?.length) {
-                 html += `<div class="section"><p>No units available for this semester.</p></div>`; // Message within a section box
+                 html += `<div class="section"><p>No units available.</p></div>`;
             } else {
-                 // Loop through each Unit and create a .section for it
                  semesterData.units.forEach(unit => {
                      if (unit?.title) {
-                         html += `<div class="section"> <div class="section-title">${unit.title}</div>`; // Unit box + Title
-                         // Check lessons array within the unit
+                         html += `<div class="section"><div class="section-title">${unit.title}</div>`;
                          if (unit.lessons?.length) {
                              unit.lessons.forEach(lesson => {
                                  if (lesson?.title) {
                                      const qCount = lesson.questions?.length || 0;
-                                     const countText = qCount === 1 ? "1 question" : `${qCount} questions`;
-                                     // Lesson Box (clickable) - data-subject retains ORIGINAL name
-                                     html += `<div class="section-content" data-subject="${subject}" data-unit="${unit.title}" data-lesson="${lesson.title}">
-                                                 <span>${lesson.title}</span>
+                                     const countText = qCount === 1 ? "1 Q" : `${qCount} Qs`; // Shorter text
+                                     // Add spans for title, stats, and count
+                                     html += `<div class="section-content" data-subject="${subject}" data-semester="${semester}" data-unit="${unit.title}" data-lesson="${lesson.title}">
+                                                 <span class="lesson-title-text">${lesson.title}</span>
+                                                 <span class="lesson-stats-display"></span> <!-- Placeholder for stats -->
                                                  <span class="lesson-q-count">(${countText})</span>
                                                </div>`;
-                                 } else { console.warn(`Invalid lesson in unit: ${unit.title}`, lesson); }
+                                 } else { console.warn(`Invalid lesson title in unit: ${unit.title}`); }
                              });
                          } else {
                              html += `<p style="margin:10px 0 0 0; font-size:14px; color:var(--text-muted);">(No lessons)</p>`;
                          }
-                         html += `</div>`; // End Unit section (.section)
-                     } else { console.warn(`Invalid unit in ${subject}, ${semester}`, unit); }
+                         html += `</div>`; // End Unit section
+                     } else { console.warn(`Invalid unit title in ${subject}, ${semester}`); }
                  });
             }
             html += `</div>`; // End semester content
             return html;
         }
 
-
-        // Generate all content on load
+        // Generate all content structure immediately
         function generateAllContent() {
             let contentHTML = '';
             const contentDiv = document.getElementById('content');
@@ -772,12 +565,9 @@
                 });
             });
             contentDiv.innerHTML = contentHTML;
-            // Initial updateContent call is now handled in DOMContentLoaded in questions.js
         }
 
-        // Call generation immediately (since this script runs before DOMContentLoaded of the next script)
-        generateAllContent();
-
+        generateAllContent(); // Run topics.js content generation
 
         // --- END OF topics.js ---
     </script>
@@ -786,15 +576,17 @@
         // --- START OF questions.js ---
 
         // --- Global State ---
-        let quizState = {
+        let quizState = { /* ... same as before ... */
             currentQuestionIndex: 0, correctAnswers: 0, totalQuestions: 0, startTime: null, endTime: null,
-            selectedAnswers: [], questions: [], originalQuestions: [], subject: '', unit: '', lesson: '',
+            selectedAnswers: [], questions: [], originalQuestions: [], subject: '', unit: '', lesson: '', semester: '', // Added semester
             matchingState: { selectedPromptElement: null, userPairs: {} }
         };
+        let allLessonStats = {}; // Holds stats loaded from localStorage
 
         // --- Constants for LocalStorage ---
         const LS_THEME_KEY = 'quizAppTheme';
         const LS_VISITED_KEY = 'quizAppVisited';
+        const LS_STATS_KEY = 'quizAppLessonStats'; // Key for lesson statistics
 
         // --- DOM Element References ---
         let contentElement, quizViewElement, quizTitleElement, quizContainerElement,
@@ -805,111 +597,207 @@
         let resizeTimeout = null;
 
         // --- Utility Functions ---
-        function shuffleArray(array) { /* ... (same as before) ... */
+        function shuffleArray(array) { /* ... same as before ... */
              const newArray = [...array];
-             for (let i = newArray.length - 1; i > 0; i--) {
-                 const j = Math.floor(Math.random() * (i + 1));
-                 [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
-             }
+             for (let i = newArray.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1));[newArray[i], newArray[j]] = [newArray[j], newArray[i]];}
              return newArray;
         }
-        function debounce(func, wait) { /* ... (same as before) ... */
+        function debounce(func, wait) { /* ... same as before ... */
             let timeout;
-            return function executedFunction(...args) {
-                const later = () => {
-                    clearTimeout(timeout);
-                    func(...args);
-                };
-                clearTimeout(timeout);
-                timeout = setTimeout(later, wait);
-            };
+            return function executedFunction(...args) { const later = () => { clearTimeout(timeout); func(...args); }; clearTimeout(timeout); timeout = setTimeout(later, wait); };
         }
+        // Format time in seconds to "Xm Ys" or just "Ys"
+        function formatTime(totalSeconds) {
+            if (totalSeconds === null || totalSeconds < 0) return 'N/A';
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = Math.floor(totalSeconds % 60);
+            if (minutes > 0) {
+                return `${minutes}m ${seconds}s`;
+            } else {
+                return `${seconds}s`;
+            }
+        }
+
+       // --- Lesson Stats Management ---
+
+        // Function to create a unique key for localStorage based on lesson details
+        function getLessonStorageKey(subject, semester, unit, lesson) {
+           // Simple concatenation, assumes titles don't contain delimiters used here.
+           // Replace spaces in components to make the key more robust.
+           const clean = (str) => str.replace(/\s+/g, '_').replace(/-/g, '__');
+           return `${clean(subject)}-${clean(semester)}-${clean(unit)}-${clean(lesson)}`;
+       }
+
+        // Load all lesson stats from localStorage
+        function loadLessonStats() {
+            try {
+                const storedStats = localStorage.getItem(LS_STATS_KEY);
+                if (storedStats) {
+                    allLessonStats = JSON.parse(storedStats);
+                } else {
+                    allLessonStats = {};
+                }
+            } catch (e) {
+                console.error("Failed to load or parse lesson stats:", e);
+                allLessonStats = {}; // Reset to empty object on error
+            }
+        }
+
+        // Save stats for a completed lesson
+        function saveLessonStats(subject, semester, unit, lesson, score, totalQuestions, timeSeconds) {
+            const key = getLessonStorageKey(subject, semester, unit, lesson);
+            const existingStats = allLessonStats[key];
+            let shouldUpdate = false;
+
+            if (!existingStats) {
+                // First time completing this lesson
+                allLessonStats[key] = {
+                    bestScore: score,
+                    totalQuestions: totalQuestions, // Store total for context
+                    bestTime: timeSeconds
+                };
+                shouldUpdate = true;
+            } else {
+                // Compare with existing best score
+                if (score > existingStats.bestScore) {
+                    // New high score! Update score and time.
+                    existingStats.bestScore = score;
+                    existingStats.bestTime = timeSeconds;
+                    existingStats.totalQuestions = totalQuestions; // Update total in case it changed
+                    shouldUpdate = true;
+                } else if (score === existingStats.bestScore && timeSeconds < existingStats.bestTime) {
+                    // Same score, but faster time. Update time.
+                    existingStats.bestTime = timeSeconds;
+                    // No need to update totalQuestions if score is the same
+                    shouldUpdate = true;
+                }
+                 // Also update total questions if it changed, even if score/time isn't better
+                 if (totalQuestions !== existingStats.totalQuestions) {
+                      existingStats.totalQuestions = totalQuestions;
+                      shouldUpdate = true;
+                 }
+            }
+
+            if (shouldUpdate) {
+                try {
+                    localStorage.setItem(LS_STATS_KEY, JSON.stringify(allLessonStats));
+                } catch (e) {
+                    console.error("Failed to save lesson stats:", e);
+                }
+            }
+        }
+
+         // Update the display of all visible lesson boxes
+         function updateLessonBoxDisplays() {
+             const activeSemesterContent = document.querySelector('.semester-content.active');
+             if (!activeSemesterContent) return; // Only update visible semester
+
+             const lessonBoxes = activeSemesterContent.querySelectorAll('.section-content');
+             lessonBoxes.forEach(box => {
+                 const subject = box.dataset.subject;
+                 const semester = box.dataset.semester; // Get semester from box data
+                 const unit = box.dataset.unit;
+                 const lesson = box.dataset.lesson;
+                 const statsDisplaySpan = box.querySelector('.lesson-stats-display');
+                 const qCountSpan = box.querySelector('.lesson-q-count'); // Find question count span
+
+                 if (!subject || !semester || !unit || !lesson || !statsDisplaySpan) {
+                      // console.warn("Skipping box due to missing data attributes or span", box);
+                      return; // Skip if essential data is missing
+                 }
+
+
+                 const key = getLessonStorageKey(subject, semester, unit, lesson);
+                 const stats = allLessonStats[key];
+
+                 // Reset styles first
+                 box.classList.remove('lesson-complete-perfect', 'lesson-complete-imperfect');
+                 statsDisplaySpan.textContent = '';
+                 if(qCountSpan) qCountSpan.style.display = ''; // Ensure question count is visible initially
+
+                 if (stats) {
+                     // Format and display stats
+                     const scoreText = `🏆 ${stats.bestScore}/${stats.totalQuestions}`;
+                     const timeText = `⏱️ ${formatTime(stats.bestTime)}`;
+                     statsDisplaySpan.textContent = `${scoreText} | ${timeText}`;
+
+                     // Apply coloring based on score
+                     if (stats.bestScore === stats.totalQuestions && stats.totalQuestions > 0) {
+                         box.classList.add('lesson-complete-perfect');
+                     } else {
+                         box.classList.add('lesson-complete-imperfect');
+                     }
+                      // Optionally hide original question count if stats are shown
+                      // if(qCountSpan) qCountSpan.style.display = 'none';
+                 } else {
+                     // No stats for this lesson
+                     statsDisplaySpan.textContent = ''; // Ensure it's empty
+                     // Ensure q-count is visible if stats aren't
+                      if(qCountSpan) qCountSpan.style.display = '';
+                 }
+             });
+         }
+
 
         // --- Theme Management ---
-        function applyTheme(theme) {
+        function applyTheme(theme) { /* ... same as before ... */
             document.body.classList.toggle('dark-theme', theme === 'dark');
-            // Update radio buttons in modal if it exists
             const themeRadios = settingsModalElement?.querySelectorAll('input[name="theme"]');
-            if(themeRadios) {
-                themeRadios.forEach(radio => {
-                    radio.checked = radio.value === theme;
-                });
-            }
+            if(themeRadios) { themeRadios.forEach(radio => { radio.checked = radio.value === theme; }); }
         }
-
-        function handleThemeChange(event) {
-            const newTheme = event.target.value;
-            applyTheme(newTheme);
-            localStorage.setItem(LS_THEME_KEY, newTheme);
+        function handleThemeChange(event) { /* ... same as before ... */
+            const newTheme = event.target.value; applyTheme(newTheme); localStorage.setItem(LS_THEME_KEY, newTheme);
         }
-
-        function loadAndApplyTheme() {
-            const savedTheme = localStorage.getItem(LS_THEME_KEY);
-            // Default to dark if nothing is saved
-            const currentTheme = savedTheme || 'dark';
-            applyTheme(currentTheme);
-            // Make sure the default is saved if it wasn't already
-            if (!savedTheme) {
-                localStorage.setItem(LS_THEME_KEY, 'dark');
-            }
+        function loadAndApplyTheme() { /* ... same as before ... */
+            const savedTheme = localStorage.getItem(LS_THEME_KEY); const currentTheme = savedTheme || 'dark';
+            applyTheme(currentTheme); if (!savedTheme) { localStorage.setItem(LS_THEME_KEY, 'dark'); }
         }
 
         // --- Settings Modal ---
-        function toggleSettingsModal(show) {
+        function toggleSettingsModal(show) { /* ... same as before ... */
             if (!settingsModalElement) return;
             if (show) {
-                // Ensure radio reflects current theme BEFORE showing
                 const currentTheme = localStorage.getItem(LS_THEME_KEY) || 'dark';
                 const themeRadios = settingsModalElement.querySelectorAll('input[name="theme"]');
-                themeRadios.forEach(radio => {
-                    radio.checked = radio.value === currentTheme;
-                });
+                themeRadios.forEach(radio => { radio.checked = radio.value === currentTheme; });
                 settingsModalElement.classList.remove('hidden');
-                // Delay adding visible class for transition effect
                 setTimeout(() => settingsModalElement.classList.add('visible'), 10);
             } else {
                 settingsModalElement.classList.remove('visible');
-                // Wait for transition before hiding completely
                 setTimeout(() => settingsModalElement.classList.add('hidden'), 300);
             }
         }
-
-        function resetSavedData() {
-            if (confirm('Are you sure you want to reset all saved data? This includes your theme preference and will show the welcome screen again.')) {
+        function resetSavedData() { // Updated to clear stats
+            if (confirm('Are you sure you want to reset ALL saved data?\n\nThis includes:\n- Theme preference\n- Welcome screen status\n- All saved lesson scores and times')) {
                 localStorage.removeItem(LS_THEME_KEY);
                 localStorage.removeItem(LS_VISITED_KEY);
-                // Optionally remove other saved data if added later
-                alert('Saved data has been reset. The page will now reload with defaults.');
-                location.reload(); // Reload to apply defaults and show welcome
+                localStorage.removeItem(LS_STATS_KEY); // Clear lesson stats
+                allLessonStats = {}; // Clear in-memory stats
+                alert('Saved data has been reset. The page will now reload.');
+                location.reload();
             }
         }
 
          // --- Welcome Screen Logic ---
-         function handleWelcome() {
+         function handleWelcome() { /* ... same as before ... */
              if (!welcomeViewElement || !mainContainerElement) return;
              const hasVisited = localStorage.getItem(LS_VISITED_KEY);
-
              if (hasVisited) {
-                 // Hide welcome, show main app immediately
                  welcomeViewElement.classList.add('hidden');
                  mainContainerElement.classList.remove('initially-hidden');
-                 // Start fade-in transition after a short delay
                  setTimeout(() => { mainContainerElement.style.opacity = 1; }, 50);
              } else {
-                 // Welcome is visible by default, hide main container
-                 welcomeViewElement.classList.remove('hidden'); // Ensure it's visible
+                 welcomeViewElement.classList.remove('hidden');
                  mainContainerElement.classList.add('initially-hidden');
-                 mainContainerElement.style.opacity = 0; // Set initial state for transition later
-
+                 mainContainerElement.style.opacity = 0;
                  const getStartedBtn = welcomeViewElement.querySelector('.get-started-btn');
                  if (getStartedBtn) {
                      getStartedBtn.addEventListener('click', () => {
                          localStorage.setItem(LS_VISITED_KEY, 'true');
                          welcomeViewElement.classList.add('hidden');
                          mainContainerElement.classList.remove('initially-hidden');
-                         // Start fade-in transition
                         setTimeout(() => { mainContainerElement.style.opacity = 1; }, 50);
-                     }, { once: true }); // Only fire once
+                     }, { once: true });
                  }
              }
          }
@@ -918,79 +806,59 @@
         // --- DOM Ready Listener ---
         document.addEventListener('DOMContentLoaded', () => {
             // Get DOM elements
-            welcomeViewElement = document.getElementById('welcome-view');
-            mainContainerElement = document.querySelector('.container');
-            contentElement = document.getElementById('content');
-            quizViewElement = document.getElementById('quiz-view');
-            quizTitleElement = document.getElementById('quiz-title');
-            quizContainerElement = document.getElementById('quiz-container');
-            feedbackContainerElement = document.getElementById('feedback-container');
-            quizButtonsContainerElement = document.getElementById('quiz-buttons-container');
-            navSectionElement = document.querySelector('.nav-section');
-            settingsButtonElement = document.getElementById('settings-btn');
+            welcomeViewElement = document.getElementById('welcome-view');           mainContainerElement = document.querySelector('.container');
+            contentElement = document.getElementById('content');                    quizViewElement = document.getElementById('quiz-view');
+            quizTitleElement = document.getElementById('quiz-title');               quizContainerElement = document.getElementById('quiz-container');
+            feedbackContainerElement = document.getElementById('feedback-container'); quizButtonsContainerElement = document.getElementById('quiz-buttons-container');
+            navSectionElement = document.querySelector('.nav-section');             settingsButtonElement = document.getElementById('settings-btn');
             settingsModalElement = document.getElementById('settings-modal');
 
             // --- Initial Setup ---
-            loadAndApplyTheme(); // Load theme first
-            handleWelcome();     // Handle welcome screen visibility
+            loadAndApplyTheme();    // Load theme preference
+            loadLessonStats();      // Load existing lesson stats
+            handleWelcome();        // Handle welcome screen visibility
 
             // --- Event Listeners ---
-            if (settingsButtonElement) {
-                 settingsButtonElement.addEventListener('click', () => toggleSettingsModal(true));
-            }
+            if (settingsButtonElement) { settingsButtonElement.addEventListener('click', () => toggleSettingsModal(true)); }
             if (settingsModalElement) {
-                // Theme selection listeners
                 const themeRadios = settingsModalElement.querySelectorAll('input[name="theme"]');
                 themeRadios.forEach(radio => radio.addEventListener('change', handleThemeChange));
-
-                // Reset data listener
                 const resetBtn = document.getElementById('reset-data-button');
                 if(resetBtn) resetBtn.addEventListener('click', resetSavedData);
-
-                 // Close modal if clicking the overlay background
-                 settingsModalElement.addEventListener('click', (event) => {
-                     if (event.target === settingsModalElement) {
-                         toggleSettingsModal(false);
-                     }
-                 });
+                 settingsModalElement.addEventListener('click', (event) => { if (event.target === settingsModalElement) toggleSettingsModal(false); });
             }
-
 
             // Navigation Listeners
             document.querySelectorAll('.nav-btn[data-subject]').forEach(button => {
                 button.addEventListener('click', function() {
                     if (!quizViewElement.classList.contains('hidden') && !confirm("Leave quiz? Progress will be lost.")) return;
-                    showTopicList();
+                    showTopicList(); // Will call updateContent which calls updateLessonBoxDisplays
                     document.querySelectorAll('.nav-btn[data-subject]').forEach(btn => btn.classList.remove('active'));
                     this.classList.add('active');
-                    updateContent();
+                    updateContent(); // Update content view
                 });
             });
             document.querySelectorAll('.semester-btn').forEach(button => {
                 button.addEventListener('click', function() {
                     if (!quizViewElement.classList.contains('hidden') && !confirm("Leave quiz? Progress will be lost.")) return;
-                    showTopicList();
+                    showTopicList(); // Will call updateContent which calls updateLessonBoxDisplays
                     document.querySelectorAll('.semester-btn').forEach(btn => btn.classList.remove('active'));
                     this.classList.add('active');
-                    updateContent();
+                    updateContent(); // Update content view
                 });
             });
 
-             // Topic Click Listener (using Event Delegation)
+             // Topic Click Listener (Event Delegation)
              if (contentElement) {
                  contentElement.addEventListener('click', (event) => {
                      const lessonBox = event.target.closest('.section-content');
                      if (lessonBox) {
-                        // Check if a quiz is active - prompt if necessary
-                        if (!quizViewElement.classList.contains('hidden')) {
-                            if (!confirm("Leave current quiz? Progress will be lost.")) {
-                                return; // Don't start new quiz if user cancels
-                            }
-                            // If confirmed, showTopicList will handle resetting state etc.
-                           showTopicList();
-                           // We still want to proceed to load the NEW quiz after resetting
-                        }
-                         handleSectionClick(lessonBox.dataset.subject, lessonBox.dataset.unit, lessonBox.dataset.lesson);
+                        if (!quizViewElement.classList.contains('hidden')) { if (!confirm("Leave current quiz? Progress will be lost.")) { return; } showTopicList(); }
+                         const subject = lessonBox.dataset.subject;
+                         const semester = lessonBox.dataset.semester; // Get semester from clicked box
+                         const unit = lessonBox.dataset.unit;
+                         const lesson = lessonBox.dataset.lesson;
+                         handleSectionClick(subject, semester, unit, lesson); // Pass semester
                      }
                  });
              }
@@ -998,1157 +866,369 @@
             // Resize Listener
             window.addEventListener('resize', debounce(updateAllArrowPositions, 250));
 
-            // Initial content display (if not on welcome screen)
+            // Initial content display and stats update (if not on welcome screen)
             if (localStorage.getItem(LS_VISITED_KEY)) {
-                 updateContent();
+                 updateContent(); // This will also call updateLessonBoxDisplays
             }
         });
 
         // --- View Management ---
         function showTopicList() {
             if (contentElement && quizViewElement && navSectionElement && mainContainerElement) {
-                mainContainerElement.classList.remove('hidden'); // Ensure main container is visible
+                mainContainerElement.classList.remove('hidden');
                 contentElement.classList.remove('hidden');
                 quizViewElement.classList.add('hidden');
-                navSectionElement.classList.remove('hidden'); // SHOW Nav
-                updateContent(); // Ensure the correct topic list is shown
+                navSectionElement.classList.remove('hidden');
+                updateContent(); // Ensure correct list AND update stats display
 
                 // Cleanup Quiz specific things
                 if (matchingArrowObserver) { matchingArrowObserver.disconnect(); matchingArrowObserver = null; }
-                if(matchingSvgElement) matchingSvgElement.innerHTML = '<defs><marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="var(--accent-color)"/></marker></defs>';
+                if(matchingSvgElement && matchingSvgElement.parentNode) { matchingSvgElement.remove(); matchingSvgElement = null; }
                 quizState = { // Reset state
                     currentQuestionIndex: 0, correctAnswers: 0, totalQuestions: 0, startTime: null, endTime: null,
-                    selectedAnswers: [], questions: [], originalQuestions: [], subject: '', unit: '', lesson: '',
+                    selectedAnswers: [], questions: [], originalQuestions: [], subject: '', unit: '', lesson: '', semester: '',
                     matchingState: { selectedPromptElement: null, userPairs: {} }
                 };
-                 mainContainerElement.scrollIntoView({ behavior: 'smooth', block: 'start' }); // Scroll to top of container
+                 mainContainerElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
         }
-        function showQuizView() {
+        function showQuizView() { /* ... same as before ... */
              if (contentElement && quizViewElement && navSectionElement && mainContainerElement) {
-                 mainContainerElement.classList.remove('hidden'); // Ensure main container is visible
-                 contentElement.classList.add('hidden');
-                 quizViewElement.classList.remove('hidden');
-                 navSectionElement.classList.add('hidden'); // HIDE Nav
+                 mainContainerElement.classList.remove('hidden'); contentElement.classList.add('hidden');
+                 quizViewElement.classList.remove('hidden'); navSectionElement.classList.add('hidden');
                  quizViewElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
              }
         }
 
         // --- Core Functions ---
-        function updateContent() { // Updates topic list view (Handles sanitized IDs, no listener re-attachment needed)
+        function updateContent() { // Updates topic list view AND triggers stat display update
             const activeSubjectBtn = document.querySelector('.nav-btn[data-subject].active');
             const activeSemesterBtn = document.querySelector('.semester-btn.active');
             if (!activeSubjectBtn || !activeSemesterBtn || !contentElement) return;
 
             const activeSubject = activeSubjectBtn.dataset.subject;
             const activeSemester = activeSemesterBtn.dataset.semester;
-            const sanitizedSubject = activeSubject.replace(/\s+/g, '-'); // Apply the SAME replacement
+            const sanitizedSubject = activeSubject.replace(/\s+/g, '-');
 
             contentElement.querySelectorAll('.semester-content').forEach(c => c.classList.remove('active'));
 
-            const contentId = `${sanitizedSubject}-${activeSemester}`; // Use sanitizedSubject
+            const contentId = `${sanitizedSubject}-${activeSemester}`;
             const semesterContentElement = contentElement.querySelector(`#${contentId}`);
 
             if (semesterContentElement) {
                 semesterContentElement.classList.add('active');
-                // No listener re-attachment needed due to event delegation
+                updateLessonBoxDisplays(); // <--- Update stats display for the now active semester
             } else {
                 console.warn(`Semester content ID "#${contentId}" not found.`);
             }
         }
 
 
-        function handleSectionClick(subject, unit, lesson) { // Starts quiz if questions found
-             if (!subject || !unit || !lesson) { alert("Error identifying topic."); return; }
+        // Modified to accept and store semester
+        function handleSectionClick(subject, semester, unit, lesson) {
+             if (!subject || !semester || !unit || !lesson) { alert("Error identifying topic."); return; }
             try {
-                // Ensure we are showing the quiz view before fetching/starting
-                showQuizView();
-                const originalQuestions = getQuestions(subject, unit, lesson);
+                showQuizView(); // Ensure quiz view is shown
+                const originalQuestions = getQuestions(subject, semester, unit, lesson); // Pass semester
                 if (originalQuestions?.length) {
-                    startQuiz(subject, unit, lesson, originalQuestions); // Pass original list
-                } else { showError(subject, unit, lesson); }
+                    startQuiz(subject, semester, unit, lesson, originalQuestions); // Pass semester
+                } else { showError(subject, unit, lesson); } // semester not needed for error display message
             } catch (error) { console.error("Section click error:", error); showError(subject, unit, lesson, "Error loading questions."); }
         }
 
-        function startQuiz(subject, unit, lesson, originalQuestions) { // Shuffles questions
+        // Modified to accept and store semester
+        function startQuiz(subject, semester, unit, lesson, originalQuestions) {
             const shuffledQuestions = shuffleArray(originalQuestions);
-            quizState = { // Reset state for new/redo quiz
+            quizState = {
                 currentQuestionIndex: 0, correctAnswers: 0, totalQuestions: shuffledQuestions.length, startTime: new Date(), endTime: null,
                 selectedAnswers: new Array(shuffledQuestions.length).fill(null), questions: shuffledQuestions, originalQuestions: originalQuestions,
-                subject: subject, unit: unit, lesson: lesson, matchingState: { selectedPromptElement: null, userPairs: {} }
+                subject: subject, unit: unit, lesson: lesson, semester: semester, // Store semester
+                matchingState: { selectedPromptElement: null, userPairs: {} }
             };
             if (quizTitleElement) quizTitleElement.textContent = `${lesson}`;
-            // showQuizView(); // Already called in handleSectionClick
             displayQuestion();
         }
 
-        function displayQuestion() { // Renders current question
-             /* ... (rest of displayQuestion is largely the same) ... */
+        function displayQuestion() { /* ... (same as before, no changes needed here) ... */
              if (!quizContainerElement || !feedbackContainerElement || !quizButtonsContainerElement) return;
              const currentQuestion = quizState.questions[quizState.currentQuestionIndex];
-             if (!currentQuestion) { displayResults(); return; } // Should go to results if no more questions
-
-             quizContainerElement.innerHTML = '';
-             feedbackContainerElement.innerHTML = '';
-             feedbackContainerElement.classList.add('hidden');
-             quizButtonsContainerElement.innerHTML = '';
-
-             // Cleanup previous matching SVGs/observers if any
-             if (matchingSvgElement && matchingSvgElement.parentNode) {
-                 matchingSvgElement.parentNode.removeChild(matchingSvgElement);
-                 matchingSvgElement = null;
-             }
-             if (matchingArrowObserver) {
-                 matchingArrowObserver.disconnect();
-                 matchingArrowObserver = null;
-             }
-
+             if (!currentQuestion) { displayResults(); return; }
+             quizContainerElement.innerHTML = ''; feedbackContainerElement.innerHTML = ''; feedbackContainerElement.classList.add('hidden'); quizButtonsContainerElement.innerHTML = '';
+             if (matchingSvgElement && matchingSvgElement.parentNode) { matchingSvgElement.remove(); matchingSvgElement = null; }
+             if (matchingArrowObserver) { matchingArrowObserver.disconnect(); matchingArrowObserver = null; }
              const qWrap = document.createElement('div'); qWrap.className = 'question-display-wrapper';
              const pTxt = document.createElement('div'); pTxt.className = 'question-progress'; pTxt.textContent = `Question ${quizState.currentQuestionIndex + 1}/${quizState.totalQuestions}`; qWrap.appendChild(pTxt);
              const qTxt = document.createElement('p'); qTxt.className = 'question-text'; qTxt.innerHTML = `<strong>Q:</strong> ${currentQuestion.question||'?'}`; qWrap.appendChild(qTxt);
              const typeWrap = document.createElement('div'); typeWrap.className = 'question-type-wrapper';
-
              try {
                   switch (currentQuestion.type) {
-                      case "matching":
-                          renderMatching(currentQuestion, typeWrap);
-                          // Ensure observer setup happens *after* elements are in DOM
-                          requestAnimationFrame(setupArrowObserver); // Use rAF
-                          break;
+                      case "matching": renderMatching(currentQuestion, typeWrap); requestAnimationFrame(setupArrowObserver); break;
                       case "ordering": renderOrdering(currentQuestion, typeWrap); break;
                       case "multiple_choice": default: renderMultipleChoice(currentQuestion, typeWrap); break;
                   }
              } catch (e) { console.error("Render error:", e); typeWrap.innerHTML = `<p style="color:red;">Error displaying question.</p>`; }
              qWrap.appendChild(typeWrap); quizContainerElement.appendChild(qWrap);
-
-             // Buttons
              const subBtn = document.createElement('button'); subBtn.className = 'btn submit-btn'; subBtn.id = 'submit-btn'; subBtn.textContent = 'Submit'; subBtn.onclick = checkAnswer;
              const nxtBtn = document.createElement('button'); nxtBtn.className = 'btn next-btn hidden'; nxtBtn.id = 'next-btn'; nxtBtn.textContent = quizState.currentQuestionIndex === quizState.totalQuestions - 1 ? 'View Results' : 'Next Question'; nxtBtn.onclick = nextQuestion;
-             quizButtonsContainerElement.append(subBtn, nxtBtn);
-
-             subBtn.disabled = true; // Start disabled, enable via specific renderers/handlers
-             // Enable immediately if not one of the types requiring user input to enable
-             if (currentQuestion.type !== 'multiple_choice' && currentQuestion.type !== 'ordering' && currentQuestion.type !== 'matching') {
-                 subBtn.disabled = false;
-             }
+             quizButtonsContainerElement.append(subBtn, nxtBtn); subBtn.disabled = true;
+             if (currentQuestion.type !== 'multiple_choice' && currentQuestion.type !== 'ordering' && currentQuestion.type !== 'matching') { subBtn.disabled = false; }
         }
 
         // --- Rendering Functions ---
         function renderMultipleChoice(question, container) { /* ... (same as before) ... */
             if (!question.options?.length) { container.textContent = 'Err: Options invalid.'; return; }
-            const optionsDiv = document.createElement('div');
-            optionsDiv.className = 'options-container';
-            optionsDiv.id = 'options-list';
+            const optionsDiv = document.createElement('div'); optionsDiv.className = 'options-container'; optionsDiv.id = 'options-list';
             question.options.forEach((option, index) => {
-                const id = `option-${index}`;
-                const lbl = document.createElement('label');
-                lbl.className = 'option-label';
-                lbl.htmlFor = id;
-                const inp = document.createElement('input');
-                inp.type = 'radio';
-                inp.name = 'question-option';
-                inp.value = index;
-                inp.id = id;
-                inp.className = 'option-input';
-                inp.addEventListener('change', () => {
-                    const submitBtn = document.getElementById('submit-btn');
-                    if (submitBtn) submitBtn.disabled = false;
-                });
-                const txt = document.createElement('span');
-                txt.className = 'option-text';
-                txt.textContent = option;
-                lbl.append(inp, txt);
-                optionsDiv.appendChild(lbl);
-            });
-            container.appendChild(optionsDiv);
+                const id = `option-${index}`; const lbl = document.createElement('label'); lbl.className = 'option-label'; lbl.htmlFor = id;
+                const inp = document.createElement('input'); inp.type = 'radio'; inp.name = 'question-option'; inp.value = index; inp.id = id; inp.className = 'option-input';
+                inp.addEventListener('change', () => { const submitBtn = document.getElementById('submit-btn'); if (submitBtn) submitBtn.disabled = false; });
+                const txt = document.createElement('span'); txt.className = 'option-text'; txt.textContent = option; lbl.append(inp, txt); optionsDiv.appendChild(lbl);
+            }); container.appendChild(optionsDiv);
         }
-        function renderMatching(question, container) { /* ... (same as before, ensure matchingSvgElement is created) ... */
+        function renderMatching(question, container) { /* ... (same as before) ... */
              if (!question.prompts?.length || !question.matches?.length || question.prompts.length !== question.matches.length) { container.textContent = 'Err: Match data invalid.'; return; }
-             quizState.matchingState.userPairs = {}; // Reset pairs for this question
-             const instr = document.createElement('p');
-             instr.className = 'matching-instructions';
-             instr.textContent = 'Click a left item, then its corresponding right item. Click a matched item again to deselect the pair.';
-             container.appendChild(instr);
-
-             const outer = document.createElement('div');
-             outer.style.position = 'relative'; // Needed for the absolute positioned SVG
-
-             // Create SVG element specifically for this question instance
-             matchingSvgElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-             matchingSvgElement.id = 'matching-arrow-svg';
-             matchingSvgElement.innerHTML = '<defs><marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="var(--accent-color)"/></marker></defs>';
-             outer.appendChild(matchingSvgElement); // Add SVG first (so it's behind)
-
-             const matchCont = document.createElement('div');
-             matchCont.className = 'matching-container';
-             matchCont.id = 'matching-cols'; // ID for observer
-
-             const promCol = document.createElement('div');
-             promCol.className = 'matching-column';
-             promCol.id = 'prompts-column';
-             promCol.innerHTML = '<h4>Items</h4>';
-             const matCol = document.createElement('div');
-             matCol.className = 'matching-column';
-             matCol.id = 'matches-column';
-             matCol.innerHTML = '<h4>Matches</h4>';
-
-             // Shuffle the 'matches' side for randomness
-             const shuffledMatches = question.matches
-                 .map((text, originalIndex) => ({ text, originalIndex }))
-                 .sort(() => 0.5 - Math.random());
-
-             // Create prompt items
-             question.prompts.forEach((promptText, promptIndex) => {
-                 const item = document.createElement('div');
-                 item.className = 'matching-item prompt-item';
-                 item.textContent = promptText;
-                 item.dataset.index = promptIndex;
-                 item.id = `prompt-${promptIndex}`;
-                 item.onclick = handleMatchingClick;
-                 promCol.appendChild(item);
-             });
-
-             // Create match items (using shuffled order)
-             shuffledMatches.forEach(matchObject => {
-                 const item = document.createElement('div');
-                 item.className = 'matching-item match-item';
-                 item.textContent = matchObject.text;
-                 item.dataset.index = matchObject.originalIndex; // Store the ORIGINAL index
-                 item.id = `match-${matchObject.originalIndex}`;
-                 item.onclick = handleMatchingClick;
-                 matCol.appendChild(item);
-             });
-
-             matchCont.append(promCol, matCol);
-             outer.appendChild(matchCont); // Add columns after SVG
-             container.appendChild(outer);
+             quizState.matchingState.userPairs = {}; const instr = document.createElement('p'); instr.className = 'matching-instructions'; instr.textContent = 'Click a left item, then its corresponding right item. Click a matched item again to deselect the pair.'; container.appendChild(instr);
+             const outer = document.createElement('div'); outer.style.position = 'relative'; matchingSvgElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); matchingSvgElement.id = 'matching-arrow-svg'; matchingSvgElement.innerHTML = '<defs><marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="var(--accent-color)"/></marker></defs>'; outer.appendChild(matchingSvgElement);
+             const matchCont = document.createElement('div'); matchCont.className = 'matching-container'; matchCont.id = 'matching-cols';
+             const promCol = document.createElement('div'); promCol.className = 'matching-column'; promCol.id = 'prompts-column'; promCol.innerHTML = '<h4>Items</h4>';
+             const matCol = document.createElement('div'); matCol.className = 'matching-column'; matCol.id = 'matches-column'; matCol.innerHTML = '<h4>Matches</h4>';
+             const shuffledMatches = question.matches.map((text, originalIndex) => ({ text, originalIndex })).sort(() => 0.5 - Math.random());
+             question.prompts.forEach((promptText, promptIndex) => { const item = document.createElement('div'); item.className = 'matching-item prompt-item'; item.textContent = promptText; item.dataset.index = promptIndex; item.id = `prompt-${promptIndex}`; item.onclick = handleMatchingClick; promCol.appendChild(item); });
+             shuffledMatches.forEach(matchObject => { const item = document.createElement('div'); item.className = 'matching-item match-item'; item.textContent = matchObject.text; item.dataset.index = matchObject.originalIndex; item.id = `match-${matchObject.originalIndex}`; item.onclick = handleMatchingClick; matCol.appendChild(item); });
+             matchCont.append(promCol, matCol); outer.appendChild(matchCont); container.appendChild(outer);
         }
         function renderOrdering(question, container) { /* ... (same as before) ... */
             if (!question.items?.length) { container.textContent = 'Err: Ordering data invalid.'; return; }
-            const num = question.items.length;
-            const instr = document.createElement('p');
-            instr.className = 'ordering-instructions';
-            instr.textContent = `Select the correct order number (1-${num}) for each item.`;
-            container.appendChild(instr);
-            const orderCont = document.createElement('div');
-            orderCont.className = 'ordering-container';
-            orderCont.id = 'ordering-list';
-
-            const checkAllSelected = () => {
-                const allSelects = orderCont.querySelectorAll('.ordering-select');
-                // Check if every select has a value (not the placeholder "-")
-                const allSelected = Array.from(allSelects).every(s => s.value !== "");
-                const submitBtn = document.getElementById('submit-btn');
-                if(submitBtn) submitBtn.disabled = !allSelected;
-            };
-
-            // Shuffle items visually for the user
-            const shuffledItems = question.items
-                .map((text, originalIndex) => ({ text, originalIndex }))
-                .sort(() => 0.5 - Math.random());
-
+            const num = question.items.length; const instr = document.createElement('p'); instr.className = 'ordering-instructions'; instr.textContent = `Select the correct order number (1-${num}) for each item.`; container.appendChild(instr);
+            const orderCont = document.createElement('div'); orderCont.className = 'ordering-container'; orderCont.id = 'ordering-list';
+            const checkAllSelected = () => { const allSelects = orderCont.querySelectorAll('.ordering-select'); const allSelected = Array.from(allSelects).every(s => s.value !== ""); const submitBtn = document.getElementById('submit-btn'); if(submitBtn) submitBtn.disabled = !allSelected; };
+            const shuffledItems = question.items.map((text, originalIndex) => ({ text, originalIndex })).sort(() => 0.5 - Math.random());
             shuffledItems.forEach(({ text, originalIndex }) => {
-                const div = document.createElement('div');
-                div.className = 'ordering-item';
-                div.dataset.originalIndex = originalIndex; // Store original index if needed later
-
-                const sel = document.createElement('select');
-                sel.className = 'ordering-select';
-                sel.dataset.itemIndex = originalIndex; // Link select to the original item index
-
-                const defOpt = document.createElement('option');
-                defOpt.value = ""; defOpt.textContent = "-"; defOpt.selected = true; defOpt.disabled = true;
-                sel.appendChild(defOpt);
-
-                for (let j = 1; j <= num; j++) {
-                    const opt = document.createElement('option');
-                    opt.value = j; opt.textContent = j;
-                    sel.appendChild(opt);
-                }
-                sel.addEventListener('change', checkAllSelected); // Check completeness on change
-
-                const span = document.createElement('span');
-                span.className = 'ordering-text';
-                span.textContent = text; // Display the text
-
-                div.append(sel, span);
-                orderCont.appendChild(div);
-            });
-            container.appendChild(orderCont);
+                const div = document.createElement('div'); div.className = 'ordering-item'; div.dataset.originalIndex = originalIndex; const sel = document.createElement('select'); sel.className = 'ordering-select'; sel.dataset.itemIndex = originalIndex;
+                const defOpt = document.createElement('option'); defOpt.value = ""; defOpt.textContent = "-"; defOpt.selected = true; defOpt.disabled = true; sel.appendChild(defOpt);
+                for (let j = 1; j <= num; j++) { const opt = document.createElement('option'); opt.value = j; opt.textContent = j; sel.appendChild(opt); }
+                sel.addEventListener('change', checkAllSelected); const span = document.createElement('span'); span.className = 'ordering-text'; span.textContent = text; div.append(sel, span); orderCont.appendChild(div);
+            }); container.appendChild(orderCont);
         }
 
 
         // --- Interaction Handlers ---
         function handleMatchingClick(event) { /* ... (same as before) ... */
-             const clickedItem = event.target.closest('.matching-item');
-             if (!clickedItem) return; // Click wasn't on an item
-
-             const isPrompt = clickedItem.classList.contains('prompt-item');
-             const isAlreadyMatched = clickedItem.classList.contains('matched');
-             const clickedIndex = clickedItem.dataset.index;
-             let selectedPrompt = quizState.matchingState.selectedPromptElement;
-
-             // --- Case 1: Clicking an already matched item (prompt or match) ---
+             const clickedItem = event.target.closest('.matching-item'); if (!clickedItem) return;
+             const isPrompt = clickedItem.classList.contains('prompt-item'); const isAlreadyMatched = clickedItem.classList.contains('matched'); const clickedIndex = clickedItem.dataset.index; let selectedPrompt = quizState.matchingState.selectedPromptElement;
              if (isAlreadyMatched) {
-                 let promptIndexToClear = -1;
-                 let matchIndexToClear = -1;
-
-                 if (isPrompt) {
-                     // Clicked a matched prompt item
-                     promptIndexToClear = clickedIndex;
-                     matchIndexToClear = quizState.matchingState.userPairs[promptIndexToClear];
-                 } else {
-                     // Clicked a matched match item
-                     matchIndexToClear = clickedIndex;
-                     // Find the corresponding prompt index
-                     promptIndexToClear = Object.keys(quizState.matchingState.userPairs).find(pIdx => quizState.matchingState.userPairs[pIdx] == matchIndexToClear);
-                 }
-
+                 let promptIndexToClear = -1; let matchIndexToClear = -1;
+                 if (isPrompt) { promptIndexToClear = clickedIndex; matchIndexToClear = quizState.matchingState.userPairs[promptIndexToClear]; }
+                 else { matchIndexToClear = clickedIndex; promptIndexToClear = Object.keys(quizState.matchingState.userPairs).find(pIdx => quizState.matchingState.userPairs[pIdx] == matchIndexToClear); }
                  if (promptIndexToClear != -1 && matchIndexToClear !== undefined) {
-                     const promptElement = document.getElementById(`prompt-${promptIndexToClear}`);
-                     const matchElement = document.getElementById(`match-${matchIndexToClear}`);
-
-                     if (promptElement) {
-                         promptElement.classList.remove('matched', 'selected'); // Remove both states
-                         promptElement.style.cursor = 'pointer';
-                     }
-                     if (matchElement) {
-                         matchElement.classList.remove('matched');
-                         matchElement.style.cursor = 'pointer';
-                     }
-
-                     delete quizState.matchingState.userPairs[promptIndexToClear]; // Remove from user's pairs
-                     removeArrow(promptIndexToClear); // Remove the visual arrow
-
-                     // If the cleared prompt was the currently selected one, deselect it
-                     if (selectedPrompt && selectedPrompt.dataset.index == promptIndexToClear) {
-                         quizState.matchingState.selectedPromptElement = null;
-                     }
-
-                     // Disable submit button as the match is broken
-                     const submitBtn = document.getElementById('submit-btn');
-                     if (submitBtn) submitBtn.disabled = true;
-                 }
-                 return; // Done handling the deselect case
+                     const promptElement = document.getElementById(`prompt-${promptIndexToClear}`); const matchElement = document.getElementById(`match-${matchIndexToClear}`);
+                     if (promptElement) { promptElement.classList.remove('matched', 'selected'); promptElement.style.cursor = 'pointer'; }
+                     if (matchElement) { matchElement.classList.remove('matched'); matchElement.style.cursor = 'pointer'; }
+                     delete quizState.matchingState.userPairs[promptIndexToClear]; removeArrow(promptIndexToClear);
+                     if (selectedPrompt && selectedPrompt.dataset.index == promptIndexToClear) { quizState.matchingState.selectedPromptElement = null; }
+                     const submitBtn = document.getElementById('submit-btn'); if (submitBtn) submitBtn.disabled = true;
+                 } return;
              }
-
-             // --- Case 2: Clicking a prompt item (that isn't already matched) ---
              if (isPrompt) {
-                 if (clickedItem === selectedPrompt) {
-                     // Clicking the currently selected prompt again: Deselect it
-                     clickedItem.classList.remove('selected');
-                     quizState.matchingState.selectedPromptElement = null;
-                 } else {
-                     // Clicking a new prompt: Deselect old, select new
-                     if (selectedPrompt) {
-                         selectedPrompt.classList.remove('selected');
-                     }
-                     clickedItem.classList.add('selected');
-                     quizState.matchingState.selectedPromptElement = clickedItem;
-                 }
-             }
-             // --- Case 3: Clicking a match item (that isn't already matched) ---
-             else { // It's a match item
+                 if (clickedItem === selectedPrompt) { clickedItem.classList.remove('selected'); quizState.matchingState.selectedPromptElement = null; }
+                 else { if (selectedPrompt) { selectedPrompt.classList.remove('selected'); } clickedItem.classList.add('selected'); quizState.matchingState.selectedPromptElement = clickedItem; }
+             } else {
                  if (selectedPrompt) {
-                     // A prompt is currently selected: Create the pair
-                     const promptIndex = selectedPrompt.dataset.index;
-                     const matchIndex = clickedIndex;
-
-                     // Store the user's pair (prompt index -> match index)
-                     quizState.matchingState.userPairs[promptIndex] = parseInt(matchIndex, 10);
-
-                     // Update visuals: mark both as matched, remove 'selected' from prompt
-                     selectedPrompt.classList.remove('selected');
-                     selectedPrompt.classList.add('matched');
-                     selectedPrompt.style.cursor = 'pointer'; // Allow clicking again to deselect
-
-                     clickedItem.classList.add('matched');
-                     clickedItem.style.cursor = 'pointer'; // Allow clicking again to deselect
-
-                     drawArrow(selectedPrompt, clickedItem, promptIndex); // Draw the connecting arrow
-
-                     // Clear the selected prompt state
-                     quizState.matchingState.selectedPromptElement = null;
-
-                     // Check if all prompts are now matched to enable submit
-                     const totalPrompts = document.querySelectorAll('.prompt-item').length;
-                     const matchedCount = Object.keys(quizState.matchingState.userPairs).length;
-                     const submitBtn = document.getElementById('submit-btn');
-                     if (submitBtn && totalPrompts > 0 && totalPrompts === matchedCount) {
-                         submitBtn.disabled = false;
-                     }
+                     const promptIndex = selectedPrompt.dataset.index; const matchIndex = clickedIndex; quizState.matchingState.userPairs[promptIndex] = parseInt(matchIndex, 10);
+                     selectedPrompt.classList.remove('selected'); selectedPrompt.classList.add('matched'); selectedPrompt.style.cursor = 'pointer'; clickedItem.classList.add('matched'); clickedItem.style.cursor = 'pointer';
+                     drawArrow(selectedPrompt, clickedItem, promptIndex); quizState.matchingState.selectedPromptElement = null;
+                     const totalPrompts = document.querySelectorAll('.prompt-item').length; const matchedCount = Object.keys(quizState.matchingState.userPairs).length; const submitBtn = document.getElementById('submit-btn');
+                     if (submitBtn && totalPrompts > 0 && totalPrompts === matchedCount) { submitBtn.disabled = false; }
                  }
-                 // Else: Clicking a match item with no prompt selected - do nothing
              }
          }
 
 
         // --- Arrow Drawing ---
         function drawArrow(promptEl, matchEl, promptIndex) { /* ... (same as before) ... */
-            if (!matchingSvgElement || !promptEl || !matchEl) return;
-            const svgRect = matchingSvgElement.getBoundingClientRect();
-            // Adjust for scroll position if SVG isn't fixed
-            const scrollX = window.scrollX || window.pageXOffset;
-            const scrollY = window.scrollY || window.pageYOffset;
-
-            const promptRect = promptEl.getBoundingClientRect();
-            const matchRect = matchEl.getBoundingClientRect();
-
-            // Calculate coordinates relative to the SVG's top-left corner
-            const startX = promptRect.right - svgRect.left;
-            const startY = promptRect.top + promptRect.height/2 - svgRect.top;
-            const endX = matchRect.left - svgRect.left;
-            const endY = matchRect.top + matchRect.height/2 - svgRect.top;
-
-            let line = matchingSvgElement.querySelector(`#arrow-${promptIndex}`);
-            if (!line) {
-                line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-                line.id = `arrow-${promptIndex}`;
-                // Ensure line is added before setting attributes if it might affect rendering order
-                matchingSvgElement.appendChild(line);
-            }
-            line.setAttribute('x1', startX);
-            line.setAttribute('y1', startY);
-            line.setAttribute('x2', endX);
-            line.setAttribute('y2', endY);
-            // Ensure necessary styles are set (stroke, stroke-width, marker) via CSS or here
-             line.setAttribute('stroke', 'var(--accent-color)');
-             line.setAttribute('stroke-width', '2');
-             line.setAttribute('marker-end', 'url(#arrowhead)');
-            line.style.opacity = '1'; // Make visible
+            if (!matchingSvgElement || !promptEl || !matchEl) return; const svgRect = matchingSvgElement.getBoundingClientRect(); const scrollX = window.scrollX || window.pageXOffset; const scrollY = window.scrollY || window.pageYOffset;
+            const promptRect = promptEl.getBoundingClientRect(); const matchRect = matchEl.getBoundingClientRect();
+            const startX = promptRect.right - svgRect.left; const startY = promptRect.top + promptRect.height/2 - svgRect.top; const endX = matchRect.left - svgRect.left; const endY = matchRect.top + matchRect.height/2 - svgRect.top;
+            let line = matchingSvgElement.querySelector(`#arrow-${promptIndex}`); if (!line) { line = document.createElementNS('http://www.w3.org/2000/svg', 'line'); line.id = `arrow-${promptIndex}`; matchingSvgElement.appendChild(line); }
+            line.setAttribute('x1', startX); line.setAttribute('y1', startY); line.setAttribute('x2', endX); line.setAttribute('y2', endY); line.setAttribute('stroke', 'var(--accent-color)'); line.setAttribute('stroke-width', '2'); line.setAttribute('marker-end', 'url(#arrowhead)'); line.style.opacity = '1';
          }
         function removeArrow(promptIndex) { /* ... (same as before) ... */
-            if (!matchingSvgElement) return; const line = matchingSvgElement.querySelector(`#arrow-${promptIndex}`);
-            if (line) { line.style.opacity = '0'; setTimeout(() => line.remove(), 300); }
+            if (!matchingSvgElement) return; const line = matchingSvgElement.querySelector(`#arrow-${promptIndex}`); if (line) { line.style.opacity = '0'; setTimeout(() => line.remove(), 300); }
          }
         function updateAllArrowPositions() { /* ... (same as before) ... */
-             if (!matchingSvgElement || !quizState || quizState.questions[quizState.currentQuestionIndex]?.type !== 'matching') return;
+             if (!matchingSvgElement || !quizState || !quizState.questions[quizState.currentQuestionIndex] || quizState.questions[quizState.currentQuestionIndex].type !== 'matching') return;
              const pairs = quizState.matchingState.userPairs;
-             for (const pIdx in pairs) {
-                if (pairs.hasOwnProperty(pIdx)) {
-                    const mIdx = pairs[pIdx];
-                    const pEl = document.getElementById(`prompt-${pIdx}`);
-                    const mEl = document.getElementById(`match-${mIdx}`);
-                    if (pEl && mEl) { // Check if elements still exist
-                        drawArrow(pEl, mEl, pIdx);
-                    } else {
-                        // If an element is gone (e.g., during question change), remove arrow
-                        removeArrow(pIdx);
-                    }
-                }
-             }
+             for (const pIdx in pairs) { if (pairs.hasOwnProperty(pIdx)) { const mIdx = pairs[pIdx]; const pEl = document.getElementById(`prompt-${pIdx}`); const mEl = document.getElementById(`match-${mIdx}`); if (pEl && mEl) { drawArrow(pEl, mEl, pIdx); } else { removeArrow(pIdx); } } }
          }
         function setupArrowObserver() { /* ... (same as before) ... */
-            // Ensure target exists before observing
-            const target = document.getElementById('matching-cols');
-            if (!target || !matchingSvgElement) { // Also check if SVG exists
-                console.warn("Cannot setup observer: Target or SVG missing.");
-                return;
-            }
-            // Disconnect previous observer if exists
-            if (matchingArrowObserver) {
-                matchingArrowObserver.disconnect();
-            }
-
-            const config = { attributes: true, childList: true, subtree: true, characterData: true };
-            // Use a debounced callback to avoid excessive updates during rapid changes
-            const callback = debounce(updateAllArrowPositions, 50); // Short debounce
-            matchingArrowObserver = new MutationObserver(callback);
-            matchingArrowObserver.observe(target, config);
-
-            // Also observe changes to the main container/quiz view dimensions or position if needed
-            // Example: observing the quiz container itself for layout shifts
-            const quizContainerTarget = document.getElementById('quiz-container');
-            if (quizContainerTarget) {
-                 matchingArrowObserver.observe(quizContainerTarget, { attributes: true, subtree: false });
-            }
-
-
-            // Initial draw attempt after a short delay to ensure layout is stable
+            const target = document.getElementById('matching-cols'); if (!target || !matchingSvgElement) { console.warn("Cannot setup observer: Target or SVG missing."); return; }
+            if (matchingArrowObserver) { matchingArrowObserver.disconnect(); }
+            const config = { attributes: true, childList: true, subtree: true, characterData: true }; const callback = debounce(updateAllArrowPositions, 50); matchingArrowObserver = new MutationObserver(callback); matchingArrowObserver.observe(target, config);
+            const quizContainerTarget = document.getElementById('quiz-container'); if (quizContainerTarget) { matchingArrowObserver.observe(quizContainerTarget, { attributes: true, subtree: false }); }
             setTimeout(updateAllArrowPositions, 100);
         }
 
 
         // --- Answer Checking ---
-        function checkAnswer() { /* ... (same as before, including disconnect) ... */
-            if (!feedbackContainerElement || !quizButtonsContainerElement) return;
-            if (matchingArrowObserver) { matchingArrowObserver.disconnect(); matchingArrowObserver = null; } // Disconnect observer on check
-
-            const currentQuestion = quizState.questions[quizState.currentQuestionIndex];
-            let result = { isCorrect: false, feedback: '', userResponse: null, scoreIncrement: 0 };
-            try {
-                switch (currentQuestion.type) {
-                    case "matching": result = checkMatching(currentQuestion); break;
-                    case "ordering": result = checkOrdering(currentQuestion); break;
-                    case "multiple_choice": default: result = checkMultipleChoice(currentQuestion); break;
-                }
-            } catch (error) { console.error("Check answer error:", error); result = { isCorrect: false, feedback: '<div class="incorrect-feedback">Error checking answer.</div>', userResponse: null, scoreIncrement: 0 }; }
-            quizState.selectedAnswers[quizState.currentQuestionIndex] = result.userResponse; // Store what the user did
-            if (result.scoreIncrement > 0) { // Use scoreIncrement for flexibility
-                 quizState.correctAnswers += result.scoreIncrement; // Currently only 1 for fully correct
-            }
-            feedbackContainerElement.innerHTML = result.feedback;
-            feedbackContainerElement.classList.remove('hidden');
-            disableInputs();
+        function checkAnswer() { /* ... (same as before) ... */
+            if (!feedbackContainerElement || !quizButtonsContainerElement) return; if (matchingArrowObserver) { matchingArrowObserver.disconnect(); matchingArrowObserver = null; }
+            const currentQuestion = quizState.questions[quizState.currentQuestionIndex]; let result = { isCorrect: false, feedback: '', userResponse: null, scoreIncrement: 0 };
+            try { switch (currentQuestion.type) { case "matching": result = checkMatching(currentQuestion); break; case "ordering": result = checkOrdering(currentQuestion); break; case "multiple_choice": default: result = checkMultipleChoice(currentQuestion); break; } }
+            catch (error) { console.error("Check answer error:", error); result = { isCorrect: false, feedback: '<div class="incorrect-feedback">Error checking answer.</div>', userResponse: null, scoreIncrement: 0 }; }
+            quizState.selectedAnswers[quizState.currentQuestionIndex] = result.userResponse; if (result.scoreIncrement > 0) { quizState.correctAnswers += result.scoreIncrement; }
+            feedbackContainerElement.innerHTML = result.feedback; feedbackContainerElement.classList.remove('hidden'); disableInputs();
             const submitBtn = quizButtonsContainerElement.querySelector('#submit-btn'), nextBtn = quizButtonsContainerElement.querySelector('#next-btn');
-            if(submitBtn) submitBtn.classList.add('hidden');
-            if(nextBtn) nextBtn.classList.remove('hidden');
+            if(submitBtn) submitBtn.classList.add('hidden'); if(nextBtn) nextBtn.classList.remove('hidden');
         }
         function checkMultipleChoice(question) { /* ... (same as before) ... */
-            const selectedRadio = document.querySelector('input[name="question-option"]:checked');
-            if(!selectedRadio) {
-                // Return a state indicating no answer was selected, maybe useful for review
-                return {isCorrect:false, feedback:'<div class="incorrect-feedback">Please select an answer.</div>', userResponse:null, scoreIncrement:0};
-            }
-            const selectedIndex = parseInt(selectedRadio.value, 10);
-            const correctAnswerText = question.answer;
-            const selectedAnswerText = question.options?.[selectedIndex]; // Safe navigation
-
-            const isCorrect = selectedAnswerText === correctAnswerText;
-
-            // Provide visual feedback on options
-            document.querySelectorAll('.option-label').forEach((label, index) => {
-                const input = label.querySelector('input');
-                // Always highlight the correct answer
-                if(question.options?.[index] === correctAnswerText) {
-                    label.classList.add('correct-option');
-                }
-                // If the user selected this option AND it was incorrect, mark it incorrect
-                if(input && input.checked && !isCorrect) {
-                    label.classList.add('incorrect-option');
-                }
-            });
-
-            const feedbackHTML = isCorrect
-                ? '<div class="correct-feedback">Correct! ✓</div>'
-                : `<div class="incorrect-feedback">Incorrect. <span>Correct answer: ${correctAnswerText || 'N/A'}</span></div>`;
-
+            const selectedRadio = document.querySelector('input[name="question-option"]:checked'); if(!selectedRadio) { return {isCorrect:false, feedback:'<div class="incorrect-feedback">Please select an answer.</div>', userResponse:null, scoreIncrement:0}; }
+            const selectedIndex = parseInt(selectedRadio.value, 10); const correctAnswerText = question.answer; const selectedAnswerText = question.options?.[selectedIndex]; const isCorrect = selectedAnswerText === correctAnswerText;
+            document.querySelectorAll('.option-label').forEach((label, index) => { const input = label.querySelector('input'); if(question.options?.[index] === correctAnswerText) { label.classList.add('correct-option'); } if(input && input.checked && !isCorrect) { label.classList.add('incorrect-option'); } });
+            const feedbackHTML = isCorrect ? '<div class="correct-feedback">Correct! ✓</div>' : `<div class="incorrect-feedback">Incorrect. <span>Correct answer: ${correctAnswerText || 'N/A'}</span></div>`;
             return {isCorrect: isCorrect, feedback: feedbackHTML, userResponse: selectedIndex, scoreIncrement: isCorrect ? 1 : 0};
         }
         function checkMatching(question) { /* ... (same as before) ... */
-             const userPairs = quizState.matchingState.userPairs; // { promptIdx: matchIdx, ... }
-             const correctPairs = question.answer || {};       // { promptIdx: correctMatchIdx, ... }
-             const totalCorrectPairs = Object.keys(correctPairs).length;
-             let correctlyMatchedCount = 0;
-
-             if (totalCorrectPairs === 0) { // Handle edge case of empty matching question
-                 return {isCorrect: true, feedback: '<div class="correct-feedback">No matching required for this question.</div>', userResponse: userPairs, scoreIncrement: 0};
-             }
-
-             // Iterate through the *correct* pairs to count user matches
-             for (const promptIndex in correctPairs) {
-                 if (userPairs.hasOwnProperty(promptIndex) && userPairs[promptIndex] === correctPairs[promptIndex]) {
-                     correctlyMatchedCount++;
-                 }
-             }
-
-             // Determine correctness (only fully correct counts)
-             const isFullyCorrect = correctlyMatchedCount === totalCorrectPairs && Object.keys(userPairs).length === totalCorrectPairs; // Also ensure user matched all items
-             const isPartiallyCorrect = correctlyMatchedCount > 0 && !isFullyCorrect;
-
-             // Generate feedback message
-             let feedbackHTML = "";
-             if (isFullyCorrect) {
-                 feedbackHTML = `<div class="correct-feedback">Correct! ✓ All pairs matched correctly.</div>`;
-             } else if (isPartiallyCorrect) {
-                 feedbackHTML = `<div class="partial-feedback">Partially Correct. You matched ${correctlyMatchedCount} out of ${totalCorrectPairs} pairs correctly.</div>`;
-             } else {
-                 feedbackHTML = `<div class="incorrect-feedback">Incorrect. You matched 0 out of ${totalCorrectPairs} pairs correctly.</div>`;
-             }
-
-             // Visual feedback (optional - could highlight correct/incorrect lines/items)
-             // Example: Iterate through userPairs and compare with correctPairs to style lines/items
+             const userPairs = quizState.matchingState.userPairs; const correctPairs = question.answer || {}; const totalCorrectPairs = Object.keys(correctPairs).length; let correctlyMatchedCount = 0;
+             if (totalCorrectPairs === 0) { return {isCorrect: true, feedback: '<div class="correct-feedback">No matching required.</div>', userResponse: userPairs, scoreIncrement: 0}; }
+             for (const promptIndex in correctPairs) { if (userPairs.hasOwnProperty(promptIndex) && userPairs[promptIndex] === correctPairs[promptIndex]) { correctlyMatchedCount++; } }
+             const isFullyCorrect = correctlyMatchedCount === totalCorrectPairs && Object.keys(userPairs).length === totalCorrectPairs; const isPartiallyCorrect = correctlyMatchedCount > 0 && !isFullyCorrect;
+             let feedbackHTML = ""; if (isFullyCorrect) { feedbackHTML = `<div class="correct-feedback">Correct! ✓ All pairs matched.</div>`; } else if (isPartiallyCorrect) { feedbackHTML = `<div class="partial-feedback">Partially Correct. Matched ${correctlyMatchedCount}/${totalCorrectPairs}.</div>`; } else { feedbackHTML = `<div class="incorrect-feedback">Incorrect. Matched 0/${totalCorrectPairs}.</div>`; }
              for (const promptIndex in userPairs) {
-                 const userMatchIndex = userPairs[promptIndex];
-                 const correctMatchIndex = correctPairs[promptIndex];
-                 const line = matchingSvgElement?.querySelector(`#arrow-${promptIndex}`);
-                 const promptEl = document.getElementById(`prompt-${promptIndex}`);
-                 const userMatchEl = document.getElementById(`match-${userMatchIndex}`);
-
-                 if (userMatchIndex === correctMatchIndex) {
-                     // Style as correct (e.g., change line color, add class to items)
-                     if(line) line.style.stroke = 'var(--correct-border)';
-                     if(promptEl) promptEl.style.borderColor = 'var(--correct-border)';
-                     if(userMatchEl) userMatchEl.style.borderColor = 'var(--correct-border)';
-
-                 } else {
-                     // Style as incorrect
-                     if(line) line.style.stroke = 'var(--incorrect-border)';
-                     if(promptEl) promptEl.style.borderColor = 'var(--incorrect-border)';
-                     if(userMatchEl) userMatchEl.style.borderColor = 'var(--incorrect-border)';
-                     // Optionally, you could try drawing the correct line faintly
-                 }
+                 const userMatchIndex = userPairs[promptIndex]; const correctMatchIndex = correctPairs[promptIndex]; const line = matchingSvgElement?.querySelector(`#arrow-${promptIndex}`); const promptEl = document.getElementById(`prompt-${promptIndex}`); const userMatchEl = document.getElementById(`match-${userMatchIndex}`);
+                 if (userMatchIndex === correctMatchIndex) { if(line) line.style.stroke = 'var(--correct-border)'; if(promptEl) promptEl.style.borderColor = 'var(--correct-border)'; if(userMatchEl) userMatchEl.style.borderColor = 'var(--correct-border)'; }
+                 else { if(line) line.style.stroke = 'var(--incorrect-border)'; if(promptEl) promptEl.style.borderColor = 'var(--incorrect-border)'; if(userMatchEl) userMatchEl.style.borderColor = 'var(--incorrect-border)'; }
              }
-
-
-             return {
-                 isCorrect: isFullyCorrect, // Only true if 100% correct
-                 feedback: feedbackHTML,
-                 userResponse: userPairs, // Store the user's final pairs
-                 scoreIncrement: isFullyCorrect ? 1 : 0 // Score only for full correctness
-             };
+             return { isCorrect: isFullyCorrect, feedback: feedbackHTML, userResponse: userPairs, scoreIncrement: isFullyCorrect ? 1 : 0 };
         }
         function checkOrdering(question) { /* ... (same as before) ... */
-            const originalItems = question.items || [];
-            const correctAnswerOrder = question.answer || []; // Array of item texts in correct order
-            const numItems = originalItems.length;
-
-            if(numItems === 0 || !Array.isArray(correctAnswerOrder) || numItems !== correctAnswerOrder.length) {
-                console.error("Invalid ordering data:", question);
-                return {isCorrect:false, feedback:'<div class="incorrect-feedback">Error: Invalid question setup.</div>', userResponse:null, scoreIncrement:0};
-            }
-
-            const userOrderMap = {}; // { originalIndex: userSelectedPosition (1-based) }
-            const selectedPositions = new Set();
-            let allSelected = true;
-            let hasDuplicates = false;
-
-            const selectElements = document.querySelectorAll("#ordering-list .ordering-select");
-
-            if(selectElements.length !== numItems) {
-                console.error("Ordering Error: Select element count mismatch.");
-                return {isCorrect:false, feedback:'<div class="incorrect-feedback">Error processing your selections.</div>', userResponse:null, scoreIncrement:0};
-            }
-
-            // 1. Gather user input and validate completeness & uniqueness
+            const originalItems = question.items || []; const correctAnswerOrder = question.answer || []; const numItems = originalItems.length;
+            if(numItems === 0 || !Array.isArray(correctAnswerOrder) || numItems !== correctAnswerOrder.length) { console.error("Invalid ordering data:", question); return {isCorrect:false, feedback:'<div class="incorrect-feedback">Error: Invalid question setup.</div>', userResponse:null, scoreIncrement:0}; }
+            const userOrderMap = {}; const selectedPositions = new Set(); let allSelected = true; let hasDuplicates = false; const selectElements = document.querySelectorAll("#ordering-list .ordering-select");
+            if(selectElements.length !== numItems) { console.error("Ordering Error: Select element count mismatch."); return {isCorrect:false, feedback:'<div class="incorrect-feedback">Error processing selections.</div>', userResponse:null, scoreIncrement:0}; }
             selectElements.forEach(select => {
-                const itemIndex = parseInt(select.dataset.itemIndex, 10); // Original index of the item text
-                const selectedValue = select.value;
-
-                if (selectedValue === "") {
-                    allSelected = false;
-                } else {
-                    const position = parseInt(selectedValue, 10);
-                    if (isNaN(position) || position < 1 || position > numItems) {
-                        allSelected = false; // Invalid number selected
-                        return;
-                    }
-                    userOrderMap[itemIndex] = position;
-                    if (selectedPositions.has(position)) {
-                        hasDuplicates = true;
-                    }
-                    selectedPositions.add(position);
-                }
-            });
-
-            // 2. Provide feedback based on validation
-            if (!allSelected) {
-                return {isCorrect:false, feedback:'<div class="incorrect-feedback">Please select an order number for all items.</div>', userResponse: userOrderMap, scoreIncrement:0};
-            }
-            if (hasDuplicates || selectedPositions.size !== numItems) {
-                 const numberText = numItems > 1 ? `numbers 1-${numItems}` : 'number 1';
-                return {isCorrect:false, feedback:`<div class="incorrect-feedback">Please use each order ${numberText} exactly once.</div>`, userResponse: userOrderMap, scoreIncrement:0};
-            }
-
-            // 3. Construct the user's ordered list of item texts
-            const userOrderedItems = new Array(numItems).fill(null);
-            let constructionOk = true;
-            for (const itemIndexStr in userOrderMap) {
-                if (userOrderMap.hasOwnProperty(itemIndexStr)) {
-                    const itemIndex = parseInt(itemIndexStr, 10);
-                    const itemText = originalItems[itemIndex]; // Get text using original index
-                    const userPosition = userOrderMap[itemIndex] - 1; // 0-based index for array
-
-                    if (itemText === undefined || userPosition < 0 || userPosition >= numItems || userOrderedItems[userPosition] !== null) {
-                        constructionOk = false; // Should not happen if validation passed, but safety check
-                        break;
-                    }
-                    userOrderedItems[userPosition] = itemText;
-                }
-            }
-
-            if (!constructionOk || userOrderedItems.some(item => item === null)) {
-                 console.error("Ordering Error: Failed to construct user sequence.", userOrderMap, userOrderedItems);
-                return {isCorrect:false, feedback:'<div class="incorrect-feedback">Error processing your sequence.</div>', userResponse: userOrderedItems, scoreIncrement:0};
-            }
-
-            // 4. Compare user's order with the correct order
+                const itemIndex = parseInt(select.dataset.itemIndex, 10); const selectedValue = select.value; if (selectedValue === "") { allSelected = false; } else { const position = parseInt(selectedValue, 10); if (isNaN(position) || position < 1 || position > numItems) { allSelected = false; return; } userOrderMap[itemIndex] = position; if (selectedPositions.has(position)) { hasDuplicates = true; } selectedPositions.add(position); } });
+            if (!allSelected) { return {isCorrect:false, feedback:'<div class="incorrect-feedback">Please select order for all items.</div>', userResponse: userOrderMap, scoreIncrement:0}; }
+            if (hasDuplicates || selectedPositions.size !== numItems) { const numTxt = numItems > 1 ? `numbers 1-${numItems}` : 'number 1'; return {isCorrect:false, feedback:`<div class="incorrect-feedback">Please use each order ${numTxt} once.</div>`, userResponse: userOrderMap, scoreIncrement:0}; }
+            const userOrderedItems = new Array(numItems).fill(null); let constructionOk = true;
+            for (const itemIndexStr in userOrderMap) { if (userOrderMap.hasOwnProperty(itemIndexStr)) { const itemIndex = parseInt(itemIndexStr, 10); const itemText = originalItems[itemIndex]; const userPosition = userOrderMap[itemIndex] - 1; if (itemText === undefined || userPosition < 0 || userPosition >= numItems || userOrderedItems[userPosition] !== null) { constructionOk = false; break; } userOrderedItems[userPosition] = itemText; } }
+            if (!constructionOk || userOrderedItems.some(item => item === null)) { console.error("Ordering Error: Construction fail.", userOrderMap, userOrderedItems); return {isCorrect:false, feedback:'<div class="incorrect-feedback">Error processing sequence.</div>', userResponse: userOrderedItems, scoreIncrement:0}; }
             const isCorrect = JSON.stringify(userOrderedItems) === JSON.stringify(correctAnswerOrder);
-
-            // 5. Generate feedback message
-            const feedbackHTML = isCorrect
-                ? '<div class="correct-feedback">Correct! ✓</div>'
-                : `<div class="incorrect-feedback">Incorrect. <span>Correct order: ${correctAnswerOrder.join(" → ")}</span></div>`;
-
-            // 6. Visual feedback on select dropdowns
-            selectElements.forEach(select => {
-                const itemIndex = parseInt(select.dataset.itemIndex, 10);
-                const itemText = originalItems[itemIndex];
-                const userSelectedPosition = userOrderMap[itemIndex]; // 1-based
-                const correctPosition = correctAnswerOrder.indexOf(itemText) + 1; // 1-based
-
-                if (userSelectedPosition === correctPosition) {
-                    select.style.borderColor = "var(--correct-border)";
-                    select.style.backgroundColor = "var(--correct-bg)"; // Subtle bg hint
-                } else {
-                    select.style.borderColor = "var(--incorrect-border)";
-                     select.style.backgroundColor = "var(--incorrect-bg)"; // Subtle bg hint
-                }
-                select.style.borderWidth = "2px";
-            });
-
-            return {
-                isCorrect: isCorrect,
-                feedback: feedbackHTML,
-                userResponse: userOrderedItems, // Store the ordered list of texts
-                scoreIncrement: isCorrect ? 1 : 0
-            };
+            const feedbackHTML = isCorrect ? '<div class="correct-feedback">Correct! ✓</div>' : `<div class="incorrect-feedback">Incorrect. <span>Correct order: ${correctAnswerOrder.join(" → ")}</span></div>`;
+            selectElements.forEach(select => { const itemIndex = parseInt(select.dataset.itemIndex, 10); const itemText = originalItems[itemIndex]; const userSelectedPosition = userOrderMap[itemIndex]; const correctPosition = correctAnswerOrder.indexOf(itemText) + 1; if (userSelectedPosition === correctPosition) { select.style.borderColor = "var(--correct-border)"; select.style.backgroundColor = "var(--correct-bg)"; } else { select.style.borderColor = "var(--incorrect-border)"; select.style.backgroundColor = "var(--incorrect-bg)"; } select.style.borderWidth = "2px"; });
+            return { isCorrect: isCorrect, feedback: feedbackHTML, userResponse: userOrderedItems, scoreIncrement: isCorrect ? 1 : 0 };
         }
         function disableInputs() { /* ... (same as before) ... */
-             document.querySelectorAll('input[name="question-option"], .ordering-select').forEach(i => i.disabled = true);
-             document.querySelectorAll('.option-label').forEach(l => l.style.cursor = 'default');
-             document.querySelectorAll('.matching-item').forEach(i => {
-                 i.style.pointerEvents = 'none'; // Prevent further clicks
-                 i.style.cursor = 'default';
-                // Optionally remove hover effects if desired
-                // i.classList.add('disabled-match-item');
-             });
-             // Make arrows slightly less prominent? (Optional)
-             // if (matchingSvgElement) {
-             //     matchingSvgElement.style.opacity = 0.7;
-             // }
+             document.querySelectorAll('input[name="question-option"], .ordering-select').forEach(i => i.disabled = true); document.querySelectorAll('.option-label').forEach(l => l.style.cursor = 'default');
+             document.querySelectorAll('.matching-item').forEach(i => { i.style.pointerEvents = 'none'; i.style.cursor = 'default'; });
          }
 
 
         // --- Navigation and Results ---
         function nextQuestion() { /* ... (same as before) ... */
-            quizState.currentQuestionIndex++;
-            if (quizState.currentQuestionIndex < quizState.totalQuestions) {
-                displayQuestion();
-            } else {
-                quizState.endTime = new Date();
-                displayResults();
-            }
+            quizState.currentQuestionIndex++; if (quizState.currentQuestionIndex < quizState.totalQuestions) { displayQuestion(); } else { quizState.endTime = new Date(); displayResults(); }
         }
-        function displayResults() { // Includes Redo Button & IMPROVED UI
+        function displayResults() { // Updated to save stats
              if (!quizContainerElement || !feedbackContainerElement || !quizButtonsContainerElement || !quizTitleElement) return;
 
-             quizContainerElement.innerHTML = ''; // Clear previous content
-             feedbackContainerElement.classList.add('hidden');
-             quizButtonsContainerElement.innerHTML = '';
-             quizTitleElement.textContent = 'Quiz Results'; // Update title
+             quizContainerElement.innerHTML = ''; feedbackContainerElement.classList.add('hidden'); quizButtonsContainerElement.innerHTML = '';
+             quizTitleElement.textContent = 'Quiz Results';
 
-             const timeTaken = quizState.endTime && quizState.startTime ? (quizState.endTime - quizState.startTime) / 1000 : 0;
-             const minutes = Math.floor(timeTaken / 60);
-             const seconds = Math.floor(timeTaken % 60);
-             const timeString = timeTaken > 0 ? `${minutes}m ${seconds}s` : 'N/A';
-
+             const timeTakenSeconds = quizState.endTime && quizState.startTime ? Math.round((quizState.endTime - quizState.startTime) / 1000) : 0;
+             const timeString = formatTime(timeTakenSeconds);
              const score = quizState.totalQuestions > 0 ? (quizState.correctAnswers / quizState.totalQuestions) * 100 : 0;
              const scoreRounded = score.toFixed(0);
 
-             let resultMessage = '';
-             if (quizState.totalQuestions === 0) {
-                 resultMessage = 'No questions in this quiz.';
-             } else if (score >= 90) {
-                 resultMessage = 'Excellent! 🎉';
-             } else if (score >= 70) {
-                 resultMessage = 'Great Job! 👍';
-             } else if (score >= 50) {
-                 resultMessage = 'Good Effort! 💪';
-             } else {
-                 resultMessage = 'Keep Practicing! 📚';
+             // --- Save Stats ---
+             if (quizState.totalQuestions > 0) {
+                 saveLessonStats(
+                     quizState.subject, quizState.semester, quizState.unit, quizState.lesson,
+                     quizState.correctAnswers, quizState.totalQuestions, timeTakenSeconds
+                 );
              }
+             // --- End Save Stats ---
 
-             const resultsDiv = document.createElement('div');
-             resultsDiv.className = 'results-container';
+             let resultMessage = ''; if (quizState.totalQuestions === 0) { resultMessage = 'No questions.'; } else if (score >= 90) { resultMessage = 'Excellent! 🎉'; } else if (score >= 70) { resultMessage = 'Great Job! 👍'; } else if (score >= 50) { resultMessage = 'Good Effort! 💪'; } else { resultMessage = 'Keep Practicing! 📚'; }
 
-             // Use innerHTML for structure, incorporating new styles and icons
+             const resultsDiv = document.createElement('div'); resultsDiv.className = 'results-container';
              resultsDiv.innerHTML = `
                 <h2 class="results-header">${resultMessage}</h2>
-                <div class="results-score">
-                    <div class="score-circle">
-                        <span class="score-number">${scoreRounded}</span>
-                        <span class="score-percent-sign">%</span>
-                    </div>
-                </div>
+                <div class="results-score"><div class="score-circle"><span class="score-number">${scoreRounded}</span><span class="score-percent-sign">%</span></div></div>
                 <div class="results-details">
                     <p><span class="detail-icon">📚</span><strong>Subject:</strong> <span class="detail-value">${quizState.subject || 'N/A'}</span></p>
+                    <p><span class="detail-icon">🗓️</span><strong>Semester:</strong> <span class="detail-value">${quizState.semester || 'N/A'}</span></p>
                     <p><span class="detail-icon">🔖</span><strong>Unit:</strong> <span class="detail-value">${quizState.unit || 'N/A'}</span></p>
                     <p><span class="detail-icon">📖</span><strong>Lesson:</strong> <span class="detail-value">${quizState.lesson || 'N/A'}</span></p>
                     <p><span class="detail-icon">✅</span><strong>Correct:</strong> <span class="detail-value">${quizState.correctAnswers} / ${quizState.totalQuestions}</span></p>
                     <p><span class="detail-icon">⏱️</span><strong>Time:</strong> <span class="detail-value">${timeString}</span></p>
-                </div>
-             `;
+                </div>`;
              quizContainerElement.appendChild(resultsDiv);
 
              // --- Results Buttons ---
-             const actionsDiv = document.createElement('div');
-             actionsDiv.className = 'results-actions quiz-buttons'; // Re-use class for button container styling
-
-             // Redo Quiz Button
-             const redoBtn = document.createElement('button');
-             redoBtn.className = 'btn redo-btn';
-             redoBtn.textContent = '🔄 Redo Quiz'; // Added icon
-             redoBtn.onclick = () => {
-                 // Restart the quiz with the same set of original questions
-                 startQuiz(quizState.subject, quizState.unit, quizState.lesson, quizState.originalQuestions);
-             };
+             const actionsDiv = document.createElement('div'); actionsDiv.className = 'results-actions quiz-buttons';
+             const redoBtn = document.createElement('button'); redoBtn.className = 'btn redo-btn'; redoBtn.innerHTML = '🔄 Redo Quiz';
+             redoBtn.onclick = () => { startQuiz(quizState.subject, quizState.semester, quizState.unit, quizState.lesson, quizState.originalQuestions); };
              actionsDiv.appendChild(redoBtn);
-
-             // Review Answers Button (only if there were questions)
-             if (quizState.totalQuestions > 0) {
-                 const reviewBtn = document.createElement('button');
-                 reviewBtn.id = 'review-btn';
-                 reviewBtn.className = 'btn review-btn';
-                 reviewBtn.textContent = '🧐 Review Answers'; // Added icon
-                 reviewBtn.onclick = reviewAnswers;
-                 actionsDiv.appendChild(reviewBtn);
-             }
-
-             // Back to Topics Button
-             const backTopicsBtn = document.createElement('button');
-             backTopicsBtn.className = 'btn back-to-topics-btn'; // Specific class for potential right alignment
-             backTopicsBtn.textContent = '⬅️ Back to Topics'; // Added icon
-             backTopicsBtn.onclick = showTopicList;
-             actionsDiv.appendChild(backTopicsBtn);
-
+             if (quizState.totalQuestions > 0) { const reviewBtn = document.createElement('button'); reviewBtn.id = 'review-btn'; reviewBtn.className = 'btn review-btn'; reviewBtn.innerHTML = '🧐 Review Answers'; reviewBtn.onclick = reviewAnswers; actionsDiv.appendChild(reviewBtn); }
+             const backTopicsBtn = document.createElement('button'); backTopicsBtn.className = 'btn back-to-topics-btn'; backTopicsBtn.innerHTML = '⬅️ Back to Topics'; backTopicsBtn.onclick = showTopicList; actionsDiv.appendChild(backTopicsBtn);
              quizButtonsContainerElement.appendChild(actionsDiv);
          }
 
         // --- Answer Review ---
         function reviewAnswers() { /* ... (same as before) ... */
              if (!quizContainerElement || !feedbackContainerElement || !quizButtonsContainerElement || !quizTitleElement) return;
-             quizContainerElement.innerHTML = ''; feedbackContainerElement.classList.add('hidden'); quizButtonsContainerElement.innerHTML = '';
-             quizTitleElement.textContent = `Review: ${quizState.lesson}`;
-
+             quizContainerElement.innerHTML = ''; feedbackContainerElement.classList.add('hidden'); quizButtonsContainerElement.innerHTML = ''; quizTitleElement.textContent = `Review: ${quizState.lesson}`;
              const reviewDiv = document.createElement('div'); reviewDiv.className = 'review-container';
-             quizState.questions.forEach((q, i) => { // Use the shuffled question order from the quiz attempt
-                 const box = document.createElement('div');
-                 const userAns = quizState.selectedAnswers[i]; // Get the user's response for this question index
-                 let { correctnessClass, statusText } = calculateReviewStatus(q, userAns);
-                 box.className = `question-review ${correctnessClass}`; // Add correct/incorrect/partial class
-
-                 // Header with status
+             quizState.questions.forEach((q, i) => {
+                 const box = document.createElement('div'); const userAns = quizState.selectedAnswers[i]; let { correctnessClass, statusText } = calculateReviewStatus(q, userAns); box.className = `question-review ${correctnessClass}`;
                  const qTypeDisplay = (q.type || 'multiple_choice').replace('_',' ');
-                 box.innerHTML = `<div class="review-question-header">
-                                     <span class="review-question-number">Question ${i + 1} (${qTypeDisplay})</span>
-                                     <span class="review-status">${statusText}</span>
-                                  </div>
-                                  <p class="review-question-text">${q.question||'?'}</p>
-                                  <div class="review-answer-content" id="review-answer-content-${i}"></div>`; // Container for specific answer review
-                 reviewDiv.appendChild(box);
-
-                 // Render the specific answer details
+                 box.innerHTML = `<div class="review-question-header"><span class="review-question-number">Question ${i + 1} (${qTypeDisplay})</span><span class="review-status">${statusText}</span></div><p class="review-question-text">${q.question||'?'}</p><div class="review-answer-content" id="review-answer-content-${i}"></div>`; reviewDiv.appendChild(box);
                  const contentArea = box.querySelector(`#review-answer-content-${i}`);
-                 if (contentArea) {
-                     try {
-                         switch(q.type){
-                             case "matching": reviewMatchingReview(q, userAns, contentArea); break;
-                             case "ordering": reviewOrderingReview(q, userAns, contentArea); break;
-                             case "multiple_choice": default: reviewMultipleChoiceReview(q, userAns, contentArea); break;
-                         }
-                     } catch(e){
-                         console.error("Review render error:", e);
-                         contentArea.innerHTML = `<p style="color:red;">Error displaying review details.</p>`;
-                     }
-                 } else {
-                      console.warn(`Could not find content area for review index ${i}`);
-                 }
+                 if (contentArea) { try { switch(q.type){ case "matching": reviewMatchingReview(q, userAns, contentArea); break; case "ordering": reviewOrderingReview(q, userAns, contentArea); break; case "multiple_choice": default: reviewMultipleChoiceReview(q, userAns, contentArea); break; } } catch(e){ console.error("Review render error:", e); contentArea.innerHTML = `<p style="color:red;">Error displaying review.</p>`; } } else { console.warn(`No content area for review index ${i}`); }
              });
              quizContainerElement.appendChild(reviewDiv);
-
-             // Review Buttons
-             const actionsDiv = document.createElement('div');
-             actionsDiv.className = 'review-actions quiz-buttons'; // Use shared button container class
-
-             // Back to Results Button
-             const backResultsBtn = document.createElement('button');
-             backResultsBtn.className = 'btn back-btn';
-             backResultsBtn.textContent = '← Back to Results';
-             backResultsBtn.onclick = displayResults;
-             actionsDiv.appendChild(backResultsBtn);
-
-             // Back to Topics Button (Right aligned potentially)
-             const backTopicsBtn = document.createElement('button');
-             backTopicsBtn.className = 'btn back-to-topics-btn';
-             backTopicsBtn.textContent = '⬅️ Back to Topics';
-             backTopicsBtn.onclick = showTopicList;
-             actionsDiv.appendChild(backTopicsBtn);
-
-             quizButtonsContainerElement.appendChild(actionsDiv);
-             quizContainerElement.scrollIntoView({ behavior: 'smooth', block: 'start' }); // Scroll to top of review
+             const actionsDiv = document.createElement('div'); actionsDiv.className = 'review-actions quiz-buttons';
+             const backResultsBtn = document.createElement('button'); backResultsBtn.className = 'btn back-btn'; backResultsBtn.textContent = '← Back to Results'; backResultsBtn.onclick = displayResults; actionsDiv.appendChild(backResultsBtn);
+             const backTopicsBtn = document.createElement('button'); backTopicsBtn.className = 'btn back-to-topics-btn'; backTopicsBtn.innerHTML = '⬅️ Back to Topics'; backTopicsBtn.onclick = showTopicList; actionsDiv.appendChild(backTopicsBtn);
+             quizButtonsContainerElement.appendChild(actionsDiv); quizContainerElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
          }
         function calculateReviewStatus(question, userAnswer) { /* ... (same as before) ... */
-            let correctnessClass = 'incorrect';
-            let statusText = '✗ Incorrect';
-            let isCorrect = false;
-            let isPartial = false; // For matching
-
-            try {
-                switch (question.type) {
-                    case "matching":
-                        const correctPairs = question.answer || {};
-                        const totalCorrectPairs = Object.keys(correctPairs).length;
-                        let correctlyMatchedCount = 0;
-
-                        if (totalCorrectPairs > 0 && userAnswer && typeof userAnswer === 'object') {
-                            for (const pIdx in correctPairs) {
-                                if (userAnswer.hasOwnProperty(pIdx) && userAnswer[pIdx] === correctPairs[pIdx]) {
-                                    correctlyMatchedCount++;
-                                }
-                            }
-                        }
-                         // Consider it fully correct only if all pairs are matched correctly
-                        isCorrect = totalCorrectPairs > 0 && correctlyMatchedCount === totalCorrectPairs && Object.keys(userAnswer || {}).length === totalCorrectPairs;
-                        isPartial = totalCorrectPairs > 0 && correctlyMatchedCount > 0 && !isCorrect;
-
-                        if (isCorrect) {
-                            correctnessClass = "correct";
-                            statusText = "✓ Correct";
-                        } else if (isPartial) {
-                            correctnessClass = "partial";
-                            statusText = `~ Partial (${correctlyMatchedCount}/${totalCorrectPairs})`;
-                        }
-                        // Default 'incorrect' handles the 0 correct case.
-                        break;
-
-                    case "ordering":
-                        // userAnswer should be the array of item texts in the user's chosen order
-                        if (userAnswer && Array.isArray(userAnswer) && question.answer && Array.isArray(question.answer)) {
-                            isCorrect = JSON.stringify(userAnswer) === JSON.stringify(question.answer);
-                        }
-                         if (userAnswer === null || !Array.isArray(userAnswer)) { // Handle case where user didn't complete ordering
-                              statusText = ' अधूरा'; // Incomplete
-                              correctnessClass = 'incorrect'; // Treat as incorrect for styling
-                         } else if (isCorrect) {
-                             correctnessClass = "correct";
-                             statusText = "✓ Correct";
-                         }
-                        break;
-
-                    case "multiple_choice":
-                    default:
-                        // userAnswer is the index of the selected option
-                        if (userAnswer !== null && question.options && question.answer) {
-                            isCorrect = question.options[userAnswer] === question.answer;
-                        }
-                         if (userAnswer === null) { // Handle case where user didn't select an answer
-                              statusText = 'अनुत्तरित'; // Unanswered
-                              correctnessClass = 'incorrect'; // Treat as incorrect for styling
-                         } else if (isCorrect) {
-                             correctnessClass = "correct";
-                             statusText = "✓ Correct";
-                         }
-                        break;
-                }
-            } catch (e) {
-                console.error("CalculateReviewStatus Error:", e);
-                // Fallback to incorrect status if error occurs
-                correctnessClass = 'incorrect';
-                statusText = 'Error evaluating';
-            }
-            return { correctnessClass, statusText };
+            let correctnessClass = 'incorrect', statusText = '✗ Incorrect', isCorrect = false, isPartial = false; try { switch (question.type) { case "matching": const correctPairs = question.answer || {}; const totalCorrectPairs = Object.keys(correctPairs).length; let correctlyMatchedCount = 0; if (totalCorrectPairs > 0 && userAnswer && typeof userAnswer === 'object') { for (const pIdx in correctPairs) { if (userAnswer.hasOwnProperty(pIdx) && userAnswer[pIdx] === correctPairs[pIdx]) { correctlyMatchedCount++; } } } isCorrect = totalCorrectPairs > 0 && correctlyMatchedCount === totalCorrectPairs && Object.keys(userAnswer || {}).length === totalCorrectPairs; isPartial = totalCorrectPairs > 0 && correctlyMatchedCount > 0 && !isCorrect; if (isCorrect) { correctnessClass = "correct"; statusText = "✓ Correct"; } else if (isPartial) { correctnessClass = "partial"; statusText = `~ Partial (${correctlyMatchedCount}/${totalCorrectPairs})`; } break; case "ordering": if (userAnswer && Array.isArray(userAnswer) && question.answer && Array.isArray(question.answer)) { isCorrect = JSON.stringify(userAnswer) === JSON.stringify(question.answer); } if (userAnswer === null || !Array.isArray(userAnswer)) { statusText = ' अधूरा'; correctnessClass = 'incorrect'; } else if (isCorrect) { correctnessClass = "correct"; statusText = "✓ Correct"; } break; case "multiple_choice": default: if (userAnswer !== null && question.options && question.answer) { isCorrect = question.options[userAnswer] === question.answer; } if (userAnswer === null) { statusText = 'अनुत्तरित'; correctnessClass = 'incorrect'; } else if (isCorrect) { correctnessClass = "correct"; statusText = "✓ Correct"; } break; } } catch (e) { console.error("CalculateReviewStatus Error:", e); correctnessClass = 'incorrect'; statusText = 'Error'; } return { correctnessClass, statusText };
          }
         function reviewMultipleChoiceReview(question, userAnswerIndex, container) { /* ... (same as before) ... */
-            const div = document.createElement("div");
-            div.className = "review-mc-answer";
-
-            const userSelectedText = (userAnswerIndex !== null && question.options?.[userAnswerIndex] !== undefined)
-                                      ? question.options[userAnswerIndex]
-                                      : "No answer selected";
-            const isCorrect = (userAnswerIndex !== null && userSelectedText === question.answer);
-
-            let userAnswerHTML = `<span class="user-answer-text`;
-            if (userAnswerIndex === null) {
-                userAnswerHTML += `">`; // No extra class needed for 'no answer'
-            } else if (isCorrect) {
-                 userAnswerHTML += ` correct">`;
-            } else {
-                 userAnswerHTML += ` incorrect">`; // Incorrect class adds line-through via CSS
-            }
-             userAnswerHTML += `${userSelectedText}</span>`;
-
-
-            div.innerHTML = `<p><strong>Your answer:</strong> ${userAnswerHTML}</p>`;
-
-            if (!isCorrect) {
-                div.innerHTML += `<p><strong>Correct answer:</strong> <span class="correct-answer-text">${question.answer || "N/A"}</span></p>`;
-            }
-
-            container.appendChild(div);
+            const div = document.createElement("div"); div.className = "review-mc-answer"; const userSelectedText = (userAnswerIndex !== null && question.options?.[userAnswerIndex] !== undefined) ? question.options[userAnswerIndex] : "No answer selected"; const isCorrect = (userAnswerIndex !== null && userSelectedText === question.answer); let userAnswerHTML = `<span class="user-answer-text`; if (userAnswerIndex === null) { userAnswerHTML += `">`; } else if (isCorrect) { userAnswerHTML += ` correct">`; } else { userAnswerHTML += ` incorrect">`; } userAnswerHTML += `${userSelectedText}</span>`; div.innerHTML = `<p><strong>Your answer:</strong> ${userAnswerHTML}</p>`; if (!isCorrect) { div.innerHTML += `<p><strong>Correct answer:</strong> <span class="correct-answer-text">${question.answer || "N/A"}</span></p>`; } container.appendChild(div);
          }
         function reviewMatchingReview(question, userPairs, container) { /* ... (same as before) ... */
-             const div=document.createElement("div");div.className="review-matching-answer";
-             div.innerHTML="<p><strong>Matching Review:</strong> (Your Matches vs Correct)</p>";
-
-             const grid=document.createElement("div");grid.className="review-matching-grid";
-             const pCol=document.createElement("div"); pCol.className="review-matching-column"; // pCol.innerHTML = "<h5>Item</h5>";
-             const mCol=document.createElement("div"); mCol.className="review-matching-column"; // mCol.innerHTML = "<h5>Your Match (Correct Match)</h5>";
-
-             const correctPairs=question.answer||{};
-             const prompts = question.prompts || [];
-             const matches = question.matches || [];
-
-             // Iterate through prompts to ensure all are listed
-             prompts.forEach((promptText, promptIndex) => {
-                 const userMatchIndex = userPairs ? userPairs[promptIndex] : null; // User's selected match index for this prompt
-                 const correctMatchIndex = correctPairs[promptIndex]; // Correct match index for this prompt
-
-                 const isPairCorrect = (userMatchIndex !== null && userMatchIndex === correctMatchIndex);
-
-                 // Create display elements
-                 const pDiv = document.createElement("div"); pDiv.textContent = `${promptIndex + 1}. ${promptText}`;
-                 const mDiv = document.createElement("div");
-
-                 const userMatchText = (userMatchIndex !== null && matches[userMatchIndex] !== undefined)
-                                       ? matches[userMatchIndex]
-                                       : "(No match / Invalid)";
-                 const correctMatchText = (correctMatchIndex !== undefined && matches[correctMatchIndex] !== undefined)
-                                          ? matches[correctMatchIndex]
-                                          : "(N/A)";
-
-                 if (isPairCorrect) {
-                     // Correctly matched pair
-                     pDiv.className = "review-matched-pair-correct";
-                     mDiv.textContent = correctMatchText; // Just show the correct match
-                     mDiv.className = "review-matched-pair-correct";
-                 } else {
-                     // Incorrectly matched pair (or no match)
-                     pDiv.className = "review-matched-pair-incorrect";
-                     // Show user's incorrect match crossed out, followed by the correct one
-                     mDiv.innerHTML = `<span style="text-decoration: line-through; opacity: 0.7;">${userMatchText}</span> <span style="color: var(--correct-text); font-weight:500;">(${correctMatchText})</span>`;
-                     mDiv.className = "review-matched-pair-incorrect";
-                 }
-
-                 pCol.appendChild(pDiv);
-                 mCol.appendChild(mDiv);
-             });
-
-             grid.append(pCol, mCol);
-             div.appendChild(grid);
-             container.appendChild(div);
+             const div=document.createElement("div");div.className="review-matching-answer"; div.innerHTML="<p><strong>Matching Review:</strong> (Your Match vs Correct)</p>"; const grid=document.createElement("div");grid.className="review-matching-grid"; const pCol=document.createElement("div"); pCol.className="review-matching-column"; const mCol=document.createElement("div"); mCol.className="review-matching-column"; const correctPairs=question.answer||{}; const prompts = question.prompts || []; const matches = question.matches || [];
+             prompts.forEach((promptText, promptIndex) => { const userMatchIndex = userPairs ? userPairs[promptIndex] : null; const correctMatchIndex = correctPairs[promptIndex]; const isPairCorrect = (userMatchIndex !== null && userMatchIndex === correctMatchIndex); const pDiv = document.createElement("div"); pDiv.textContent = `${promptIndex + 1}. ${promptText}`; const mDiv = document.createElement("div"); const userMatchText = (userMatchIndex !== null && matches[userMatchIndex] !== undefined) ? matches[userMatchIndex] : "(No match)"; const correctMatchText = (correctMatchIndex !== undefined && matches[correctMatchIndex] !== undefined) ? matches[correctMatchIndex] : "(N/A)";
+                 if (isPairCorrect) { pDiv.className = "review-matched-pair-correct"; mDiv.textContent = correctMatchText; mDiv.className = "review-matched-pair-correct"; } else { pDiv.className = "review-matched-pair-incorrect"; mDiv.innerHTML = `<span style="text-decoration: line-through;">${userMatchText}</span> <span style="font-weight:500;">(${correctMatchText})</span>`; mDiv.className = "review-matched-pair-incorrect"; } pCol.appendChild(pDiv); mCol.appendChild(mDiv); });
+             grid.append(pCol, mCol); div.appendChild(grid); container.appendChild(div);
          }
-        function reviewOrderingReview(question, userOrderedItems, container) { // Improved display
-             const div = document.createElement("div");
-             div.className = "review-ordering-answer";
-             const correctOrder = question.answer || [];
-             const isFullyCorrect = userOrderedItems && JSON.stringify(userOrderedItems) === JSON.stringify(correctOrder);
-
-             div.innerHTML = `<p><strong>Ordering Review:</strong></p>`;
-
-             const list = document.createElement("div");
-             list.className = "review-ordering-list";
-
-             // Display based on the CORRECT order
-             correctOrder.forEach((correctItemText, correctIndex) => {
-                 const itemDiv = document.createElement("div");
-                 itemDiv.className = "review-ordering-list-item";
-
-                 const userIndex = userOrderedItems ? userOrderedItems.indexOf(correctItemText) : -1;
-                 const userPosition = (userIndex !== -1) ? userIndex + 1 : null; // 1-based position chosen by user
-                 const correctPosition = correctIndex + 1; // 1-based correct position
-
-                 let numberSpanHTML = '';
-                 if (userPosition === correctPosition) {
-                     // Correct position chosen by user
-                     numberSpanHTML = `<span class="review-order-number review-order-correct">${correctPosition}.</span>`;
-                     itemDiv.style.backgroundColor = 'var(--correct-bg)'; // Background hint
-                 } else if (userPosition !== null) {
-                     // Incorrect position chosen by user
-                     numberSpanHTML = `<span class="review-order-number review-order-incorrect">${userPosition}.</span> <span class="review-order-number review-order-correct">(${correctPosition}.)</span>`;
-                     itemDiv.style.backgroundColor = 'var(--incorrect-bg)'; // Background hint
-                 } else {
-                     // User did not place this item (or didn't complete the ordering)
-                     numberSpanHTML = `<span class="review-order-number review-order-incorrect">(Not Placed)</span> <span class="review-order-number review-order-correct">(${correctPosition}.)</span>`;
-                     itemDiv.style.backgroundColor = 'var(--partial-bg)'; // Different hint
-                 }
-
-                 itemDiv.innerHTML = `${numberSpanHTML} ${correctItemText}`;
-                 list.appendChild(itemDiv);
-             });
-
-             div.appendChild(list);
-
-             // Optionally, show the user's full sequence if it was incorrect and provided
-            // if (!isFullyCorrect && userOrderedItems && userOrderedItems.length > 0) {
-            //     div.innerHTML += `<p style="margin-top:15px; font-size: 14px;"><strong>Your order:</strong> ${userOrderedItems.join(" → ")}</p>`;
-            // } else if (!userOrderedItems) {
-            //     div.innerHTML += `<p style="margin-top:15px; font-size: 14px; color: var(--incorrect-text);">Ordering was not completed.</p>`;
-            // }
-
-
-             container.appendChild(div);
+        function reviewOrderingReview(question, userOrderedItems, container) { /* ... (same as before) ... */
+             const div = document.createElement("div"); div.className = "review-ordering-answer"; const correctOrder = question.answer || []; const isFullyCorrect = userOrderedItems && JSON.stringify(userOrderedItems) === JSON.stringify(correctOrder); div.innerHTML = `<p><strong>Ordering Review:</strong></p>`; const list = document.createElement("div"); list.className = "review-ordering-list";
+             correctOrder.forEach((correctItemText, correctIndex) => { const itemDiv = document.createElement("div"); itemDiv.className = "review-ordering-list-item"; const userIndex = userOrderedItems ? userOrderedItems.indexOf(correctItemText) : -1; const userPosition = (userIndex !== -1) ? userIndex + 1 : null; const correctPosition = correctIndex + 1; let numberSpanHTML = '';
+                 if (userPosition === correctPosition) { numberSpanHTML = `<span class="review-order-number review-order-correct">${correctPosition}.</span>`; itemDiv.style.backgroundColor = 'var(--correct-bg)'; } else if (userPosition !== null) { numberSpanHTML = `<span class="review-order-number review-order-incorrect">${userPosition}.</span> <span class="review-order-number review-order-correct">(${correctPosition}.)</span>`; itemDiv.style.backgroundColor = 'var(--incorrect-bg)'; } else { numberSpanHTML = `<span class="review-order-number review-order-incorrect">(NP)</span> <span class="review-order-number review-order-correct">(${correctPosition}.)</span>`; itemDiv.style.backgroundColor = 'var(--partial-bg)'; } itemDiv.innerHTML = `${numberSpanHTML} ${correctItemText}`; list.appendChild(itemDiv); });
+             div.appendChild(list); container.appendChild(div);
          }
 
 
         // --- Error Display ---
-        function showError(subject, unit, lesson, message = '') { // Renders error into quiz container
-             if (!quizContainerElement || !feedbackContainerElement || !quizButtonsContainerElement || !quizTitleElement) return;
-             // Ensure quiz view is visible to show the error
-             showQuizView();
-
-             quizTitleElement.textContent = 'Error';
-             quizContainerElement.innerHTML = ''; // Clear any previous quiz content
-             feedbackContainerElement.classList.add('hidden');
-             quizButtonsContainerElement.innerHTML = ''; // Clear buttons
-
-             const defaultMsg = `Sorry, no questions are currently available for "${lesson}" in the "${unit}" unit.`;
-             const displayMsg = message || defaultMsg;
-
-             const errDiv = document.createElement('div');
-             errDiv.className = 'error-display'; // Use existing error styling
-             errDiv.innerHTML = `<div class="error-message">${displayMsg}</div>`;
-
-             // Add a button to go back
-             const backBtn = document.createElement('button');
-             backBtn.className = 'btn back-to-topics-btn';
-             backBtn.textContent = '⬅️ Back to Topics';
-             backBtn.onclick = showTopicList;
-             errDiv.appendChild(backBtn);
-
-             quizContainerElement.appendChild(errDiv);
+        function showError(subject, unit, lesson, message = '') { /* ... (same as before) ... */
+             if (!quizContainerElement || !feedbackContainerElement || !quizButtonsContainerElement || !quizTitleElement) return; showQuizView(); quizTitleElement.textContent = 'Error'; quizContainerElement.innerHTML = ''; feedbackContainerElement.classList.add('hidden'); quizButtonsContainerElement.innerHTML = '';
+             const defaultMsg = `Sorry, no questions are currently available for "${lesson}" in the "${unit}" unit.`; const displayMsg = message || defaultMsg; const errDiv = document.createElement('div'); errDiv.className = 'error-display'; errDiv.innerHTML = `<div class="error-message">${displayMsg}</div>`;
+             const backBtn = document.createElement('button'); backBtn.className = 'btn back-to-topics-btn'; backBtn.innerHTML = '⬅️ Back to Topics'; backBtn.onclick = showTopicList; errDiv.appendChild(backBtn); quizContainerElement.appendChild(errDiv);
         }
 
         // --- Get Questions Data ---
-        function getQuestions(subject, unitTitle, lessonTitle) { // Adds default type if missing (Sanitize ID access)
-             const activeSemesterBtn = document.querySelector('.semester-btn.active');
-             if (!activeSemesterBtn) {
-                 console.error("No active semester selected.");
-                 return [];
-             }
-             const activeSemester = activeSemesterBtn.dataset.semester;
-
-             if (!subject || !unitTitle || !lessonTitle || !activeSemester) {
-                 console.error("Missing parameters for getQuestions:", { subject, unitTitle, lessonTitle, activeSemester });
-                 return [];
-             }
-
+        // Modified to accept semester
+        function getQuestions(subject, semester, unitTitle, lessonTitle) {
+             if (!subject || !semester || !unitTitle || !lessonTitle) { console.error("Missing parameters for getQuestions:", { subject, semester, unitTitle, lessonTitle }); return []; }
              try {
-                 const semesterData = topicsData[subject]?.[activeSemester];
-                 const units = semesterData?.units;
-                 if (!units) {
-                     console.warn(`Data structure error: Units missing for ${subject} -> ${activeSemester}`);
-                     return [];
-                 }
-
-                 const unit = units.find(u => u?.title === unitTitle);
-                 const lessons = unit?.lessons;
-                 if (!lessons) {
-                     console.warn(`Unit "${unitTitle}" or its lessons missing in ${subject} -> ${activeSemester}.`);
-                     return [];
-                 }
-
-                 const lesson = lessons.find(l => l?.title === lessonTitle);
-                 if (!lesson) {
-                     console.warn(`Lesson "${lessonTitle}" missing in unit "${unitTitle}".`);
-                     return [];
-                 }
-
-                 // Ensure questions is an array and add default type if missing
-                 if (Array.isArray(lesson.questions) && lesson.questions.length > 0) {
-                     return lesson.questions.map(q => ({
-                         ...(q.type ? {} : { type: 'multiple_choice' }), // Default to multiple_choice if type is absent
-                         ...q
-                     }));
-                 } else {
-                     // Lesson exists but has no questions or invalid questions format
-                     console.log(`No questions found for lesson "${lessonTitle}" in unit "${unitTitle}".`);
-                     return [];
-                 }
-             } catch (e) {
-                 console.error("Error accessing question data:", e);
-                 return []; // Return empty array on error
-             }
+                 const semesterData = topicsData[subject]?.[semester]; if (!semesterData?.units) { console.warn(`Data structure error: Units missing for ${subject} -> ${semester}`); return []; }
+                 const unit = semesterData.units.find(u => u?.title === unitTitle); if (!unit?.lessons) { console.warn(`Unit "${unitTitle}" or lessons missing in ${subject} -> ${semester}.`); return []; }
+                 const lesson = unit.lessons.find(l => l?.title === lessonTitle); if (!lesson) { console.warn(`Lesson "${lessonTitle}" missing in unit "${unitTitle}".`); return []; }
+                 if (Array.isArray(lesson.questions) && lesson.questions.length > 0) { return lesson.questions.map(q => ({ ...(q.type ? {} : { type: 'multiple_choice' }), ...q })); }
+                 else { console.log(`No questions found for lesson "${lessonTitle}".`); return []; }
+             } catch (e) { console.error("Error accessing question data:", e); return []; }
          }
 
         // --- END OF questions.js ---
