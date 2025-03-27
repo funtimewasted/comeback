@@ -6,349 +6,338 @@
     <title>Interactive Question Bank</title>
     <style>
         /* --- START OF styles.css --- */
+        :root {
+            /* Light Theme Variables */
+            --body-bg: #f8fafc;
+            --container-bg: #ffffff;
+            --text-color: #1e293b;
+            --text-muted: #64748b;
+            --text-heading: #0f172a;
+            --border-color: #e2e8f0;
+            --border-color-hover: #cbd5e1;
+            --accent-color: #2563eb;
+            --accent-color-dark: #1d4ed8;
+            --accent-color-light: #dbeafe;
+            --button-bg: #ffffff;
+            --button-border: #e0e0e0;
+            --button-text: #334155;
+            --button-hover-bg: #f1f5f9;
+            --button-active-bg: #0f172a;
+            --button-active-text: #ffffff;
+            --button-secondary-bg: #64748b;
+            --button-secondary-hover-bg: #475569;
+            --button-disabled-bg: #94a3b8;
+            --input-bg: #ffffff;
+            --input-border: #cbd5e1;
+            --feedback-bg: #f1f5f9;
+            --feedback-border: #e2e8f0;
+            --correct-bg: #dcfce7;
+            --correct-border: #16a34a;
+            --correct-text: #065f46;
+            --incorrect-bg: #fee2e2;
+            --incorrect-border: #ef4444;
+            --incorrect-text: #b91c1c;
+            --partial-bg: #fef9c3;
+            --partial-border: #f59e0b;
+            --partial-text: #854d0e;
+            --shadow-color: rgba(0,0,0,0.05);
+            --matched-item-bg: #e5e7eb;
+            --matched-item-border: #9ca3af;
+            --toggle-icon: '☀️';
+        }
+
+        body.dark-theme {
+            /* Dark Theme Variable Overrides */
+            --body-bg: #0f172a; /* Dark blue */
+            --container-bg: #1e293b; /* Slightly lighter blue */
+            --text-color: #cbd5e1; /* Lighter gray */
+            --text-muted: #94a3b8; /* Medium gray */
+            --text-heading: #f1f5f9; /* Off-white */
+            --border-color: #334155; /* Darker gray-blue */
+            --border-color-hover: #475569;
+            --accent-color: #3b82f6; /* Brighter blue for dark */
+            --accent-color-dark: #2563eb;
+            --accent-color-light: #1e3a8a; /* Darker blue for selection */
+            --button-bg: #334155;
+            --button-border: #475569;
+            --button-text: #e2e8f0;
+            --button-hover-bg: #475569;
+            --button-active-bg: #f1f5f9;
+            --button-active-text: #0f172a;
+            --button-secondary-bg: #475569;
+            --button-secondary-hover-bg: #52525b; /* Zinc */
+            --button-disabled-bg: #334155;
+            --input-bg: #0f172a;
+            --input-border: #475569;
+            --feedback-bg: #1e293b;
+            --feedback-border: #334155;
+            --correct-bg: #064e3b; /* Dark green */
+            --correct-border: #10b981;
+            --correct-text: #a7f3d0;
+            --incorrect-bg: #7f1d1d; /* Dark red */
+            --incorrect-border: #f87171;
+            --incorrect-text: #fecaca;
+            --partial-bg: #713f12; /* Dark amber */
+            --partial-border: #fbbf24;
+            --partial-text: #fef08a;
+            --shadow-color: rgba(0,0,0,0.2);
+            --matched-item-bg: #475569;
+            --matched-item-border: #64748b;
+            --toggle-icon: '🌙';
+        }
+
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             margin: 0;
             padding: 20px;
-            background-color: #f8fafc; /* Light background for body */
-            color: #1e293b; /* Default text color */
+            background-color: var(--body-bg);
+            color: var(--text-color);
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            background-color: #ffffff; /* White background for main container */
+            background-color: var(--container-bg);
             padding: 20px 30px;
             border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 10px var(--shadow-color);
+            border: 1px solid var(--border-color);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
         }
 
         .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             text-align: left;
             margin-bottom: 20px;
             padding-bottom: 15px;
-            border-bottom: 1px solid #e2e8f0;
+            border-bottom: 1px solid var(--border-color);
         }
 
         .header h1 {
             font-size: 24px;
             margin: 0;
-            color: #0f172a; /* Darker heading */
+            color: var(--text-heading);
         }
 
+        #theme-toggle {
+            background: none;
+            border: 1px solid var(--button-border);
+            color: var(--text-muted);
+            padding: 6px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 18px; /* Adjust size for icon */
+            line-height: 1;
+            transition: all 0.2s ease;
+        }
+         #theme-toggle::before {
+             content: var(--toggle-icon); /* Display icon */
+             display: inline-block;
+             margin-right: 4px;
+         }
+
+        #theme-toggle:hover {
+            background-color: var(--button-hover-bg);
+            border-color: var(--border-color-hover);
+            color: var(--text-color);
+        }
+
+        /* Nav Section hiding */
         .nav-section {
             display: flex;
             flex-direction: column;
             gap: 15px;
             margin-bottom: 20px;
+             transition: opacity 0.3s ease, max-height 0.3s ease, visibility 0.3s ease, margin 0.3s ease, padding 0.3s ease;
+             overflow: hidden;
+             max-height: 500px; /* Adjust if nav gets taller */
+             opacity: 1;
+             visibility: visible;
         }
-
-        .subjects {
-            display: flex;
-            flex-wrap: wrap; /* Allow wrapping on smaller screens */
-            gap: 10px;
-        }
-
-        .secondary-nav {
-            display: flex;
-            gap: 10px;
-            padding-left: 0; /* No indent needed now */
-            align-items: center;
-        }
-
-        .nav-btn {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            background-color: #ffffff;
-            border: 1px solid #e0e0e0;
-            transition: all 0.2s ease;
-            color: #334155;
-        }
-
-        .nav-btn:hover {
-            background-color: #f8f9fa;
-            border-color: #cbd5e1;
-        }
-
-        .nav-btn.active {
-            background-color: #0f172a;
-            color: white;
-            border-color: #0f172a; /* Match border */
-        }
-        .nav-btn.active span { /* Adjust icon color on active */
-             filter: brightness(0) invert(1);
-        }
-
-
-        .semester-toggle {
-            display: flex;
-            gap: 5px;
-            background-color: #f1f5f9;
-            padding: 4px;
-            border-radius: 6px;
-            border: 1px solid #e0e0e0;
-        }
-
-        .semester-btn {
-            padding: 6px 12px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-            background: none;
-            color: #334155; /* Default color */
-            transition: all 0.2s ease;
-        }
-
-        .semester-btn.active {
-            background-color: #ffffff;
-            color: #0f172a; /* Active color */
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-
-        /* --- Topic List Styles (#content) --- */
-        #content {
-            /* Styles for when the topic list is visible */
-        }
-
-        .unit-container { /* Container for semester title */
-             margin-bottom: 20px;
-        }
-
-        .unit-title { /* Title for the Semester (e.g., "First Semester") */
-            font-size: 20px;
-            font-weight: 600;
-            margin-bottom: 20px;
-            color: #1e293b;
-             padding-bottom: 10px;
-             border-bottom: 1px solid #e2e8f0;
-        }
-
-        .section { /* Represents a Unit Box */
-            background-color: #ffffff;
-            border-radius: 12px;
-            padding: 20px 25px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-            border: 1px solid #e0e0e0;
-            margin-bottom: 20px; /* Space between units */
-        }
-         /* Remove bottom margin from the last unit section in the list */
-        .semester-content > .section:last-of-type {
+         .nav-section.hidden {
+             max-height: 0;
+             opacity: 0;
              margin-bottom: 0;
+             padding-top: 0;
+             padding-bottom: 0;
+             border: none; /* Remove any potential borders when hidden */
+             visibility: hidden;
          }
 
+        .subjects { display: flex; flex-wrap: wrap; gap: 10px; }
+        .secondary-nav { display: flex; gap: 10px; align-items: center; }
 
-        .section-title { /* Represents the Unit Title inside the Unit Box */
-            font-size: 17px; /* Unit title size */
-            font-weight: 600;
-            margin-bottom: 15px;
-            color: #334155;
+        .nav-btn {
+            padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; font-size: 14px;
+            display: flex; align-items: center; gap: 6px;
+            background-color: var(--button-bg); border: 1px solid var(--button-border);
+            transition: all 0.2s ease; color: var(--button-text);
         }
-
-        /* .section-content represents a clickable Lesson Box inside a Unit Box */
-        .section-content {
-            padding: 15px;
-            background-color: #ffffff;
-            border-radius: 8px;
-            border: 1px solid #e0e0e0;
-            margin-bottom: 10px;
-            cursor: pointer;
-            transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.1s ease;
-            font-size: 15px;
-            color: #334155;
-            display: block;
-            text-align: left;
-        }
-        .section-content:last-child { /* Last lesson box in a unit */
-            margin-bottom: 0;
+        .nav-btn:hover { background-color: var(--button-hover-bg); border-color: var(--border-color-hover); }
+        .nav-btn.active { background-color: var(--button-active-bg); color: var(--button-active-text); border-color: var(--button-active-bg); }
+        .nav-btn.active span {
+            /* Invert icon color for dark theme active state */
+            body.dark-theme & { filter: none; } /* Keep default icon color in dark theme active */
+            body:not(.dark-theme) & { filter: brightness(0) invert(1); } /* Invert icon color in light theme active */
         }
 
-        .section-content:hover {
-            background-color: #f1f5f9;
-            border-color: #94a3b8;
-            transform: translateY(-1px);
-        }
 
-        .semester-content {
-            display: none;
+        .semester-toggle { display: flex; gap: 5px; background-color: var(--feedback-bg); padding: 4px; border-radius: 6px; border: 1px solid var(--button-border); }
+        .semester-btn { padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; background: none; color: var(--text-muted); transition: all 0.2s ease; }
+        .semester-btn.active { background-color: var(--container-bg); color: var(--text-heading); box-shadow: 0 1px 3px var(--shadow-color); }
+
+        /* --- Topic List Styles (#content) --- */
+        #content { /* remains visible */ }
+        .unit-container { margin-bottom: 20px; } /* Container for semester title */
+        .unit-title { font-size: 20px; font-weight: 600; margin-bottom: 20px; color: var(--text-heading); padding-bottom: 10px; border-bottom: 1px solid var(--border-color); }
+        .section { /* Represents a Unit Box */
+            background-color: var(--container-bg); border-radius: 12px; padding: 20px 25px; box-shadow: 0 1px 3px var(--shadow-color); border: 1px solid var(--border-color); margin-bottom: 20px;
         }
-        .semester-content.active {
-            display: block;
+        .semester-content > .section:last-of-type { margin-bottom: 0; }
+        .section-title { /* Unit Title */
+            font-size: 17px; font-weight: 600; margin-bottom: 15px; color: var(--text-heading);
         }
+        .section-content { /* Lesson Box */
+            padding: 15px; background-color: var(--button-bg); border-radius: 8px; border: 1px solid var(--button-border); margin-bottom: 10px; cursor: pointer; transition: all 0.2s ease; font-size: 15px; color: var(--button-text); display: block; text-align: left;
+        }
+        .section-content:last-child { margin-bottom: 0; }
+        .section-content:hover { background-color: var(--button-hover-bg); border-color: var(--border-color-hover); transform: translateY(-1px); }
+        .lesson-q-count { font-size: 0.85em; color: var(--text-muted); margin-left: 8px; font-weight: 400; }
+        .semester-content { display: none; }
+        .semester-content.active { display: block; }
 
         /* --- Quiz View Styles (#quiz-view) --- */
-        #quiz-view {
-             padding: 20px 0;
-        }
-
-        #quiz-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-        #quiz-title {
-            font-size: 20px;
-            font-weight: 600;
-            color: #1e293b;
-        }
-
-        #quiz-container {
-            margin-bottom: 20px;
-        }
-
-        .question-type-wrapper {
-            padding: 25px;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            background-color: #ffffff;
-            margin-bottom: 20px;
-             box-shadow: 0 1px 2px rgba(0,0,0,0.04);
-        }
-
-        .question-progress {
-            font-size: 14px;
-            color: #64748b;
-            margin-bottom: 15px;
-            text-align: right;
-        }
-
-        .question-text {
-            font-size: 18px;
-            margin-bottom: 25px;
-            line-height: 1.6;
-            color: #1e293b;
-        }
-        .question-text strong {
-            font-weight: 600;
-            margin-right: 5px;
-        }
+        #quiz-view { padding: 20px 0; }
+        #quiz-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid var(--border-color); }
+        #quiz-title { font-size: 20px; font-weight: 600; color: var(--text-heading); }
+        #quiz-container { margin-bottom: 20px; }
+        .question-type-wrapper { padding: 25px; border: 1px solid var(--border-color); border-radius: 8px; background-color: var(--container-bg); margin-bottom: 20px; box-shadow: 0 1px 2px var(--shadow-color); }
+        .question-progress { font-size: 14px; color: var(--text-muted); margin-bottom: 15px; text-align: right; }
+        .question-text { font-size: 18px; margin-bottom: 25px; line-height: 1.6; color: var(--text-color); }
+        .question-text strong { font-weight: 600; margin-right: 5px; }
 
         /* --- MC Specific --- */
         .options-container { display: flex; flex-direction: column; gap: 12px; margin-bottom: 0; }
-        .option-label { display: flex; align-items: center; padding: 12px 15px; border: 1px solid #e2e8f0; border-radius: 6px; cursor: pointer; transition: all 0.2s ease; background-color: #fff; }
-        .option-label:hover { background-color: #f1f5f9; border-color: #cbd5e1; }
-        .option-label input:checked + .option-text { font-weight: 500; }
-        .option-label input:checked { accent-color: #2563eb; }
+        .option-label { display: flex; align-items: center; padding: 12px 15px; border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer; transition: all 0.2s ease; background-color: var(--input-bg); }
+        .option-label:hover { background-color: var(--button-hover-bg); border-color: var(--border-color-hover); }
+        .option-label input:checked + .option-text { font-weight: 500; color: var(--accent-color); }
+        .option-label input:checked { accent-color: var(--accent-color); }
         .option-input { margin-right: 15px; flex-shrink: 0; }
-        .option-text { flex-grow: 1; font-size: 16px; color: #334155; }
+        .option-text { flex-grow: 1; font-size: 16px; color: var(--text-color); }
 
         /* --- Matching Specific --- */
-        .matching-instructions { font-size: 15px; color: #475569; margin-bottom: 20px; }
+        .matching-instructions { font-size: 15px; color: var(--text-muted); margin-bottom: 20px; }
         .matching-container { position: relative; display: flex; justify-content: space-between; gap: 5%; margin-bottom: 0; }
         .matching-column { flex-basis: 47%; display: flex; flex-direction: column; gap: 10px; }
-        .matching-column h4 { margin: 0 0 10px 0; font-size: 15px; font-weight: 600; color: #4a5568; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .matching-item { padding: 10px 15px; border: 1px solid #cbd5e1; background-color: #fff; border-radius: 6px; cursor: pointer; transition: all 0.2s ease; font-size: 15px; display: flex; align-items: center; min-height: 30px; }
-        .matching-item:hover { background-color: #f1f5f9; border-color: #94a3b8; }
-        .matching-item.selected { background-color: #dbeafe; border-color: #60a5fa; font-weight: 500; }
-        .matching-item.matched { background-color: #e5e7eb; border-color: #9ca3af; cursor: pointer; opacity: 1.0; }
+        .matching-column h4 { margin: 0 0 10px 0; font-size: 15px; font-weight: 600; color: var(--text-muted); border-bottom: 1px solid var(--border-color); padding-bottom: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .matching-item { padding: 10px 15px; border: 1px solid var(--input-border); background-color: var(--input-bg); border-radius: 6px; cursor: pointer; transition: all 0.2s ease; font-size: 15px; display: flex; align-items: center; min-height: 30px; color: var(--text-color); }
+        .matching-item:hover { background-color: var(--button-hover-bg); border-color: var(--border-color-hover); }
+        .matching-item.selected { background-color: var(--accent-color-light); border-color: var(--accent-color); font-weight: 500; }
+        .matching-item.matched { background-color: var(--matched-item-bg); border-color: var(--matched-item-border); cursor: pointer; opacity: 1.0; }
         #matching-arrow-svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; z-index: 1; }
-        #matching-arrow-svg line { stroke: #60a5fa; stroke-width: 2; transition: all 0.3s ease; marker-end: url(#arrowhead); }
-        .review-matched-pair-correct { background-color: #dcfce7 !important; border-color: #16a34a !important; }
-        .review-matched-pair-incorrect { background-color: #fee2e2 !important; border-color: #ef4444 !important; }
+        #matching-arrow-svg line { stroke: var(--accent-color); stroke-width: 2; transition: all 0.3s ease; marker-end: url(#arrowhead); }
+        #matching-arrow-svg #arrowhead polygon { fill: var(--accent-color); }
 
         /* --- Ordering Specific --- */
-        .ordering-instructions { font-size: 15px; color: #475569; margin-bottom: 20px; }
+        .ordering-instructions { font-size: 15px; color: var(--text-muted); margin-bottom: 20px; }
         .ordering-container { display: flex; flex-direction: column; gap: 15px; margin-bottom: 0; }
-        .ordering-item { display: flex; align-items: center; padding: 10px 15px; border: 1px solid #e2e8f0; background-color: #fff; border-radius: 6px; }
-        .ordering-select { margin-right: 15px; padding: 5px 8px; border-radius: 4px; border: 1px solid #cbd5e1; font-size: 14px; min-width: 60px; }
-        .ordering-text { flex-grow: 1; font-size: 16px; }
-        .review-order-number { font-weight: 600; min-width: 25px; text-align: right; margin-right: 10px; }
-        .review-order-correct { color: #059669; }
-        .review-order-incorrect { color: #dc2626; text-decoration: line-through; margin-right: 5px;}
+        .ordering-item { display: flex; align-items: center; padding: 10px 15px; border: 1px solid var(--border-color); background-color: var(--input-bg); border-radius: 6px; }
+        .ordering-select { margin-right: 15px; padding: 5px 8px; border-radius: 4px; border: 1px solid var(--input-border); font-size: 14px; min-width: 60px; background-color: var(--input-bg); color: var(--text-color); }
+        .ordering-text { flex-grow: 1; font-size: 16px; color: var(--text-color); }
 
         /* --- Feedback & Buttons --- */
-        #feedback-container { padding: 15px; margin-top: 20px; border-radius: 6px; background-color: #f1f5f9; border: 1px solid #e2e8f0; }
+        #feedback-container { padding: 15px; margin-top: 20px; border-radius: 6px; background-color: var(--feedback-bg); border: 1px solid var(--feedback-border); }
         #feedback-container.hidden { display: none; }
-        .correct-feedback { color: #059669; font-weight: 600; font-size: 16px; }
-        .incorrect-feedback { color: #dc2626; font-weight: 600; font-size: 16px; }
-        .incorrect-feedback span { display: block; font-weight: 500; margin-top: 8px; font-size: 15px; color: #475569; line-height: 1.5; }
-        .partial-feedback { color: #ca8a04; font-weight: 600; font-size: 16px; }
+        .correct-feedback { color: var(--correct-text); font-weight: 600; font-size: 16px; }
+        .incorrect-feedback { color: var(--incorrect-text); font-weight: 600; font-size: 16px; }
+        .incorrect-feedback span { display: block; font-weight: 500; margin-top: 8px; font-size: 15px; color: var(--text-muted); line-height: 1.5; }
+        .partial-feedback { color: var(--partial-text); font-weight: 600; font-size: 16px; }
 
         /* Highlighting */
-        .correct-option { background-color: #dcfce7 !important; border-color: #16a34a !important; }
-        .correct-option .option-text { color: #065f46 !important; }
-        .incorrect-option { background-color: #fee2e2 !important; border-color: #ef4444 !important; }
-        .incorrect-option .option-text { color: #b91c1c !important; }
+        .correct-option { background-color: var(--correct-bg) !important; border-color: var(--correct-border) !important; }
+        .correct-option .option-text { color: var(--correct-text) !important; }
+        .incorrect-option { background-color: var(--incorrect-bg) !important; border-color: var(--incorrect-border) !important; }
+        .incorrect-option .option-text { color: var(--incorrect-text) !important; }
 
         /* Button container */
-        #quiz-buttons-container { display: flex; gap: 10px; justify-content: flex-end; margin-top: 25px; border-top: 1px solid #e2e8f0; padding-top: 20px; }
+        #quiz-buttons-container { display: flex; gap: 10px; justify-content: flex-end; margin-top: 25px; border-top: 1px solid var(--border-color); padding-top: 20px; }
         .results-actions, .review-actions { justify-content: space-between; }
         .results-actions .back-to-topics-btn { margin-left: auto; }
 
         /* Buttons */
-        .btn { padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-size: 15px; font-weight: 500; transition: all 0.2s ease; line-height: 1.5; }
-        .submit-btn { background-color: #2563eb; color: white; }
-        .submit-btn:hover:not(:disabled) { background-color: #1d4ed8; }
-        .submit-btn:disabled { background-color: #94a3b8; cursor: not-allowed; }
-        .next-btn { background-color: #059669; color: white; }
-        .next-btn:hover { background-color: #047857; }
-        .review-btn { background-color: #16a34a; color: white; }
-        .review-btn:hover { background-color: #15803d; }
-        .redo-btn { background-color: #f97316; color: white; } /* Orange for Redo */
-        .redo-btn:hover { background-color: #ea580c; }
-        .close-btn, .back-to-topics-btn { background-color: #64748b; color: white; }
-        .close-btn:hover, .back-to-topics-btn:hover { background-color: #475569; }
-        .back-btn { background-color: #64748b; color: white; }
-        .back-btn:hover { background-color: #475569; }
+        .btn { padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-size: 15px; font-weight: 500; transition: all 0.2s ease; line-height: 1.5; background-color: var(--button-bg); color: var(--button-text); border: 1px solid var(--button-border); }
+        .btn:hover:not(:disabled) { background-color: var(--button-hover-bg); border-color: var(--border-color-hover); }
+        .submit-btn { background-color: var(--accent-color); color: white; border-color: var(--accent-color); }
+        .submit-btn:hover:not(:disabled) { background-color: var(--accent-color-dark); border-color: var(--accent-color-dark); }
+        .submit-btn:disabled { background-color: var(--button-disabled-bg); border-color: var(--button-disabled-bg); color: var(--text-muted); cursor: not-allowed; }
+        .next-btn { background-color: var(--correct-border); color: var(--correct-text); border-color: var(--correct-border); }
+        body.dark-theme .next-btn { color: white; }
+        .next-btn:hover { filter: brightness(1.1); }
+        .review-btn { background-color: var(--correct-border); color: var(--correct-text); border-color: var(--correct-border); }
+        body.dark-theme .review-btn { color: white; }
+        .review-btn:hover { filter: brightness(1.1); }
+        .redo-btn { background-color: #f97316; color: white; border-color: #f97316; }
+        .redo-btn:hover { background-color: #ea580c; border-color: #ea580c; }
+        .close-btn, .back-to-topics-btn, .back-btn { background-color: var(--button-secondary-bg); color: white; border-color: var(--button-secondary-bg); }
+        .close-btn:hover, .back-to-topics-btn:hover, .back-btn:hover { background-color: var(--button-secondary-hover-bg); border-color: var(--button-secondary-hover-bg); }
+
 
         .hidden { display: none !important; }
 
         /* --- Error Message Styles --- */
-        .error-display { padding: 30px; text-align: center; background-color: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; }
-        .error-message { color: #b91c1c; font-weight: 500; margin-bottom: 20px; }
+        .error-display { padding: 30px; text-align: center; background-color: var(--incorrect-bg); border: 1px solid var(--incorrect-border); border-radius: 8px; }
+        .error-message { color: var(--incorrect-text); font-weight: 500; margin-bottom: 20px; }
 
         /* --- Results Styles --- */
         .results-container { padding: 10px 0; text-align: center; }
-        .results-header { font-size: 24px; margin-bottom: 25px; color: #1e293b; }
+        .results-header { font-size: 24px; margin-bottom: 25px; color: var(--text-heading); }
         .results-score { margin: 30px 0 35px 0; }
-        .score-circle { width: 140px; height: 140px; border-radius: 50%; background-color: #f1f5f9; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 0 auto; border: 6px solid #2563eb; box-shadow: 0 0 15px rgba(37, 99, 235, 0.2); }
-        .score-number { font-size: 40px; font-weight: bold; color: #1e293b; line-height: 1; }
-        .score-percent-sign { font-size: 18px; font-weight: 500; color: #475569; margin-top: 2px; }
-        .results-details { max-width: 450px; margin: 0 auto 35px auto; text-align: left; background-color: #f8fafc; padding: 25px; border-radius: 8px; border: 1px solid #e2e8f0; }
-        .results-details p { margin: 10px 0; font-size: 15px; color: #334155; }
-        .results-details p strong { color: #1e293b; min-width: 120px; display: inline-block; }
+        .score-circle { width: 140px; height: 140px; border-radius: 50%; background-color: var(--feedback-bg); display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 0 auto; border: 6px solid var(--accent-color); box-shadow: 0 0 15px color-mix(in srgb, var(--accent-color) 20%, transparent); }
+        .score-number { font-size: 40px; font-weight: bold; color: var(--text-heading); line-height: 1; }
+        .score-percent-sign { font-size: 18px; font-weight: 500; color: var(--text-muted); margin-top: 2px; }
+        .results-details { max-width: 450px; margin: 0 auto 35px auto; text-align: left; background-color: var(--feedback-bg); padding: 25px; border-radius: 8px; border: 1px solid var(--feedback-border); }
+        .results-details p { margin: 10px 0; font-size: 15px; color: var(--text-color); }
+        .results-details p strong { color: var(--text-heading); min-width: 120px; display: inline-block; }
 
         /* --- Review Answers Styles --- */
         .review-container { padding: 10px 0; }
-        .question-review { padding: 20px; margin-bottom: 20px; border-radius: 8px; border: 1px solid #e2e8f0; border-left-width: 5px; background-color: #fff; }
-        .question-review.correct { border-left-color: #16a34a; }
-        .question-review.incorrect { border-left-color: #ef4444; }
-        .question-review.partial { border-left-color: #f59e0b; }
-        .review-question-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #e2e8f0; }
-        .review-question-number { font-weight: 600; color: #1e293b; font-size: 16px; }
+        .question-review { padding: 20px; margin-bottom: 20px; border-radius: 8px; border: 1px solid var(--border-color); border-left-width: 5px; background-color: var(--container-bg); }
+        .question-review.correct { border-left-color: var(--correct-border); }
+        .question-review.incorrect { border-left-color: var(--incorrect-border); }
+        .question-review.partial { border-left-color: var(--partial-border); }
+        .review-question-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid var(--border-color); }
+        .review-question-number { font-weight: 600; color: var(--text-heading); font-size: 16px; }
         .review-status { font-weight: 600; font-size: 14px; padding: 3px 8px; border-radius: 4px; text-align: center; }
-        .question-review.correct .review-status { color: #065f46; background-color: #dcfce7; }
-        .question-review.incorrect .review-status { color: #991b1b; background-color: #fee2e2; }
-        .question-review.partial .review-status { color: #854d0e; background-color: #fef9c3; }
-        .review-question-text { margin-bottom: 15px; font-size: 16px; color: #334155; }
+        .question-review.correct .review-status { color: var(--correct-text); background-color: var(--correct-bg); }
+        .question-review.incorrect .review-status { color: var(--incorrect-text); background-color: var(--incorrect-bg); }
+        .question-review.partial .review-status { color: var(--partial-text); background-color: var(--partial-bg); }
+        .review-question-text { margin-bottom: 15px; font-size: 16px; color: var(--text-color); }
 
         /* Review specific content */
-        .review-mc-answer, .review-matching-answer, .review-ordering-answer { background-color: #f8fafc; padding: 15px; border-radius: 6px; border: 1px solid #e2e8f0; margin-top: 15px; }
-        .review-mc-answer p, .review-matching-answer p, .review-ordering-answer p { margin: 8px 0; font-size: 15px; color: #475569; }
-        .review-mc-answer p strong, .review-matching-answer p strong, .review-ordering-answer p strong { color: #1e293b; margin-right: 5px; display: inline-block; min-width: 110px; }
-        .review-mc-answer .correct-answer-text, .review-matching-answer .correct-answer-text, .review-ordering-answer .correct-answer-text { color: #059669; font-weight: 500; }
-        .review-mc-answer .user-answer-text.incorrect { color: #dc2626; text-decoration: line-through; }
-        .review-mc-answer .user-answer-text.correct { color: #059669; font-weight: 500; }
+        .review-mc-answer, .review-matching-answer, .review-ordering-answer { background-color: var(--feedback-bg); padding: 15px; border-radius: 6px; border: 1px solid var(--feedback-border); margin-top: 15px; }
+        .review-mc-answer p, .review-matching-answer p, .review-ordering-answer p { margin: 8px 0; font-size: 15px; color: var(--text-color); }
+        .review-mc-answer p strong, .review-matching-answer p strong, .review-ordering-answer p strong { color: var(--text-heading); margin-right: 5px; display: inline-block; min-width: 110px; }
+        .review-mc-answer .correct-answer-text, .review-matching-answer .correct-answer-text, .review-ordering-answer .correct-answer-text { color: var(--correct-text); font-weight: 500; }
+        .review-mc-answer .user-answer-text.incorrect { color: var(--incorrect-text); text-decoration: line-through; }
+        .review-mc-answer .user-answer-text.correct { color: var(--correct-text); font-weight: 500; }
 
         /* Review Matching */
         .review-matching-grid { display: flex; flex-wrap: wrap; gap: 15px; margin-top: 10px; }
         .review-matching-column { flex: 1; min-width: 200px;}
-        .review-matching-column div { padding: 5px 8px; margin-bottom: 5px; border-radius: 4px; border: 1px solid #e2e8f0; background-color: #fff; }
+        .review-matching-column div { padding: 5px 8px; margin-bottom: 5px; border-radius: 4px; border: 1px solid var(--border-color); background-color: var(--container-bg); }
+        .review-matched-pair-correct { background-color: var(--correct-bg) !important; border-color: var(--correct-border) !important; color: var(--correct-text) !important; }
+        .review-matched-pair-incorrect { background-color: var(--incorrect-bg) !important; border-color: var(--incorrect-border) !important; color: var(--incorrect-text) !important; }
+        /* Ensure nested spans in dark mode get correct review colors */
+        body.dark-theme .review-matched-pair-incorrect span { color: var(--incorrect-text) !important; }
+        body.dark-theme .review-matched-pair-incorrect span + span { color: var(--correct-text) !important; }
 
         /* Review Ordering */
         .review-ordering-list { margin-top: 10px; }
-        .review-ordering-list-item { display: flex; align-items: center; margin-bottom: 5px; padding: 5px 8px; border-radius: 4px; border: 1px solid #e2e8f0; background-color: #fff; }
+        .review-ordering-list-item { display: flex; align-items: center; margin-bottom: 5px; padding: 5px 8px; border-radius: 4px; border: 1px solid var(--border-color); background-color: var(--container-bg); }
 
         /* --- END OF styles.css --- */
     </style>
@@ -357,6 +346,7 @@
     <div class="container">
         <div class="header">
             <h1>Interactive Question Bank</h1>
+            <button id="theme-toggle" title="Toggle Theme"></button>
         </div>
 
         <!-- Navigation -->
@@ -528,11 +518,11 @@
             }
         };
 
-        // Generate HTML for topic lists (Restored UI)
+        // Generate HTML for topic lists (Adding Question Counter)
         function generateSemesterContent(subject, semester) {
             if (!topicsData[subject]?.[semester]) {
                 console.error(`Data missing for ${subject}, ${semester}`);
-                return `<div id="${subject}-${semester}" class="semester-content"><div class="unit-container"><div class="unit-title">Error</div><p>Content unavailable.</p></div></div>`;
+                return `<div id="${subject}-${semester}" class="semester-content"><div class="section"><p>Content unavailable.</p></div></div>`;
             }
             const semesterData = topicsData[subject][semester];
             let html = `<div id="${subject}-${semester}" class="semester-content">
@@ -547,12 +537,18 @@
                          if (unit.lessons?.length) {
                              unit.lessons.forEach(lesson => {
                                  if (lesson?.title) {
-                                     html += `<div class="section-content" data-subject="${subject}" data-unit="${unit.title}" data-lesson="${lesson.title}">${lesson.title}</div>`; // Lesson Box
-                                 }
+                                     // Calculate question count
+                                     const qCount = lesson.questions?.length || 0;
+                                     const countText = qCount === 1 ? "1 question" : `${qCount} questions`;
+                                     html += `<div class="section-content" data-subject="${subject}" data-unit="${unit.title}" data-lesson="${lesson.title}">
+                                                 ${lesson.title}
+                                                 <span class="lesson-q-count">(${countText})</span>
+                                               </div>`; // Added counter span
+                                 } else { console.warn(`Invalid lesson in unit: ${unit.title}`, lesson); }
                              });
-                         } else { html += `<p style="margin:10px 0 0 0; font-size:14px; color:#64748b;">(No lessons)</p>`; }
+                         } else { html += `<p style="margin:10px 0 0 0; font-size:14px; color:var(--text-muted);">(No lessons)</p>`; }
                          html += `</div>`; // End Unit section
-                     }
+                     } else { console.warn(`Invalid unit in subject: ${subject}, semester: ${semester}`, unit); }
                  });
             }
             html += `</div>`; // End semester content
@@ -597,7 +593,9 @@
         };
 
         // --- DOM Element References ---
-        let contentElement, quizViewElement, quizTitleElement, quizContainerElement, feedbackContainerElement, quizButtonsContainerElement, matchingSvgElement;
+        let contentElement, quizViewElement, quizTitleElement, quizContainerElement,
+            feedbackContainerElement, quizButtonsContainerElement, matchingSvgElement,
+            navSectionElement; // Added reference for nav section
         let matchingArrowObserver = null;
         let resizeTimeout = null;
 
@@ -612,24 +610,60 @@
              return newArray;
          }
 
-        function debounce(func, wait) { /* Included */
-            let timeout; return function executedFunction(...args) { const later = () => { clearTimeout(timeout); func(...args); }; clearTimeout(timeout); timeout = setTimeout(later, wait); };
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
         }
+
+        // --- Theme Management ---
+        function applyTheme(theme) {
+            if (theme === 'dark') {
+                document.body.classList.add('dark-theme');
+            } else {
+                document.body.classList.remove('dark-theme');
+            }
+        }
+        function toggleTheme() {
+            const currentTheme = document.body.classList.contains('dark-theme') ? 'dark' : 'light';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            applyTheme(newTheme);
+            localStorage.setItem('quizTheme', newTheme); // Save preference
+        }
+
 
         // --- DOM Ready Listener ---
         document.addEventListener('DOMContentLoaded', () => {
+            // Assign element references
             contentElement = document.getElementById('content');
             quizViewElement = document.getElementById('quiz-view');
             quizTitleElement = document.getElementById('quiz-title');
             quizContainerElement = document.getElementById('quiz-container');
             feedbackContainerElement = document.getElementById('feedback-container');
             quizButtonsContainerElement = document.getElementById('quiz-buttons-container');
+            navSectionElement = document.querySelector('.nav-section'); // Get nav section reference
+
+            // Theme Toggle Listener
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            if (themeToggleBtn) {
+                themeToggleBtn.addEventListener('click', toggleTheme);
+            }
+            // Apply saved theme on load
+            const savedTheme = localStorage.getItem('quizTheme') || 'light'; // Default to light
+            applyTheme(savedTheme);
+
 
             // Nav button listeners with confirmation
             document.querySelectorAll('.nav-btn[data-subject]').forEach(button => {
                 button.addEventListener('click', function() {
                     if (!quizViewElement.classList.contains('hidden') && !confirm("Leave quiz? Progress lost.")) return;
-                    showTopicList();
+                    showTopicList(); // Ensure nav is visible before updating content
                     document.querySelectorAll('.nav-btn[data-subject]').forEach(btn => btn.classList.remove('active'));
                     this.classList.add('active');
                     updateContent();
@@ -646,16 +680,17 @@
             });
 
             window.addEventListener('resize', debounce(updateAllArrowPositions, 250));
-            updateContent();
+            updateContent(); // Initial topic list load
         });
 
         // --- View Management ---
         function showTopicList() {
-            if (contentElement && quizViewElement) {
+            if (contentElement && quizViewElement && navSectionElement) {
                 contentElement.classList.remove('hidden');
                 quizViewElement.classList.add('hidden');
+                navSectionElement.classList.remove('hidden'); // *** SHOW Nav Section ***
                 if (matchingArrowObserver) { matchingArrowObserver.disconnect(); matchingArrowObserver = null; }
-                if(matchingSvgElement) matchingSvgElement.innerHTML = '<defs><marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#60a5fa"/></marker></defs>';
+                if(matchingSvgElement) matchingSvgElement.innerHTML = '<defs><marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="var(--accent-color)"/></marker></defs>'; // Use variable
                 quizState = { // Reset state fully
                     currentQuestionIndex: 0, correctAnswers: 0, totalQuestions: 0, startTime: null, endTime: null,
                     selectedAnswers: [], questions: [], originalQuestions: [], subject: '', unit: '', lesson: '',
@@ -664,9 +699,10 @@
             }
         }
         function showQuizView() {
-             if (contentElement && quizViewElement) {
+             if (contentElement && quizViewElement && navSectionElement) {
                  contentElement.classList.add('hidden');
                  quizViewElement.classList.remove('hidden');
+                 navSectionElement.classList.add('hidden'); // *** HIDE Nav Section ***
                  quizViewElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
              }
         }
@@ -683,7 +719,8 @@
             const semesterContentElement = contentElement.querySelector(`#${contentId}`);
             if (semesterContentElement) {
                 semesterContentElement.classList.add('active');
-                semesterContentElement.querySelectorAll('.section-content').forEach(lessonBox => { // Target lesson boxes
+                // Re-attach listeners to lesson boxes
+                semesterContentElement.querySelectorAll('.section-content').forEach(lessonBox => {
                     const newLessonBox = lessonBox.cloneNode(true);
                     lessonBox.parentNode.replaceChild(newLessonBox, lessonBox);
                     newLessonBox.addEventListener('click', () => handleSectionClick(newLessonBox.dataset.subject, newLessonBox.dataset.unit, newLessonBox.dataset.lesson));
@@ -697,7 +734,7 @@
                 const originalQuestions = getQuestions(subject, unit, lesson); // Get original order
                 if (originalQuestions?.length) {
                     startQuiz(subject, unit, lesson, originalQuestions); // Pass original list
-                } else { showError(subject, unit, lesson); }
+                } else { showError(subject, unit, lesson); } // Show error in quiz view
             } catch (error) {
                 console.error("Section click error:", error);
                 showError(subject, unit, lesson, "Error loading questions.");
@@ -708,7 +745,7 @@
         function startQuiz(subject, unit, lesson, originalQuestions) {
             const shuffledQuestions = shuffleArray(originalQuestions); // Shuffle for this attempt
 
-            quizState = {
+            quizState = { // Reset state for new/redo quiz
                 currentQuestionIndex: 0,
                 correctAnswers: 0,
                 totalQuestions: shuffledQuestions.length,
@@ -725,238 +762,397 @@
 
             if (quizTitleElement) quizTitleElement.textContent = `${lesson}`;
             showQuizView();
-            displayQuestion();
+            displayQuestion(); // Display the first (shuffled) question
         }
 
         // Display the current question
         function displayQuestion() {
              if (!quizContainerElement || !feedbackContainerElement || !quizButtonsContainerElement) return;
              const currentQuestion = quizState.questions[quizState.currentQuestionIndex];
-             if (!currentQuestion) { displayResults(); return; }
+             if (!currentQuestion) { displayResults(); return; } // End quiz if no more questions
 
-             quizContainerElement.innerHTML = ''; feedbackContainerElement.innerHTML = ''; feedbackContainerElement.classList.add('hidden'); quizButtonsContainerElement.innerHTML = '';
-             if (matchingSvgElement) matchingSvgElement.innerHTML = '<defs><marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#60a5fa"/></marker></defs>';
-             if (matchingArrowObserver) { matchingArrowObserver.disconnect(); matchingArrowObserver = null; }
+             // Clear previous content and state
+             quizContainerElement.innerHTML = '';
+             feedbackContainerElement.innerHTML = '';
+             feedbackContainerElement.classList.add('hidden');
+             quizButtonsContainerElement.innerHTML = '';
+             if (matchingSvgElement) matchingSvgElement.innerHTML = '<defs><marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="var(--accent-color)"/></marker></defs>'; // Reset SVG, keep defs
+             if (matchingArrowObserver) { matchingArrowObserver.disconnect(); matchingArrowObserver = null; } // Disconnect old observer
 
-             const questionWrapper = document.createElement('div'); questionWrapper.className = 'question-display-wrapper';
-             const progressText = document.createElement('div'); progressText.className = 'question-progress'; progressText.textContent = `Question ${quizState.currentQuestionIndex + 1} of ${quizState.totalQuestions}`; questionWrapper.appendChild(progressText);
-             const questionText = document.createElement('p'); questionText.className = 'question-text'; questionText.innerHTML = `<strong>Q:</strong> ${currentQuestion.question || '?'}`; questionWrapper.appendChild(questionText);
-             const typeWrapper = document.createElement('div'); typeWrapper.className = 'question-type-wrapper';
+             // --- Render Question Structure ---
+             const questionWrapper = document.createElement('div');
+             questionWrapper.className = 'question-display-wrapper';
 
+             const progressText = document.createElement('div');
+             progressText.className = 'question-progress';
+             progressText.textContent = `Question ${quizState.currentQuestionIndex + 1} of ${quizState.totalQuestions}`;
+             questionWrapper.appendChild(progressText);
+
+             const questionText = document.createElement('p');
+             questionText.className = 'question-text';
+             questionText.innerHTML = `<strong>Q:</strong> ${currentQuestion.question || 'Missing question text'}`;
+             questionWrapper.appendChild(questionText);
+
+             const typeWrapper = document.createElement('div');
+             typeWrapper.className = 'question-type-wrapper';
+
+             // --- Render Question Content by Type ---
              try {
                   switch (currentQuestion.type) {
-                      case "matching": renderMatching(currentQuestion, typeWrapper); setupArrowObserver(); break;
-                      case "ordering": renderOrdering(currentQuestion, typeWrapper); break;
-                      case "multiple_choice": default: renderMultipleChoice(currentQuestion, typeWrapper); break;
+                      case "matching":
+                          renderMatching(currentQuestion, typeWrapper);
+                          setupArrowObserver(); // Setup observer AFTER elements exist
+                          break;
+                      case "ordering":
+                          renderOrdering(currentQuestion, typeWrapper);
+                          break;
+                      case "multiple_choice":
+                      default:
+                          renderMultipleChoice(currentQuestion, typeWrapper);
+                          break;
                   }
-             } catch (renderError) { console.error("Render error:", renderError); typeWrapper.innerHTML = `<p style="color: red;">Error displaying question.</p>`; }
-             questionWrapper.appendChild(typeWrapper); quizContainerElement.appendChild(questionWrapper);
+             } catch (renderError) {
+                 console.error("Render error:", renderError);
+                 typeWrapper.innerHTML = `<p style="color:red;">Error displaying question.</p>`;
+             }
+             questionWrapper.appendChild(typeWrapper);
+             quizContainerElement.appendChild(questionWrapper);
 
-             // Buttons
-             const submitBtn = document.createElement('button'); submitBtn.className = 'btn submit-btn'; submitBtn.id = 'submit-btn'; submitBtn.textContent = 'Submit Answer'; submitBtn.onclick = checkAnswer;
-             const nextBtn = document.createElement('button'); nextBtn.className = 'btn next-btn hidden'; nextBtn.id = 'next-btn'; nextBtn.textContent = quizState.currentQuestionIndex === quizState.totalQuestions - 1 ? 'See Results' : 'Next Question'; nextBtn.onclick = nextQuestion;
-             quizButtonsContainerElement.appendChild(submitBtn); quizButtonsContainerElement.appendChild(nextBtn);
+             // --- Render Buttons ---
+             const submitBtn = document.createElement('button');
+             submitBtn.className = 'btn submit-btn';
+             submitBtn.id = 'submit-btn';
+             submitBtn.textContent = 'Submit Answer';
+             submitBtn.onclick = checkAnswer;
 
-             // Initial submit button state
-              submitBtn.disabled = true;
-              if (currentQuestion.type !== 'multiple_choice' && currentQuestion.type !== 'ordering' && currentQuestion.type !== 'matching') {
-                  submitBtn.disabled = false; // Enable for unknown types or types not needing selection
-              }
-              // Specific types enable button via their render/interaction logic
+             const nextBtn = document.createElement('button');
+             nextBtn.className = 'btn next-btn hidden'; // Always start hidden
+             nextBtn.id = 'next-btn';
+             nextBtn.textContent = quizState.currentQuestionIndex === quizState.totalQuestions - 1 ? 'See Results' : 'Next Question';
+             nextBtn.onclick = nextQuestion;
+
+             quizButtonsContainerElement.appendChild(submitBtn);
+             quizButtonsContainerElement.appendChild(nextBtn);
+
+             // --- Set Initial Button State ---
+             submitBtn.disabled = true; // Start disabled
+             // Enable logic is within specific renderers or handleMatchingClick
+             if (currentQuestion.type !== 'multiple_choice' && currentQuestion.type !== 'ordering' && currentQuestion.type !== 'matching') {
+                 // If it's an unknown type or one not needing selection, enable immediately
+                 submitBtn.disabled = false;
+             }
         }
 
 
         // --- Rendering Functions ---
         function renderMultipleChoice(question, container) {
-             if (!question.options?.length) { container.textContent = 'Error: Options invalid.'; return; }
-             const optionsDiv = document.createElement('div'); optionsDiv.className = 'options-container'; optionsDiv.id = 'options-list';
-             question.options.forEach((option, index) => {
-                 const id = `option-${index}`, lbl = document.createElement('label'); lbl.className = 'option-label'; lbl.htmlFor = id;
-                 const inp = document.createElement('input'); inp.type = 'radio'; inp.name = 'question-option'; inp.value = index; inp.id = id; inp.className = 'option-input';
-                 inp.addEventListener('change', () => { document.getElementById('submit-btn').disabled = false; });
-                 const txt = document.createElement('span'); txt.className = 'option-text'; txt.textContent = option;
-                 lbl.appendChild(inp); lbl.appendChild(txt); optionsDiv.appendChild(lbl);
-             }); container.appendChild(optionsDiv);
+            if (!question.options?.length) { container.textContent = 'Err: Options invalid.'; return; }
+            const optionsDiv = document.createElement('div'); optionsDiv.className = 'options-container'; optionsDiv.id = 'options-list';
+            question.options.forEach((option, index) => {
+                const id = `option-${index}`, lbl = document.createElement('label'); lbl.className = 'option-label'; lbl.htmlFor = id;
+                const inp = document.createElement('input'); inp.type = 'radio'; inp.name = 'question-option'; inp.value = index; inp.id = id; inp.className = 'option-input';
+                // Enable submit button when an option is chosen
+                inp.addEventListener('change', () => {
+                    const submitBtn = document.getElementById('submit-btn');
+                    if (submitBtn) submitBtn.disabled = false;
+                });
+                const txt = document.createElement('span'); txt.className = 'option-text'; txt.textContent = option;
+                lbl.append(inp, txt); optionsDiv.appendChild(lbl);
+            }); container.appendChild(optionsDiv);
         }
         function renderMatching(question, container) {
-             if (!question.prompts?.length || !question.matches?.length || question.prompts.length !== question.matches.length) { container.textContent = 'Error: Matching data invalid.'; return; }
-             quizState.matchingState.userPairs = {};
+             if (!question.prompts?.length || !question.matches?.length || question.prompts.length !== question.matches.length) { container.textContent = 'Err: Match data invalid.'; return; }
+             quizState.matchingState.userPairs = {}; // Reset internal state
              const instr = document.createElement('p'); instr.className = 'matching-instructions'; instr.textContent = 'Click left item, then right item. Click matched item to deselect.'; container.appendChild(instr);
-             const outer = document.createElement('div'); outer.style.position = 'relative';
-             const matchCont = document.createElement('div'); matchCont.className = 'matching-container'; matchCont.id = 'matching-cols';
-             const promCol = document.createElement('div'); promCol.className = 'matching-column'; promCol.id = 'prompts-column'; promCol.innerHTML = '<h4>Items</h4>';
-             const matCol = document.createElement('div'); matCol.className = 'matching-column'; matCol.id = 'matches-column'; matCol.innerHTML = '<h4>Matches</h4>';
-             matchingSvgElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); matchingSvgElement.id = 'matching-arrow-svg'; matchingSvgElement.innerHTML = '<defs><marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#60a5fa"/></marker></defs>'; outer.appendChild(matchingSvgElement);
-             const shuffled = question.matches.map((t, i) => ({ t, i })).sort(() => 0.5 - Math.random());
-             question.prompts.forEach((t, i) => { const it = document.createElement('div'); it.className = 'matching-item prompt-item'; it.textContent = t; it.dataset.index = i; it.id=`prompt-${i}`; it.onclick = handleMatchingClick; promCol.appendChild(it); });
-             shuffled.forEach(o => { const it = document.createElement('div'); it.className = 'matching-item match-item'; it.textContent = o.t; it.dataset.index = o.i; it.id=`match-${o.i}`; it.onclick = handleMatchingClick; matCol.appendChild(it); });
-             matchCont.append(promCol, matCol); outer.appendChild(matchCont); container.appendChild(outer);
-        }
+             const outer = document.createElement('div'); outer.style.position = 'relative'; // Outer container for relative positioning
+             const matchCont = document.createElement('div'); matchCont.className = 'matching-container'; matchCont.id = 'matching-cols'; // Container for the two columns
+             const promCol = document.createElement('div'); promCol.className = 'matching-column'; promCol.id = 'prompts-column'; promCol.innerHTML = '<h4>Items</h4>'; // Left column
+             const matCol = document.createElement('div'); matCol.className = 'matching-column'; matCol.id = 'matches-column'; matCol.innerHTML = '<h4>Matches</h4>'; // Right column
+
+             // SVG layer for arrows
+             matchingSvgElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+             matchingSvgElement.id = 'matching-arrow-svg';
+             matchingSvgElement.innerHTML = '<defs><marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="var(--accent-color)"/></marker></defs>'; // Arrowhead definition using CSS var
+             outer.appendChild(matchingSvgElement); // Add SVG layer first (behind columns)
+
+             // Shuffle matches but keep track of original index
+             const shuffled = question.matches.map((t, i) => ({ text: t, originalIndex: i })).sort(() => 0.5 - Math.random());
+
+             // Render prompts (left side)
+             question.prompts.forEach((t, i) => {
+                 const it = document.createElement('div'); it.className = 'matching-item prompt-item'; it.textContent = t; it.dataset.index = i; it.id=`prompt-${i}`; it.onclick = handleMatchingClick; promCol.appendChild(it);
+             });
+             // Render shuffled matches (right side)
+             shuffled.forEach(o => {
+                 const it = document.createElement('div'); it.className = 'matching-item match-item'; it.textContent = o.text; it.dataset.index = o.originalIndex; it.id=`match-${o.originalIndex}`; it.onclick = handleMatchingClick; matCol.appendChild(it);
+             });
+
+             matchCont.append(promCol, matCol); // Add columns to their container
+             outer.appendChild(matchCont); // Add column container on top of SVG
+             container.appendChild(outer); // Add the whole structure
+         }
         function renderOrdering(question, container) {
-            if (!question.items?.length) { container.textContent = 'Error: Ordering data invalid.'; return; }
+            if (!question.items?.length) { container.textContent = 'Err: Ordering data invalid.'; return; }
             const num = question.items.length;
             const instr = document.createElement('p'); instr.className = 'ordering-instructions'; instr.textContent = `Select order number (1-${num}) for each.`; container.appendChild(instr);
             const orderCont = document.createElement('div'); orderCont.className = 'ordering-container'; orderCont.id = 'ordering-list';
-            const checkDone = () => { const allSel = Array.from(orderCont.querySelectorAll('.ordering-select')).every(s => s.value !== ""); const btn = document.getElementById('submit-btn'); if(btn) btn.disabled = !allSel; };
+            // Function to check if all dropdowns have a valid selection
+            const checkAllSelected = () => {
+                const allSelects = orderCont.querySelectorAll('.ordering-select');
+                const allSelectedWithValue = Array.from(allSelects).every(s => s.value !== "");
+                const submitBtn = document.getElementById('submit-btn');
+                if(submitBtn) submitBtn.disabled = !allSelectedWithValue;
+            };
             question.items.forEach((t, i) => {
                 const div = document.createElement('div'); div.className = 'ordering-item'; div.dataset.originalIndex = i;
-                const sel = document.createElement('select'); sel.className = 'ordering-select'; sel.dataset.itemIndex = i; const defOpt = document.createElement('option'); defOpt.value = ""; defOpt.textContent = "-"; defOpt.selected = true; defOpt.disabled = true; sel.appendChild(defOpt);
+                const sel = document.createElement('select'); sel.className = 'ordering-select'; sel.dataset.itemIndex = i;
+                // Default blank option
+                const defOpt = document.createElement('option'); defOpt.value = ""; defOpt.textContent = "-"; defOpt.selected = true; defOpt.disabled = true; sel.appendChild(defOpt);
+                // Numbered options
                 for (let j = 1; j <= num; j++) { const opt = document.createElement('option'); opt.value = j; opt.textContent = j; sel.appendChild(opt); }
-                sel.addEventListener('change', checkDone);
+                sel.addEventListener('change', checkAllSelected); // Check completion on change
                 const span = document.createElement('span'); span.className = 'ordering-text'; span.textContent = t;
                 div.append(sel, span); orderCont.appendChild(div);
             }); container.appendChild(orderCont);
-        }
+            // Ensure submit is initially disabled for ordering questions
+            const submitBtn = document.getElementById('submit-btn');
+            if (submitBtn) submitBtn.disabled = true;
+         }
 
         // --- Interaction Handlers ---
         function handleMatchingClick(event) { // Includes deselect logic
-             const clicked = event.target; if (!clicked.classList.contains('matching-item')) return;
+             const clicked = event.target; if (!clicked.classList.contains('matching-item')) return; // Ensure it's an item
              const isPrompt = clicked.classList.contains('prompt-item'), isMatched = clicked.classList.contains('matched');
              let currentSel = quizState.matchingState.selectedPromptElement; const idx = clicked.dataset.index;
 
-             if (isMatched) { // --- Deselection ---
+             // --- Deselection Logic ---
+             if (isMatched) {
                  let pIdx = -1, mIdx = -1;
-                 if (isPrompt) { pIdx = idx; mIdx = quizState.matchingState.userPairs[pIdx]; }
-                 else { mIdx = idx; pIdx = Object.keys(quizState.matchingState.userPairs).find(k => quizState.matchingState.userPairs[k] == mIdx); }
-                 if (pIdx !== -1 && mIdx !== undefined) {
+                 // Figure out which pair this element belongs to
+                 if (isPrompt) { // Clicked a matched prompt
+                     pIdx = idx;
+                     mIdx = quizState.matchingState.userPairs[pIdx]; // Get the match index it was paired with
+                 } else { // Clicked a matched match-item
+                     mIdx = idx;
+                     // Find the prompt index this match was paired with
+                     pIdx = Object.keys(quizState.matchingState.userPairs).find(key => quizState.matchingState.userPairs[key] == mIdx); // Use == for string/num compare
+                 }
+
+                 // If we found a valid pair to deselect
+                 if (pIdx != -1 && mIdx !== undefined) {
                      const pEl = document.getElementById(`prompt-${pIdx}`), mEl = document.getElementById(`match-${mIdx}`);
-                     if (pEl) { pEl.classList.remove('matched'); pEl.style.cursor = 'pointer'; pEl.style.pointerEvents = 'auto'; }
-                     if (mEl) { mEl.classList.remove('matched'); mEl.style.cursor = 'pointer'; mEl.style.pointerEvents = 'auto'; }
-                     delete quizState.matchingState.userPairs[pIdx]; removeArrow(pIdx);
-                     if (currentSel) currentSel.classList.remove('selected'); quizState.matchingState.selectedPromptElement = null;
-                     document.getElementById('submit-btn').disabled = true; return;
+                     // Remove visual 'matched' state and restore interactivity
+                     if (pEl) { pEl.classList.remove('matched'); pEl.style.cursor = 'pointer'; /* pEl.style.pointerEvents = 'auto'; */ } // pointerEvents handled by class/css
+                     if (mEl) { mEl.classList.remove('matched'); mEl.style.cursor = 'pointer'; /* mEl.style.pointerEvents = 'auto'; */ }
+                     delete quizState.matchingState.userPairs[pIdx]; // Remove from stored answers
+                     removeArrow(pIdx); // Remove the connecting arrow
+
+                     // If a prompt was somehow selected before clicking the matched item, clear that selection
+                     if (currentSel) currentSel.classList.remove('selected');
+                     quizState.matchingState.selectedPromptElement = null;
+
+                     document.getElementById('submit-btn').disabled = true; // Must disable submit, as it's no longer complete
+                     return; // Stop processing here for deselect
                  }
              }
-             // --- Selection / Matching ---
-             if (isPrompt) { if (clicked === currentSel) { clicked.classList.remove('selected'); quizState.matchingState.selectedPromptElement = null; } else if (!isMatched) { if (currentSel) currentSel.classList.remove('selected'); clicked.classList.add('selected'); quizState.matchingState.selectedPromptElement = clicked; } }
-             else { if (currentSel && !isMatched) { const pIdx = currentSel.dataset.index, mIdx = idx; quizState.matchingState.userPairs[pIdx] = parseInt(mIdx, 10); currentSel.classList.remove('selected'); currentSel.classList.add('matched'); clicked.classList.add('matched'); drawArrow(currentSel, clicked, pIdx); quizState.matchingState.selectedPromptElement = null; const total = document.querySelectorAll('.prompt-item').length, matched = document.querySelectorAll('.prompt-item.matched').length; if (total === matched) document.getElementById('submit-btn').disabled = false; } }
+
+             // --- Selection / Matching Logic (Only if not matched) ---
+             if (isPrompt) { // Clicked a prompt (that wasn't matched)
+                 if (clicked === currentSel) { // Clicked the currently selected prompt again
+                     clicked.classList.remove('selected'); // Deselect it
+                     quizState.matchingState.selectedPromptElement = null;
+                 } else { // Clicked a new, available prompt
+                     if (currentSel) currentSel.classList.remove('selected'); // Deselect any previous prompt
+                     clicked.classList.add('selected'); // Select the new one
+                     quizState.matchingState.selectedPromptElement = clicked;
+                 }
+             }
+             else { // Clicked a match-item (that wasn't matched)
+                 if (currentSel) { // And a prompt IS currently selected
+                     const pIdx = currentSel.dataset.index; // Prompt index from selected element
+                     const mIdx = idx; // Match index from clicked element
+
+                     quizState.matchingState.userPairs[pIdx] = parseInt(mIdx, 10); // Store the new pair
+
+                     // Update visuals: mark both as matched, remove prompt selection
+                     currentSel.classList.remove('selected');
+                     currentSel.classList.add('matched');
+                     clicked.classList.add('matched');
+                     // No need to change cursor/pointerEvents if CSS handles .matched state
+
+                     drawArrow(currentSel, clicked, pIdx); // Draw the connecting arrow
+
+                     quizState.matchingState.selectedPromptElement = null; // Clear prompt selection
+
+                     // Check if all prompts are now matched to enable submit
+                     const total = document.querySelectorAll('.prompt-item').length;
+                     const matchedCount = document.querySelectorAll('.prompt-item.matched').length;
+                     if (total === matchedCount && total > 0) { // Check total > 0
+                         document.getElementById('submit-btn').disabled = false;
+                     }
+                 }
+                 // Else: Clicking an available match-item with no prompt selected does nothing.
+             }
          }
 
+
         // --- Arrow Drawing ---
-        function drawArrow(promptEl, matchEl, promptIndex) { /* Same */
-            if (!matchingSvgElement || !promptEl || !matchEl) return; const svgR = matchingSvgElement.getBoundingClientRect(), pR = promptEl.getBoundingClientRect(), mR = matchEl.getBoundingClientRect(); const sx = pR.right - svgR.left, sy = pR.top + pR.height/2 - svgR.top, ex = mR.left - svgR.left, ey = mR.top + mR.height/2 - svgR.top; let line = matchingSvgElement.querySelector(`#arrow-${promptIndex}`); if (!line) { line = document.createElementNS('http://www.w3.org/2000/svg', 'line'); line.id = `arrow-${promptIndex}`; matchingSvgElement.appendChild(line); } line.setAttribute('x1', sx); line.setAttribute('y1', sy); line.setAttribute('x2', ex); line.setAttribute('y2', ey); line.style.opacity = '1';
+        function drawArrow(promptEl, matchEl, promptIndex) {
+            if (!matchingSvgElement || !promptEl || !matchEl) return;
+            const svgRect = matchingSvgElement.getBoundingClientRect();
+            const promptRect = promptEl.getBoundingClientRect();
+            const matchRect = matchEl.getBoundingClientRect();
+
+            const startX = promptRect.right - svgRect.left + window.scrollX; // Include scroll offsets
+            const startY = promptRect.top + promptRect.height / 2 - svgRect.top + window.scrollY;
+            const endX = matchRect.left - svgRect.left + window.scrollX;
+            const endY = matchRect.top + matchRect.height / 2 - svgRect.top + window.scrollY;
+
+            let line = matchingSvgElement.querySelector(`#arrow-${promptIndex}`);
+            if (!line) {
+                line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.id = `arrow-${promptIndex}`;
+                matchingSvgElement.appendChild(line);
+            }
+
+            line.setAttribute('x1', startX); line.setAttribute('y1', startY);
+            line.setAttribute('x2', endX); line.setAttribute('y2', endY);
+            line.style.opacity = '1';
+        }
+        function removeArrow(promptIndex) {
+            if (!matchingSvgElement) return; const line = matchingSvgElement.querySelector(`#arrow-${promptIndex}`);
+            if (line) { line.style.opacity = '0'; setTimeout(() => line.remove(), 300); }
+        }
+        function updateAllArrowPositions() {
+             if (!matchingSvgElement || !quizState || quizState.questions[quizState.currentQuestionIndex]?.type !== 'matching') return;
+             const pairs = quizState.matchingState.userPairs;
+             for (const pIdx in pairs) {
+                 if (pairs.hasOwnProperty(pIdx)) {
+                     const mIdx = pairs[pIdx];
+                     const pEl = document.getElementById(`prompt-${pIdx}`), mEl = document.getElementById(`match-${mIdx}`);
+                     if (pEl && mEl) drawArrow(pEl, mEl, pIdx); // Redraw
+                 }
+             }
          }
-        function removeArrow(promptIndex) { /* Same */
-            if (!matchingSvgElement) return; const line = matchingSvgElement.querySelector(`#arrow-${promptIndex}`); if (line) { line.style.opacity = '0'; setTimeout(() => line.remove(), 300); }
-         }
-        function updateAllArrowPositions() { /* Same */
-             if (!matchingSvgElement || !quizState || quizState.questions[quizState.currentQuestionIndex]?.type !== 'matching') return; const pairs = quizState.matchingState.userPairs; for (const pIdx in pairs) { if (pairs.hasOwnProperty(pIdx)) { const mIdx = pairs[pIdx], pEl = document.getElementById(`prompt-${pIdx}`), mEl = document.getElementById(`match-${mIdx}`); if (pEl && mEl) drawArrow(pEl, mEl, pIdx); } }
-         }
-        function setupArrowObserver() { /* Same */
-            const target = document.getElementById('matching-cols'); if (!target) return; const cfg = { attributes: true, childList: true, subtree: true, characterData: true }; const cb = debounce(() => updateAllArrowPositions(), 100); matchingArrowObserver = new MutationObserver(cb); matchingArrowObserver.observe(target, cfg);
-         }
+        function setupArrowObserver() {
+            const target = document.getElementById('matching-cols'); if (!target) return;
+            const config = { attributes: true, childList: true, subtree: true, characterData: true };
+            const callback = debounce(updateAllArrowPositions, 100); // Debounce updates
+            matchingArrowObserver = new MutationObserver(callback);
+            matchingArrowObserver.observe(target, config);
+            // Initial draw might need slight delay if layout isn't final instantly
+            setTimeout(updateAllArrowPositions, 50);
+        }
 
         // --- Answer Checking ---
         function checkAnswer() {
             if (!feedbackContainerElement || !quizButtonsContainerElement) return;
             if (matchingArrowObserver) { matchingArrowObserver.disconnect(); matchingArrowObserver = null; } // Disconnect observer
-            const currentQuestion = quizState.questions[quizState.currentQuestionIndex]; let result = { isCorrect: false, feedback: '', userResponse: null, scoreIncrement: 0 };
-            try { switch (currentQuestion.type) { case "matching": result = checkMatching(currentQuestion); break; case "ordering": result = checkOrdering(currentQuestion); break; case "multiple_choice": default: result = checkMultipleChoice(currentQuestion); break; } }
-            catch (error) { console.error("Check error:", error); result = { isCorrect: false, feedback: '<div class="incorrect-feedback">Error checking.</div>', userResponse: null, scoreIncrement: 0 }; }
-            quizState.selectedAnswers[quizState.currentQuestionIndex] = result.userResponse; if (result.isCorrect) quizState.correctAnswers++; // Only count fully correct
-            feedbackContainerElement.innerHTML = result.feedback; feedbackContainerElement.classList.remove('hidden');
-            disableInputs(); const submitBtn = quizButtonsContainerElement.querySelector('#submit-btn'), nextBtn = quizButtonsContainerElement.querySelector('#next-btn'); if(submitBtn) submitBtn.classList.add('hidden'); if(nextBtn) nextBtn.classList.remove('hidden');
+            const currentQuestion = quizState.questions[quizState.currentQuestionIndex];
+            let result = { isCorrect: false, feedback: '', userResponse: null, scoreIncrement: 0 };
+            try {
+                switch (currentQuestion.type) {
+                    case "matching": result = checkMatching(currentQuestion); break;
+                    case "ordering": result = checkOrdering(currentQuestion); break;
+                    case "multiple_choice": default: result = checkMultipleChoice(currentQuestion); break;
+                }
+            } catch (error) {
+                console.error("Check answer error:", error);
+                result = { isCorrect: false, feedback: '<div class="incorrect-feedback">Error checking answer.</div>', userResponse: null, scoreIncrement: 0 };
+            }
+            quizState.selectedAnswers[quizState.currentQuestionIndex] = result.userResponse;
+            // Correct answers count only full points
+            if (result.isCorrect && result.scoreIncrement > 0) {
+                 quizState.correctAnswers += result.scoreIncrement;
+            }
+            feedbackContainerElement.innerHTML = result.feedback;
+            feedbackContainerElement.classList.remove('hidden');
+            disableInputs();
+            const submitBtn = quizButtonsContainerElement.querySelector('#submit-btn'), nextBtn = quizButtonsContainerElement.querySelector('#next-btn');
+            if(submitBtn) submitBtn.classList.add('hidden');
+            if(nextBtn) nextBtn.classList.remove('hidden');
         }
-        function checkMultipleChoice(question) { /* Same */
-            const sel = document.querySelector('input[name="question-option"]:checked'); if (!sel) return { isCorrect: false, feedback: '<div class="incorrect-feedback">Select answer.</div>', userResponse: null, scoreIncrement: 0 }; const idx = parseInt(sel.value, 10), correctText = question.answer, selText = question.options[idx], isCorrect = selText === correctText; document.querySelectorAll('.option-label').forEach((lbl, i) => { const inp = lbl.querySelector('input'); if (question.options[i] === correctText) lbl.classList.add('correct-option'); if (inp && parseInt(inp.value, 10) === idx && !isCorrect) lbl.classList.add('incorrect-option'); }); const fb = isCorrect ? '<div class="correct-feedback">Correct! ✓</div>' : `<div class="incorrect-feedback">Incorrect. <span>Correct: ${correctText}</span></div>`; return { isCorrect, feedback: fb, userResponse: idx, scoreIncrement: isCorrect ? 1 : 0 };
+        function checkMultipleChoice(question) {
+            const sel=document.querySelector('input[name="question-option"]:checked');if(!sel)return{isCorrect:!1,feedback:'<div class="incorrect-feedback">Select answer.</div>',userResponse:null,scoreIncrement:0};const idx=parseInt(sel.value,10),cTxt=question.answer,sTxt=question.options?.[idx],isOk=sTxt===cTxt;document.querySelectorAll('.option-label').forEach((l,i)=>{const n=l.querySelector('input');question.options?.[i]===cTxt&&l.classList.add('correct-option'),n&&parseInt(n.value,10)===idx&&!isOk&&l.classList.add('incorrect-option')});const fb=isOk?'<div class="correct-feedback">Correct! ✓</div>':`<div class="incorrect-feedback">Incorrect. <span>Correct: ${cTxt||'N/A'}</span></div>`;return{isCorrect:isOk,feedback:fb,userResponse:idx,scoreIncrement:isOk?1:0};
         }
-        function checkMatching(question) { /* Same */
-             const userPairs = quizState.matchingState.userPairs, correctPairs = question.answer || {}, total = Object.keys(correctPairs).length; let correctCount = 0; if (total === 0) return { isCorrect: true, feedback: '<div class="correct-feedback">N/A</div>', userResponse: userPairs, scoreIncrement: 0 }; for (const pIdx in correctPairs) { if (userPairs.hasOwnProperty(pIdx) && userPairs[pIdx] === correctPairs[pIdx]) correctCount++; } const isFull = correctCount === total; let fb = ''; if (isFull) fb = `<div class="correct-feedback">Correct! ✓ (${correctCount}/${total})</div>`; else if (correctCount > 0) fb = `<div class="partial-feedback">Partial. Matched ${correctCount}/${total}.</div>`; else fb = `<div class="incorrect-feedback">Incorrect. Matched 0/${total}.</div>`; return { isCorrect: isFull, feedback: fb, userResponse: userPairs, scoreIncrement: isFull ? 1 : 0 };
+        function checkMatching(question) {
+             const userPairs=quizState.matchingState.userPairs,correct=question.answer||{},total=Object.keys(correct).length;let ct=0;if(0===total)return{isCorrect:!0,feedback:'<div class="correct-feedback">N/A</div>',userResponse:userPairs,scoreIncrement:0};for(const pIdx in correct)userPairs.hasOwnProperty(pIdx)&&userPairs[pIdx]===correct[pIdx]&&ct++;const isFull=ct===total;let fb="";isFull?fb=`<div class="correct-feedback">Correct! ✓ (${ct}/${total})</div>`:ct>0?fb=`<div class="partial-feedback">Partial. Matched ${ct}/${total}.</div>`:fb=`<div class="incorrect-feedback">Incorrect. Matched 0/${total}.</div>`;return{isCorrect:isFull,feedback:fb,userResponse:userPairs,scoreIncrement:isFull?1:0};
         }
-        function checkOrdering(question) { /* Same */
-            const items = question.items || [], correctOrder = question.answer || [], numItems = items.length; if (numItems === 0 || !Array.isArray(correctOrder) || numItems !== correctOrder.length) { console.error("Invalid ordering data:", question); return { isCorrect: false, feedback: '<div class="incorrect-feedback">Error: Invalid setup.</div>', userResponse: null, scoreIncrement: 0 }; } const userOrderMap = {}, selectedNumbers = new Set(); let allSelected = true, hasDuplicate = false; const selects = document.querySelectorAll('#ordering-list .ordering-select'); if (selects.length !== numItems) { return { isCorrect: false, feedback: '<div class="incorrect-feedback">Error processing form.</div>', userResponse: null, scoreIncrement: 0 }; } selects.forEach(sel => { const idx = parseInt(sel.dataset.itemIndex, 10), val = sel.value; if (val === "") allSelected = false; else { const num = parseInt(val, 10); if (isNaN(num) || num < 1 || num > numItems) { allSelected = false; return; } userOrderMap[idx] = num; if (selectedNumbers.has(num)) hasDuplicate = true; selectedNumbers.add(num); } }); if (!allSelected) return { isCorrect: false, feedback: '<div class="incorrect-feedback">Select order for all.</div>', userResponse: null, scoreIncrement: 0 }; if (hasDuplicate || selectedNumbers.size !== numItems) return { isCorrect: false, feedback: `<div class="incorrect-feedback">Use each number (1-${numItems}) once.</div>`, userResponse: null, scoreIncrement: 0 }; const userOrderedItems = new Array(numItems).fill(null); let ok = true; for (const idxStr in userOrderMap) { if (userOrderMap.hasOwnProperty(idxStr)) { const idx = parseInt(idxStr, 10), text = items[idx], pos = userOrderMap[idx] - 1; if (text === undefined || pos < 0 || pos >= numItems || userOrderedItems[pos] !== null) { ok = false; break; } userOrderedItems[pos] = text; } } if (!ok || userOrderedItems.some(i => i === null)) { console.error("Construction Fail:", userOrderMap, userOrderedItems); return { isCorrect: false, feedback: '<div class="incorrect-feedback">Error processing sequence.</div>', userResponse: userOrderedItems, scoreIncrement: 0 }; } const isCorrect = JSON.stringify(userOrderedItems) === JSON.stringify(correctOrder); let fb = ''; if (isCorrect) fb = `<div class="correct-feedback">Correct! ✓</div>`; else fb = `<div class="incorrect-feedback">Incorrect. <span>Correct: ${correctOrder.join(' → ')}</span></div>`; selects.forEach(sel => { const idx = parseInt(sel.dataset.itemIndex, 10), userN = userOrderMap[idx], correctN = correctOrder.indexOf(items[idx]) + 1; sel.style.borderColor = (userN === correctN) ? '#16a34a' : '#ef4444'; sel.style.borderWidth = '2px'; }); return { isCorrect, feedback: fb, userResponse: userOrderedItems, scoreIncrement: isCorrect ? 1 : 0 };
+        function checkOrdering(question) {
+            const items=question.items||[],correctOrder=question.answer||[],num=items.length;if(0===num||!Array.isArray(correctOrder)||num!==correctOrder.length)return console.error("Invalid ordering data:",question),{isCorrect:!1,feedback:'<div class="incorrect-feedback">Err: Invalid setup.</div>',userResponse:null,scoreIncrement:0};const userMap={},selNums=new Set;let allSel=!0,hasDup=!1;const selects=document.querySelectorAll("#ordering-list .ordering-select");if(selects.length!==num)return console.error("Select count mismatch"),{isCorrect:!1,feedback:'<div class="incorrect-feedback">Err processing form.</div>',userResponse:null,scoreIncrement:0};selects.forEach(sel=>{const idx=parseInt(sel.dataset.itemIndex,10),val=sel.value;if(""===val)allSel=!1;else{const n=parseInt(val,10);if(isNaN(n)||n<1||n>num)return void(allSel=!1);userMap[idx]=n,selNums.has(n)&&(hasDup=!0),selNums.add(n)}});if(!allSel)return{isCorrect:!1,feedback:'<div class="incorrect-feedback">Select order for all.</div>',userResponse:userMap,scoreIncrement:0};if(hasDup||selNums.size!==num)return{isCorrect:!1,feedback:`<div class="incorrect-feedback">Use each number (1-${num}) once.</div>`,userResponse:userMap,scoreIncrement:0};const userItems=new Array(num).fill(null);let ok=!0;for(const idxStr in userMap)if(userMap.hasOwnProperty(idxStr)){const idx=parseInt(idxStr,10),txt=items[idx],pos=userMap[idx]-1;if(void 0===txt||pos<0||pos>=num||null!==userItems[pos]){ok=!1;break}userItems[pos]=txt}if(!ok||userItems.some(i=>null===i))return console.error("Construction Fail:",userMap,userItems),{isCorrect:!1,feedback:'<div class="incorrect-feedback">Err processing sequence.</div>',userResponse:userItems,scoreIncrement:0};const isOk=JSON.stringify(userItems)===JSON.stringify(correctOrder);let fb="";isOk?fb='<div class="correct-feedback">Correct! ✓</div>':fb=`<div class="incorrect-feedback">Incorrect. <span>Correct: ${correctOrder.join(" → ")}</span></div>`;selects.forEach(sel=>{const idx=parseInt(sel.dataset.itemIndex,10),userN=userMap[idx],corrN=correctOrder.indexOf(items[idx])+1;sel.style.borderColor=userN===corrN?"var(--correct-border)":"var(--incorrect-border)",sel.style.borderWidth="2px"});return{isCorrect:isOk,feedback:fb,userResponse:userItems,scoreIncrement:isOk?1:0};
         }
-        function disableInputs() { /* Same */
-             document.querySelectorAll('input[name="question-option"], .ordering-select').forEach(i => i.disabled = true); document.querySelectorAll('.option-label').forEach(l => l.style.cursor = 'default'); document.querySelectorAll('.matching-item').forEach(i => { i.style.pointerEvents = 'none'; i.style.cursor = 'default'; });
-        }
+        function disableInputs() {
+             document.querySelectorAll('input[name="question-option"], .ordering-select').forEach(i => i.disabled = true);
+             document.querySelectorAll('.option-label').forEach(l => l.style.cursor = 'default');
+             document.querySelectorAll('.matching-item').forEach(i => { i.style.pointerEvents = 'none'; i.style.cursor = 'default'; }); // Disable matching items
+         }
 
         // --- Navigation and Results ---
-        function nextQuestion() { /* Same */
-            quizState.currentQuestionIndex++; if (quizState.currentQuestionIndex < quizState.totalQuestions) displayQuestion(); else { quizState.endTime = new Date(); displayResults(); }
+        function nextQuestion() {
+            quizState.currentQuestionIndex++;
+            if (quizState.currentQuestionIndex < quizState.totalQuestions) {
+                displayQuestion();
+            } else {
+                quizState.endTime = new Date();
+                displayResults();
+            }
         }
-        function displayResults() { // ADDED Redo Button
+        function displayResults() {
              if (!quizContainerElement || !feedbackContainerElement || !quizButtonsContainerElement || !quizTitleElement) return;
              quizContainerElement.innerHTML = ''; feedbackContainerElement.classList.add('hidden'); quizButtonsContainerElement.innerHTML = '';
-             quizTitleElement.textContent = 'Quiz Results'; // Update title for results
+             quizTitleElement.textContent = 'Quiz Results';
 
-             const time = quizState.endTime && quizState.startTime ? (quizState.endTime - quizState.startTime) / 1000 : 0; const mins = Math.floor(time / 60), secs = Math.floor(time % 60); const timeStr = time > 0 ? `${mins}m ${secs}s` : 'N/A';
+             const time = quizState.endTime && quizState.startTime ? (quizState.endTime - quizState.startTime)/1000 : 0; const mins = Math.floor(time/60), secs = Math.floor(time % 60); const timeStr = time > 0 ? `${mins}m ${secs}s` : 'N/A';
              const score = quizState.totalQuestions > 0 ? (quizState.correctAnswers / quizState.totalQuestions) * 100 : 0;
-             let msg = ''; // Performance message logic...
-             if (quizState.totalQuestions === 0) msg = 'No questions.'; else if (score >= 90) msg = 'Excellent! 🎉'; else if (score >= 70) msg = 'Good work! 👍'; else if (score >= 50) msg = 'Not bad! 💪'; else msg = 'Needs practice. 📚';
+             let msg = ''; if (quizState.totalQuestions === 0) msg = 'No questions.'; else if (score >= 90) msg = 'Excellent! 🎉'; else if (score >= 70) msg = 'Good work! 👍'; else if (score >= 50) msg = 'Not bad! 💪'; else msg = 'Needs practice. 📚';
 
              const resultsDiv = document.createElement('div'); resultsDiv.className = 'results-container';
-             resultsDiv.innerHTML = `
-                <h2 class="results-header">${msg}</h2>
-                <div class="results-score"> <div class="score-circle"> <span class="score-number">${score.toFixed(0)}</span> <span class="score-percent-sign">%</span> </div> </div>
-                <div class="results-details">
-                    <p><strong>Subject:</strong> ${quizState.subject || 'N/A'}</p> <p><strong>Unit:</strong> ${quizState.unit || 'N/A'}</p> <p><strong>Lesson:</strong> ${quizState.lesson || 'N/A'}</p>
-                    <p><strong>Correct:</strong> ${quizState.correctAnswers} / ${quizState.totalQuestions}</p> <p><strong>Time:</strong> ${timeStr}</p>
-                </div>`;
+             resultsDiv.innerHTML = `<h2 class="results-header">${msg}</h2><div class="results-score"><div class="score-circle"><span class="score-number">${score.toFixed(0)}</span><span class="score-percent-sign">%</span></div></div><div class="results-details"><p><strong>Subject:</strong> ${quizState.subject||'N/A'}</p><p><strong>Unit:</strong> ${quizState.unit||'N/A'}</p><p><strong>Lesson:</strong> ${quizState.lesson||'N/A'}</p><p><strong>Correct:</strong> ${quizState.correctAnswers}/${quizState.totalQuestions}</p><p><strong>Time:</strong> ${timeStr}</p></div>`;
              quizContainerElement.appendChild(resultsDiv);
 
              // Results Buttons
-             const actionsDiv = document.createElement('div'); actionsDiv.className = 'results-actions quiz-buttons'; // Use quiz-buttons for consistent layout
-             const redoBtn = document.createElement('button'); // NEW Redo button
-             redoBtn.className = 'btn redo-btn'; redoBtn.textContent = 'Redo Quiz';
-             redoBtn.onclick = () => {
-                 // Restart quiz with the original (unshuffled) list, which will be shuffled again in startQuiz
-                 startQuiz(quizState.subject, quizState.unit, quizState.lesson, quizState.originalQuestions);
-             };
-             actionsDiv.appendChild(redoBtn);
+             const actionsDiv = document.createElement('div'); actionsDiv.className = 'results-actions quiz-buttons';
+             const redoBtn = document.createElement('button'); redoBtn.className = 'btn redo-btn'; redoBtn.textContent = 'Redo Quiz';
+             redoBtn.onclick = () => { startQuiz(quizState.subject, quizState.unit, quizState.lesson, quizState.originalQuestions); };
+             actionsDiv.appendChild(redoBtn); // Redo Button
 
-             if (quizState.totalQuestions > 0) { // Show Review only if questions exist
-                 const reviewBtn = document.createElement('button'); reviewBtn.id = 'review-btn'; reviewBtn.className = 'btn review-btn'; reviewBtn.textContent = 'Review Answers'; reviewBtn.onclick = reviewAnswers;
-                 actionsDiv.appendChild(reviewBtn);
-             }
+             if (quizState.totalQuestions > 0) { const revBtn = document.createElement('button'); revBtn.id = 'review-btn'; revBtn.className = 'btn review-btn'; revBtn.textContent = 'Review Answers'; revBtn.onclick = reviewAnswers; actionsDiv.appendChild(revBtn); }
              const backTopicsBtn = document.createElement('button'); backTopicsBtn.className = 'btn back-to-topics-btn'; backTopicsBtn.textContent = 'Back to Topics'; backTopicsBtn.onclick = showTopicList;
-             actionsDiv.appendChild(backTopicsBtn); // This will be on the far right due to justify-content: flex-end on quiz-buttons
-
-              // Adjust button order if needed (e.g., Back to Topics first)
-              // actionsDiv.insertBefore(backTopicsBtn, actionsDiv.firstChild); // Example: Move back button first
-
-
+             actionsDiv.appendChild(backTopicsBtn);
              quizButtonsContainerElement.appendChild(actionsDiv);
          }
 
         // --- Answer Review ---
-        function reviewAnswers() { // Renders review into quiz container
+        function reviewAnswers() {
              if (!quizContainerElement || !feedbackContainerElement || !quizButtonsContainerElement || !quizTitleElement) return;
              quizContainerElement.innerHTML = ''; feedbackContainerElement.classList.add('hidden'); quizButtonsContainerElement.innerHTML = '';
              quizTitleElement.textContent = `Review: ${quizState.lesson}`;
 
              const reviewDiv = document.createElement('div'); reviewDiv.className = 'review-container';
-             quizState.questions.forEach((q, i) => { // Iterate through SHUFFLED questions used in quiz
-                 const reviewBox = document.createElement('div');
-                 const userAns = quizState.selectedAnswers[i]; // Get user answer for this position
-                 let { correctnessClass, statusText } = calculateReviewStatus(q, userAns);
-                 reviewBox.className = `question-review ${correctnessClass}`;
-                 reviewBox.innerHTML = `<div class="review-question-header"><span class="review-question-number">Question ${i + 1} (${q.type.replace('_',' ')})</span><span class="review-status">${statusText}</span></div><p class="review-question-text">${q.question||'?'}</p><div id="review-answer-content-${i}"></div>`;
-                 reviewDiv.appendChild(reviewBox);
-                 const contentArea = reviewBox.querySelector(`#review-answer-content-${i}`);
-                 if (contentArea) {
-                     try { switch(q.type){ case "matching": reviewMatchingReview(q, userAns, contentArea); break; case "ordering": reviewOrderingReview(q, userAns, contentArea); break; case "multiple_choice": default: reviewMultipleChoiceReview(q, userAns, contentArea); break; } }
-                     catch(e){ console.error("Review render error:", e); contentArea.innerHTML = `<p style="color:red;">Error displaying review.</p>`; }
-                 }
+             quizState.questions.forEach((q, i) => {
+                 const box = document.createElement('div'); const userAns = quizState.selectedAnswers[i]; let { correctnessClass, statusText } = calculateReviewStatus(q, userAns); box.className = `question-review ${correctnessClass}`;
+                 box.innerHTML = `<div class="review-question-header"><span class="review-question-number">Q ${i + 1} (${q.type.replace('_',' ')})</span><span class="review-status">${statusText}</span></div><p class="review-question-text">${q.question||'?'}</p><div id="review-answer-content-${i}"></div>`; reviewDiv.appendChild(box);
+                 const contentArea = box.querySelector(`#review-answer-content-${i}`); if (contentArea) { try { switch(q.type){ case "matching": reviewMatchingReview(q, userAns, contentArea); break; case "ordering": reviewOrderingReview(q, userAns, contentArea); break; case "multiple_choice": default: reviewMultipleChoiceReview(q, userAns, contentArea); break; } } catch(e){ console.error("Review render err:", e); contentArea.innerHTML = `<p style="color:red;">Err display.</p>`; } }
              });
              quizContainerElement.appendChild(reviewDiv);
 
              // Review Buttons
-             const actionsDiv = document.createElement('div'); actionsDiv.className = 'review-actions quiz-buttons'; // Use shared class
+             const actionsDiv = document.createElement('div'); actionsDiv.className = 'review-actions quiz-buttons';
              const backResultsBtn = document.createElement('button'); backResultsBtn.className = 'btn back-btn'; backResultsBtn.textContent = '← Back to Results'; backResultsBtn.onclick = displayResults; actionsDiv.appendChild(backResultsBtn);
              const backTopicsBtn = document.createElement('button'); backTopicsBtn.className = 'btn back-to-topics-btn'; backTopicsBtn.textContent = 'Back to Topics'; backTopicsBtn.onclick = showTopicList; actionsDiv.appendChild(backTopicsBtn);
              quizButtonsContainerElement.appendChild(actionsDiv);
          }
-        function calculateReviewStatus(question, userAnswer) { /* Same */
-            let cl = 'incorrect', st = '✗ Incorrect', correct = false; try { switch (question.type) { case "matching": const cp = question.answer || {}, tot = Object.keys(cp).length; let ct = 0; if (tot > 0 && userAnswer && typeof userAnswer === 'object') { for (const pIdx in cp) { if (userAnswer.hasOwnProperty(pIdx) && userAnswer[pIdx] === cp[pIdx]) ct++; } } correct = tot > 0 && (ct === tot); if (correct) { cl = 'correct'; st = '✓ Correct'; } else if (ct > 0) { cl = 'partial'; st = `~ Partial (${ct}/${tot})`; } break; case "ordering": if (userAnswer && Array.isArray(userAnswer) && question.answer && Array.isArray(question.answer)) { correct = JSON.stringify(userAnswer) === JSON.stringify(question.answer); } cl = correct ? 'correct' : 'incorrect'; st = correct ? '✓ Correct' : '✗ Incorrect'; break; case "multiple_choice": default: if (userAnswer !== null && question.options && question.answer) { correct = (question.options[userAnswer] === question.answer); } cl = correct ? 'correct' : 'incorrect'; st = correct ? '✓ Correct' : '✗ Incorrect'; break; } } catch(e) { console.error("CalcReviewStatus Error:", e); } return { correctnessClass: cl, statusText: st };
+        function calculateReviewStatus(question, userAnswer) {
+            let cl='incorrect',st='✗ Incorrect',ok=!1;try{switch(question.type){case"matching":const cp=question.answer||{},tot=Object.keys(cp).length;let ct=0;if(tot>0&&userAnswer&&"object"==typeof userAnswer)for(const pIdx in cp)userAnswer.hasOwnProperty(pIdx)&&userAnswer[pIdx]===cp[pIdx]&&ct++;ok=tot>0&&ct===tot,ok?(cl="correct",st="✓ Correct"):ct>0&&(cl="partial",st=`~ Partial (${ct}/${tot})`);break;case"ordering":userAnswer&&Array.isArray(userAnswer)&&question.answer&&Array.isArray(question.answer)&&(ok=JSON.stringify(userAnswer)===JSON.stringify(question.answer)),cl=ok?"correct":"incorrect",st=ok?"✓ Correct":"✗ Incorrect";break;case"multiple_choice":default:null!==userAnswer&&question.options&&question.answer&&(ok=question.options[userAnswer]===question.answer),cl=ok?"correct":"incorrect",st=ok?"✓ Correct":"✗ Incorrect"}}catch(e){console.error("CalcReviewStatus Error:",e)}return{correctnessClass:cl,statusText:st};
          }
-        function reviewMultipleChoiceReview(question, userAnswerIndex, container) { /* Same */
-            const div = document.createElement('div'); div.className = 'review-mc-answer'; const userTxt = (userAnswerIndex !== null && question.options?.[userAnswerIndex] !== undefined) ? question.options[userAnswerIndex] : 'No answer'; const isOk = (userAnswerIndex !== null) && (userTxt === question.answer); div.innerHTML = `<p><strong>Your answer:</strong> <span class="user-answer-text ${isOk ? 'correct' : (userAnswerIndex !== null ? 'incorrect' : '')}">${userTxt}</span></p>${!isOk ? `<p><strong>Correct answer:</strong> <span class="correct-answer-text">${question.answer || 'N/A'}</span></p>` : ''}`; container.appendChild(div);
+        function reviewMultipleChoiceReview(question, userAnswerIndex, container) {
+            const div=document.createElement("div");div.className="review-mc-answer";const userTxt=null!==userAnswerIndex&&question.options?.[userAnswerIndex]!==void 0?question.options[userAnswerIndex]:"No answer",isOk=null!==userAnswerIndex&&userTxt===question.answer;div.innerHTML=`<p><strong>Your answer:</strong> <span class="user-answer-text ${isOk?"correct":null!==userAnswerIndex?"incorrect":""}">${userTxt}</span></p>${isOk?"":`<p><strong>Correct answer:</strong> <span class="correct-answer-text">${question.answer||"N/A"}</span></p>`}`,container.appendChild(div);
          }
-        function reviewMatchingReview(question, userPairs, container) { /* Same */
-             const div = document.createElement('div'); div.className = 'review-matching-answer'; div.innerHTML = `<p><strong>Matching Review:</strong></p>`; const grid = document.createElement('div'); grid.className = 'review-matching-grid'; const pCol = document.createElement('div'); pCol.className = 'review-matching-column'; const mCol = document.createElement('div'); mCol.className = 'review-matching-column'; const correct = question.answer || {}; (question.prompts || []).forEach((pTxt, pIdx) => { const userMIdx = userPairs ? userPairs[pIdx] : null, correctMIdx = correct[pIdx], isPairOk = userMIdx !== null && userMIdx === correctMIdx; const pDiv = document.createElement('div'); pDiv.textContent = pTxt; const mDiv = document.createElement('div'); const userMTxt = (userMIdx !== null && question.matches?.[userMIdx]) ? question.matches[userMIdx] : '(No match)'; const correctMTxt = (correctMIdx !== undefined && question.matches?.[correctMIdx]) ? question.matches[correctMIdx] : '(N/A)'; if (isPairOk) { pDiv.className='review-matched-pair-correct'; mDiv.textContent = correctMTxt; mDiv.className='review-matched-pair-correct'; } else { pDiv.className='review-matched-pair-incorrect'; mDiv.innerHTML = `<span style="text-decoration: line-through; color: #dc2626;">${userMTxt}</span> <span style="color: #059669;">(${correctMTxt})</span>`; mDiv.className='review-matched-pair-incorrect'; } pCol.appendChild(pDiv); mCol.appendChild(mDiv); }); grid.append(pCol, mCol); div.appendChild(grid); container.appendChild(div);
+        function reviewMatchingReview(question, userPairs, container) {
+             const div=document.createElement("div");div.className="review-matching-answer",div.innerHTML="<p><strong>Matching Review:</strong></p>";const grid=document.createElement("div");grid.className="review-matching-grid";const pCol=document.createElement("div");pCol.className="review-matching-column";const mCol=document.createElement("div");mCol.className="review-matching-column";const correct=question.answer||{};(question.prompts||[]).forEach((pTxt,pIdx)=>{const userMIdx=userPairs?userPairs[pIdx]:null,correctMIdx=correct[pIdx],isPairOk=null!==userMIdx&&userMIdx===correctMIdx,pDiv=document.createElement("div");pDiv.textContent=pTxt;const mDiv=document.createElement("div"),userMTxt=null!==userMIdx&&question.matches?.[userMIdx]?question.matches[userMIdx]:"(No match)",correctMTxt=void 0!==correctMIdx&&question.matches?.[correctMIdx]?question.matches[correctMIdx]:"(N/A)";isPairOk?(pDiv.className="review-matched-pair-correct",mDiv.textContent=correctMTxt,mDiv.className="review-matched-pair-correct"):(pDiv.className="review-matched-pair-incorrect",mDiv.innerHTML=`<span style="text-decoration: line-through; color: var(--incorrect-text);">${userMTxt}</span> <span style="color: var(--correct-text);">(${correctMTxt})</span>`,mDiv.className="review-matched-pair-incorrect"),pCol.appendChild(pDiv),mCol.appendChild(mDiv)}),grid.append(pCol,mCol),div.appendChild(grid),container.appendChild(div);
          }
-        function reviewOrderingReview(question, userOrderedItems, container) { /* Same */
-             const div = document.createElement('div'); div.className = 'review-ordering-answer'; const correctOrd = question.answer || []; const isOk = userOrderedItems && (JSON.stringify(userOrderedItems) === JSON.stringify(correctOrd)); div.innerHTML = `<p><strong>Ordering Review:</strong></p>`; const list = document.createElement('div'); list.className = 'review-ordering-list'; correctOrd.forEach((corrTxt, corrIdx) => { const item = document.createElement('div'); item.className = 'review-ordering-list-item'; const userIdx = userOrderedItems ? userOrderedItems.indexOf(corrTxt) : -1; const userNum = (userIdx !== -1) ? userIdx + 1 : null; const correctNum = corrIdx + 1; let numSpan = ''; if (userNum === correctNum) numSpan = `<span class="review-order-number review-order-correct">${userNum}.</span>`; else if (userNum !== null) numSpan = `<span class="review-order-number review-order-incorrect">${userNum}.</span> <span class="review-order-number review-order-correct">(${correctNum}.)</span>`; else numSpan = `<span class="review-order-number review-order-incorrect">(N/P)</span> <span class="review-order-number review-order-correct">(${correctNum}.)</span>`; item.innerHTML = `${numSpan} ${corrTxt}`; list.appendChild(item); }); div.appendChild(list); if (!isOk && userOrderedItems) div.innerHTML += `<p style="margin-top:10px;"><strong>Your Order:</strong> ${userOrderedItems.join(' → ')}</p>`; container.appendChild(div);
+        function reviewOrderingReview(question, userOrderedItems, container) {
+             const div=document.createElement("div");div.className="review-ordering-answer";const correctOrd=question.answer||[],isOk=userOrderedItems&&JSON.stringify(userOrderedItems)===JSON.stringify(correctOrd);div.innerHTML="<p><strong>Ordering Review:</strong></p>";const list=document.createElement("div");list.className="review-ordering-list",correctOrd.forEach((corrTxt,corrIdx)=>{const item=document.createElement("div");item.className="review-ordering-list-item";const userIdx=userOrderedItems?userOrderedItems.indexOf(corrTxt):-1,userNum=-1!==userIdx?userIdx+1:null,correctNum=corrIdx+1;let numSpan="";numSpan=userNum===correctNum?`<span class="review-order-number review-order-correct">${userNum}.</span>`:null!==userNum?`<span class="review-order-number review-order-incorrect">${userNum}.</span> <span class="review-order-number review-order-correct">(${correctNum}.)</span>`:`<span class="review-order-number review-order-incorrect">(N/P)</span> <span class="review-order-number review-order-correct">(${correctNum}.)</span>`,item.innerHTML=`${numSpan} ${corrTxt}`,list.appendChild(item)}),div.appendChild(list),!isOk&&userOrderedItems&&(div.innerHTML+=`<p style="margin-top:10px;"><strong>Your Order:</strong> ${userOrderedItems.join(" → ")}</p>`),container.appendChild(div);
          }
 
         // --- Error Display ---
