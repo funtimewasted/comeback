@@ -526,66 +526,72 @@
 
         // Generate HTML for topic lists (Adding Question Counter & Corrected Structure)
         function generateSemesterContent(subject, semester) {
-            // Check data validity
-            if (!topicsData[subject]?.[semester]) {
-                console.error(`Data missing for ${subject}, ${semester}`);
-                return `<div id="${subject}-${semester}" class="semester-content"><div class="section"><p>Content unavailable.</p></div></div>`;
-            }
-            const semesterData = topicsData[subject][semester];
+    // Check data validity
+    if (!topicsData[subject]?.[semester]) {
+        console.error(`Data missing for ${subject}, ${semester}`);
+        return `<div id="${subject}-${semester}" class="semester-content"><div class="section"><p>Content unavailable.</p></div></div>`;
+    }
+    const semesterData = topicsData[subject][semester];
 
-            // Start semester container + title container
-            let html = `<div id="${subject}-${semester}" class="semester-content">
-                            <div class="semester-title-container"> <!-- Changed class -->
-                                 <div class="unit-title">${semesterData.title}</div>
-                            </div>`; // Close semester title container
+    // Start semester container
+    let html = `<div id="${subject}-${semester}" class="semester-content">`;
 
-            // Check units array
-            if (!semesterData.units?.length) {
-                 html += `<div class="section"><p>No units available.</p></div>`; // Message within a section box
-            } else {
-                 // Loop through each Unit
-                 semesterData.units.forEach(unit => {
-                     if (unit?.title) {
-                         html += `<div class="section"> <div class="section-title">${unit.title}</div>`; // Unit box + Title
-                         // Check lessons array
-                         if (unit.lessons?.length) {
-                             unit.lessons.forEach(lesson => {
-                                 if (lesson?.title) {
-                                     const qCount = lesson.questions?.length || 0;
-                                     const countText = qCount === 1 ? "1 question" : `${qCount} questions`;
-                                     // Lesson Box (clickable)
-                                     html += `<div class="section-content" data-subject="${subject}" data-unit="${unit.title}" data-lesson="${lesson.title}">
-                                                 <span>${lesson.title}</span>  <!-- Span for title -->
-                                                 <span class="lesson-q-count">(${countText})</span>
-                                               </div>`;
-                                 } else { console.warn(`Invalid lesson in unit: ${unit.title}`, lesson); }
-                             });
-                         } else {
-                             html += `<p style="margin:10px 0 0 0; font-size:14px; color:var(--text-muted);">(No lessons)</p>`;
-                         }
-                         html += `</div>`; // End Unit section
-                     } else { console.warn(`Invalid unit in ${subject}, ${semester}`, unit); }
-                 });
-            }
-            html += `</div>`; // End semester content
-            return html;
-        }
+    // Add Semester Title Container SEPARATELY
+    html += `<div class="semester-title-container">
+                 <div class="unit-title">${semesterData.title}</div>
+            </div>`;
+
+    // Check units array - Render Unit Sections *after* the title container
+    if (!semesterData.units?.length) {
+         html += `<div class="section"><p>No units available for this semester.</p></div>`; // Message within a section box
+    } else {
+         // Loop through each Unit and create a .section for it
+         semesterData.units.forEach(unit => {
+             if (unit?.title) {
+                 html += `<div class="section"> <div class="section-title">${unit.title}</div>`; // Unit box + Title
+                 // Check lessons array within the unit
+                 if (unit.lessons?.length) {
+                     unit.lessons.forEach(lesson => {
+                         if (lesson?.title) {
+                             const qCount = lesson.questions?.length || 0;
+                             const countText = qCount === 1 ? "1 question" : `${qCount} questions`;
+                             // Lesson Box (clickable)
+                             html += `<div class="section-content" data-subject="${subject}" data-unit="${unit.title}" data-lesson="${lesson.title}">
+                                         <span>${lesson.title}</span>
+                                         <span class="lesson-q-count">(${countText})</span>
+                                       </div>`;
+                         } else { console.warn(`Invalid lesson in unit: ${unit.title}`, lesson); }
+                     });
+                 } else {
+                     html += `<p style="margin:10px 0 0 0; font-size:14px; color:var(--text-muted);">(No lessons)</p>`;
+                 }
+                 html += `</div>`; // End Unit section (.section)
+             } else { console.warn(`Invalid unit in ${subject}, ${semester}`, unit); }
+         });
+    }
+    html += `</div>`; // End semester content
+    return html;
+}
 
 
-        // Generate all content on load
-        function generateAllContent() {
-            let contentHTML = '';
-            const contentDiv = document.getElementById('content');
-            if (!contentDiv) { console.error("#content not found!"); return; }
-            Object.keys(topicsData).forEach(subject => {
-                Object.keys(topicsData[subject]).forEach(semester => {
-                    contentHTML += generateSemesterContent(subject, semester);
-                });
-            });
-            contentDiv.innerHTML = contentHTML;
-        }
+// Generate all content on load
+function generateAllContent() {
+    let contentHTML = '';
+    const contentDiv = document.getElementById('content');
+    if (!contentDiv) { console.error("#content not found!"); return; }
+    Object.keys(topicsData).forEach(subject => {
+        Object.keys(topicsData[subject]).forEach(semester => {
+            contentHTML += generateSemesterContent(subject, semester);
+        });
+    });
+    contentDiv.innerHTML = contentHTML;
+    // IMPORTANT: After generating content, call updateContent once to show the default view correctly
+    // and attach initial listeners. This should be called within the DOMContentLoaded listener in questions.js,
+    // but since topics.js runs first and generates the HTML, we ensure it's ready.
+    // We will rely on the call within questions.js's DOMContentLoaded.
+}
 
-        document.addEventListener('DOMContentLoaded', generateAllContent);
+document.addEventListener('DOMContentLoaded', generateAllContent);
 
         // --- END OF topics.js ---
     </script>
