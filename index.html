@@ -118,11 +118,8 @@
             /* Styles for when the topic list is visible */
         }
 
-        .unit-container { /* Container for semester title AND units */
+        .unit-container { /* Container for semester title */
              margin-bottom: 20px;
-        }
-        #content > .semester-content > .unit-container:last-child { /* Last unit block in semester */
-             /* This rule might be redundant now, sections handle spacing */
         }
 
         .unit-title { /* Title for the Semester (e.g., "First Semester") */
@@ -130,10 +127,8 @@
             font-weight: 600;
             margin-bottom: 20px;
             color: #1e293b;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #e2e8f0;
-             /* Put semester title in its own container if needed, or style directly */
-             /* background-color: #f8fafc; padding: 15px 25px; border-radius: 12px; border: 1px solid #e2e8f0; */
+             padding-bottom: 10px;
+             border-bottom: 1px solid #e2e8f0;
         }
 
         .section { /* Represents a Unit Box */
@@ -250,13 +245,15 @@
 
         /* --- Matching Specific --- */
         .matching-instructions { font-size: 15px; color: #475569; margin-bottom: 20px; }
-        .matching-container { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 20px; margin-bottom: 0; }
-        .matching-column { flex: 1; min-width: 200px; display: flex; flex-direction: column; gap: 10px; }
-        .matching-column h4 { margin: 0 0 10px 0; font-size: 15px; font-weight: 600; color: #4a5568; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px; }
-        .matching-item { padding: 10px 15px; border: 1px solid #cbd5e1; background-color: #fff; border-radius: 6px; cursor: pointer; transition: all 0.2s ease; font-size: 15px; }
+        .matching-container { position: relative; display: flex; justify-content: space-between; gap: 5%; margin-bottom: 0; }
+        .matching-column { flex-basis: 47%; display: flex; flex-direction: column; gap: 10px; }
+        .matching-column h4 { margin: 0 0 10px 0; font-size: 15px; font-weight: 600; color: #4a5568; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .matching-item { padding: 10px 15px; border: 1px solid #cbd5e1; background-color: #fff; border-radius: 6px; cursor: pointer; transition: all 0.2s ease; font-size: 15px; display: flex; align-items: center; min-height: 30px; }
         .matching-item:hover { background-color: #f1f5f9; border-color: #94a3b8; }
         .matching-item.selected { background-color: #dbeafe; border-color: #60a5fa; font-weight: 500; }
-        .matching-item.matched { background-color: #e5e7eb; border-color: #9ca3af; cursor: not-allowed; opacity: 0.8; }
+        .matching-item.matched { background-color: #e5e7eb; border-color: #9ca3af; cursor: pointer; opacity: 1.0; }
+        #matching-arrow-svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; z-index: 1; }
+        #matching-arrow-svg line { stroke: #60a5fa; stroke-width: 2; transition: all 0.3s ease; marker-end: url(#arrowhead); }
         .review-matched-pair-correct { background-color: #dcfce7 !important; border-color: #16a34a !important; }
         .review-matched-pair-incorrect { background-color: #fee2e2 !important; border-color: #ef4444 !important; }
 
@@ -298,6 +295,8 @@
         .next-btn:hover { background-color: #047857; }
         .review-btn { background-color: #16a34a; color: white; }
         .review-btn:hover { background-color: #15803d; }
+        .redo-btn { background-color: #f97316; color: white; } /* Orange for Redo */
+        .redo-btn:hover { background-color: #ea580c; }
         .close-btn, .back-to-topics-btn { background-color: #64748b; color: white; }
         .close-btn:hover, .back-to-topics-btn:hover { background-color: #475569; }
         .back-btn { background-color: #64748b; color: white; }
@@ -529,65 +528,50 @@
             }
         };
 
-        // Function to generate HTML for topic lists - REVISED for UI
+        // Generate HTML for topic lists (Restored UI)
         function generateSemesterContent(subject, semester) {
-            if (!topicsData[subject] || !topicsData[subject][semester]) {
-                console.error(`Data missing for subject: ${subject}, semester: ${semester}`);
-                return `<div id="${subject}-${semester}" class="semester-content"><div class="unit-container"><div class="unit-title">Error</div><p>Content not available.</p></div></div>`;
+            if (!topicsData[subject]?.[semester]) {
+                console.error(`Data missing for ${subject}, ${semester}`);
+                return `<div id="${subject}-${semester}" class="semester-content"><div class="unit-container"><div class="unit-title">Error</div><p>Content unavailable.</p></div></div>`;
             }
-
             const semesterData = topicsData[subject][semester];
-            // Outer div for the whole semester's content
             let html = `<div id="${subject}-${semester}" class="semester-content">
-                            <div class="unit-container"> <!-- Separate container for semester title -->
-                                 <div class="unit-title">${semesterData.title}</div>
-                            </div>`; // Close semester title container
+                            <div class="unit-container"> <div class="unit-title">${semesterData.title}</div> </div>`; // Semester Title container
 
-            if (!semesterData.units || !Array.isArray(semesterData.units) || semesterData.units.length === 0) {
-                 html += `<div class="section"><p>No units available for this semester.</p></div>`; // Message within a section box
+            if (!semesterData.units?.length) {
+                 html += `<div class="section"><p>No units available.</p></div>`;
             } else {
                  semesterData.units.forEach(unit => {
-                     if (unit && unit.title) {
-                         html += `<div class="section">
-                                     <div class="section-title">${unit.title}</div>`; // Unit title
-                         if (unit.lessons && Array.isArray(unit.lessons) && unit.lessons.length > 0) {
+                     if (unit?.title) {
+                         html += `<div class="section"> <div class="section-title">${unit.title}</div>`; // Unit Box + Title
+                         if (unit.lessons?.length) {
                              unit.lessons.forEach(lesson => {
-                                 if (lesson && lesson.title) {
-                                     html += `<div class="section-content" data-subject="${subject}" data-unit="${unit.title}" data-lesson="${lesson.title}">
-                                                 ${lesson.title}
-                                               </div>`;
-                                 } else { console.warn(`Invalid lesson in unit: ${unit.title}`, lesson); }
+                                 if (lesson?.title) {
+                                     html += `<div class="section-content" data-subject="${subject}" data-unit="${unit.title}" data-lesson="${lesson.title}">${lesson.title}</div>`; // Lesson Box
+                                 }
                              });
-                         } else {
-                             html += `<p style="margin-left: 0; margin-top: 10px; font-size: 14px; color: #64748b;">(No lessons in this unit yet)</p>`;
-                         }
+                         } else { html += `<p style="margin:10px 0 0 0; font-size:14px; color:#64748b;">(No lessons)</p>`; }
                          html += `</div>`; // End Unit section
-                     } else { console.warn(`Invalid unit in subject: ${subject}, semester: ${semester}`, unit); }
+                     }
                  });
             }
-            html += `</div>`; // End outer semester div
+            html += `</div>`; // End semester content
             return html;
         }
 
-
-        // Generate content for all subjects and semesters
+        // Generate all content on load
         function generateAllContent() {
             let contentHTML = '';
             const contentDiv = document.getElementById('content');
-            if (!contentDiv) { console.error("Content container #content not found!"); return; }
-            for (const subject in topicsData) {
-                if (topicsData.hasOwnProperty(subject)) {
-                    for (const semester in topicsData[subject]) {
-                         if (topicsData[subject].hasOwnProperty(semester)) {
-                            contentHTML += generateSemesterContent(subject, semester);
-                         }
-                    }
-                }
-            }
+            if (!contentDiv) { console.error("#content not found!"); return; }
+            Object.keys(topicsData).forEach(subject => {
+                Object.keys(topicsData[subject]).forEach(semester => {
+                    contentHTML += generateSemesterContent(subject, semester);
+                });
+            });
             contentDiv.innerHTML = contentHTML;
         }
 
-        // Initialize content when the page loads
         document.addEventListener('DOMContentLoaded', generateAllContent);
 
         // --- END OF topics.js ---
@@ -598,22 +582,39 @@
 
         // --- Global State ---
         let quizState = {
-            currentQuestionIndex: 0, correctAnswers: 0, totalQuestions: 0, startTime: null, endTime: null,
-            selectedAnswers: [], questions: [], subject: '', unit: '', lesson: '',
+            currentQuestionIndex: 0,
+            correctAnswers: 0,
+            totalQuestions: 0,
+            startTime: null,
+            endTime: null,
+            selectedAnswers: [], // User's response structure for each question
+            questions: [],       // Current SHUFFLED list of questions for the quiz
+            originalQuestions: [], // Original, unshuffled list for redo reference
+            subject: '',
+            unit: '',
+            lesson: '',
             matchingState: { selectedPromptElement: null, userPairs: {} }
         };
 
         // --- DOM Element References ---
-        let contentElement, quizViewElement, quizTitleElement, quizContainerElement, feedbackContainerElement, quizButtonsContainerElement;
+        let contentElement, quizViewElement, quizTitleElement, quizContainerElement, feedbackContainerElement, quizButtonsContainerElement, matchingSvgElement;
+        let matchingArrowObserver = null;
+        let resizeTimeout = null;
 
         // --- Utility Functions ---
-        function shuffleArray(array) { /* Fisher-Yates Shuffle */
-             for (let i = array.length - 1; i > 0; i--) {
+        function shuffleArray(array) {
+             // Creates a new shuffled array (doesn't modify original)
+             const newArray = [...array];
+             for (let i = newArray.length - 1; i > 0; i--) {
                  const j = Math.floor(Math.random() * (i + 1));
-                 [array[i], array[j]] = [array[j], array[i]];
+                 [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
              }
-             return array;
+             return newArray;
          }
+
+        function debounce(func, wait) { /* Included */
+            let timeout; return function executedFunction(...args) { const later = () => { clearTimeout(timeout); func(...args); }; clearTimeout(timeout); timeout = setTimeout(later, wait); };
+        }
 
         // --- DOM Ready Listener ---
         document.addEventListener('DOMContentLoaded', () => {
@@ -628,7 +629,7 @@
             document.querySelectorAll('.nav-btn[data-subject]').forEach(button => {
                 button.addEventListener('click', function() {
                     if (!quizViewElement.classList.contains('hidden') && !confirm("Leave quiz? Progress lost.")) return;
-                    showTopicList(); // Always go back to list view before updating content
+                    showTopicList();
                     document.querySelectorAll('.nav-btn[data-subject]').forEach(btn => btn.classList.remove('active'));
                     this.classList.add('active');
                     updateContent();
@@ -644,7 +645,8 @@
                 });
             });
 
-            updateContent(); // Initial topic list load
+            window.addEventListener('resize', debounce(updateAllArrowPositions, 250));
+            updateContent();
         });
 
         // --- View Management ---
@@ -652,12 +654,13 @@
             if (contentElement && quizViewElement) {
                 contentElement.classList.remove('hidden');
                 quizViewElement.classList.add('hidden');
-                quizState = { // Reset state
+                if (matchingArrowObserver) { matchingArrowObserver.disconnect(); matchingArrowObserver = null; }
+                if(matchingSvgElement) matchingSvgElement.innerHTML = '<defs><marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#60a5fa"/></marker></defs>';
+                quizState = { // Reset state fully
                     currentQuestionIndex: 0, correctAnswers: 0, totalQuestions: 0, startTime: null, endTime: null,
-                    selectedAnswers: [], questions: [], subject: '', unit: '', lesson: '',
+                    selectedAnswers: [], questions: [], originalQuestions: [], subject: '', unit: '', lesson: '',
                     matchingState: { selectedPromptElement: null, userPairs: {} }
                 };
-                // console.log("Returned to topic list, quiz state reset.");
             }
         }
         function showQuizView() {
@@ -669,462 +672,314 @@
         }
 
         // --- Core Functions ---
-        // Update main topic list view
-        function updateContent() {
+        function updateContent() { // Updates topic list view
             const activeSubjectBtn = document.querySelector('.nav-btn[data-subject].active');
             const activeSemesterBtn = document.querySelector('.semester-btn.active');
             if (!activeSubjectBtn || !activeSemesterBtn || !contentElement) return;
             const activeSubject = activeSubjectBtn.dataset.subject;
             const activeSemester = activeSemesterBtn.dataset.semester;
-
-            contentElement.querySelectorAll('.semester-content').forEach(content => content.classList.remove('active'));
+            contentElement.querySelectorAll('.semester-content').forEach(c => c.classList.remove('active'));
             const contentId = `${activeSubject}-${activeSemester}`;
             const semesterContentElement = contentElement.querySelector(`#${contentId}`);
-
             if (semesterContentElement) {
                 semesterContentElement.classList.add('active');
                 semesterContentElement.querySelectorAll('.section-content').forEach(lessonBox => { // Target lesson boxes
                     const newLessonBox = lessonBox.cloneNode(true);
                     lessonBox.parentNode.replaceChild(newLessonBox, lessonBox);
-                    newLessonBox.addEventListener('click', function() {
-                        handleSectionClick(this.dataset.subject, this.dataset.unit, this.dataset.lesson);
-                    });
+                    newLessonBox.addEventListener('click', () => handleSectionClick(newLessonBox.dataset.subject, newLessonBox.dataset.unit, newLessonBox.dataset.lesson));
                 });
-            } else { console.warn(`Semester content element ID "${contentId}" not found.`); }
+            } else { console.warn(`Semester content ID "${contentId}" not found.`); }
         }
 
-        // Handle clicking a lesson -> Start Quiz
-        function handleSectionClick(subject, unit, lesson) {
+        function handleSectionClick(subject, unit, lesson) { // Starts quiz if questions found
              if (!subject || !unit || !lesson) { alert("Error identifying topic."); return; }
-            // console.log(`Starting quiz for: Subject=${subject}, Unit=${unit}, Lesson=${lesson}`);
             try {
-                const questions = getQuestions(subject, unit, lesson);
-                if (questions && questions.length > 0) {
-                    startQuiz(subject, unit, lesson, questions);
-                } else { showError(subject, unit, lesson); } // Show error in quiz view
+                const originalQuestions = getQuestions(subject, unit, lesson); // Get original order
+                if (originalQuestions?.length) {
+                    startQuiz(subject, unit, lesson, originalQuestions); // Pass original list
+                } else { showError(subject, unit, lesson); }
             } catch (error) {
-                console.error("Error handling section click:", error);
-                showError(subject, unit, lesson, "An error occurred loading questions.");
+                console.error("Section click error:", error);
+                showError(subject, unit, lesson, "Error loading questions.");
             }
         }
 
-        // Start a new quiz
-        function startQuiz(subject, unit, lesson, questions) {
-            quizState = { // Reset state
-                currentQuestionIndex: 0, correctAnswers: 0, totalQuestions: questions.length, startTime: new Date(), endTime: null,
-                selectedAnswers: new Array(questions.length).fill(null), questions: questions, subject: subject, unit: unit, lesson: lesson,
+        // Start/Redo Quiz - SHUFFLES questions
+        function startQuiz(subject, unit, lesson, originalQuestions) {
+            const shuffledQuestions = shuffleArray(originalQuestions); // Shuffle for this attempt
+
+            quizState = {
+                currentQuestionIndex: 0,
+                correctAnswers: 0,
+                totalQuestions: shuffledQuestions.length,
+                startTime: new Date(),
+                endTime: null,
+                selectedAnswers: new Array(shuffledQuestions.length).fill(null),
+                questions: shuffledQuestions,       // Use shuffled list for quiz flow
+                originalQuestions: originalQuestions, // Store original list for redo
+                subject: subject,
+                unit: unit,
+                lesson: lesson,
                 matchingState: { selectedPromptElement: null, userPairs: {} }
             };
+
             if (quizTitleElement) quizTitleElement.textContent = `${lesson}`;
-            showQuizView(); displayQuestion();
+            showQuizView();
+            displayQuestion();
         }
 
         // Display the current question
         function displayQuestion() {
-            if (!quizContainerElement || !feedbackContainerElement || !quizButtonsContainerElement) return;
-            const currentQuestion = quizState.questions[quizState.currentQuestionIndex];
-            if (!currentQuestion) { displayResults(); return; } // End quiz if no more questions
+             if (!quizContainerElement || !feedbackContainerElement || !quizButtonsContainerElement) return;
+             const currentQuestion = quizState.questions[quizState.currentQuestionIndex];
+             if (!currentQuestion) { displayResults(); return; }
 
-            quizContainerElement.innerHTML = ''; feedbackContainerElement.innerHTML = ''; feedbackContainerElement.classList.add('hidden'); quizButtonsContainerElement.innerHTML = ''; // Clear areas
+             quizContainerElement.innerHTML = ''; feedbackContainerElement.innerHTML = ''; feedbackContainerElement.classList.add('hidden'); quizButtonsContainerElement.innerHTML = '';
+             if (matchingSvgElement) matchingSvgElement.innerHTML = '<defs><marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#60a5fa"/></marker></defs>';
+             if (matchingArrowObserver) { matchingArrowObserver.disconnect(); matchingArrowObserver = null; }
 
-            const questionWrapper = document.createElement('div'); questionWrapper.className = 'question-display-wrapper';
-            const progressText = document.createElement('div'); progressText.className = 'question-progress'; progressText.textContent = `Question ${quizState.currentQuestionIndex + 1} of ${quizState.totalQuestions}`; questionWrapper.appendChild(progressText);
-            const questionText = document.createElement('p'); questionText.className = 'question-text'; questionText.innerHTML = `<strong>Q:</strong> ${currentQuestion.question || 'Missing question text'}`; questionWrapper.appendChild(questionText);
-            const typeWrapper = document.createElement('div'); typeWrapper.className = 'question-type-wrapper';
+             const questionWrapper = document.createElement('div'); questionWrapper.className = 'question-display-wrapper';
+             const progressText = document.createElement('div'); progressText.className = 'question-progress'; progressText.textContent = `Question ${quizState.currentQuestionIndex + 1} of ${quizState.totalQuestions}`; questionWrapper.appendChild(progressText);
+             const questionText = document.createElement('p'); questionText.className = 'question-text'; questionText.innerHTML = `<strong>Q:</strong> ${currentQuestion.question || '?'}`; questionWrapper.appendChild(questionText);
+             const typeWrapper = document.createElement('div'); typeWrapper.className = 'question-type-wrapper';
 
-            try { // Render based on type
-                 switch (currentQuestion.type) {
-                     case "matching": renderMatching(currentQuestion, typeWrapper); break;
-                     case "ordering": renderOrdering(currentQuestion, typeWrapper); break;
-                     case "multiple_choice": default: renderMultipleChoice(currentQuestion, typeWrapper); break;
-                 }
-            } catch (renderError) { console.error("Error rendering question:", renderError); typeWrapper.innerHTML = `<p style="color: red;">Error displaying question.</p>`; }
-            questionWrapper.appendChild(typeWrapper); quizContainerElement.appendChild(questionWrapper);
+             try {
+                  switch (currentQuestion.type) {
+                      case "matching": renderMatching(currentQuestion, typeWrapper); setupArrowObserver(); break;
+                      case "ordering": renderOrdering(currentQuestion, typeWrapper); break;
+                      case "multiple_choice": default: renderMultipleChoice(currentQuestion, typeWrapper); break;
+                  }
+             } catch (renderError) { console.error("Render error:", renderError); typeWrapper.innerHTML = `<p style="color: red;">Error displaying question.</p>`; }
+             questionWrapper.appendChild(typeWrapper); quizContainerElement.appendChild(questionWrapper);
 
-            // Render Buttons
-            const submitBtn = document.createElement('button'); submitBtn.className = 'btn submit-btn'; submitBtn.id = 'submit-btn'; submitBtn.textContent = 'Submit Answer'; submitBtn.onclick = checkAnswer;
-            const nextBtn = document.createElement('button'); nextBtn.className = 'btn next-btn hidden'; nextBtn.id = 'next-btn'; nextBtn.textContent = quizState.currentQuestionIndex === quizState.totalQuestions - 1 ? 'See Results' : 'Next Question'; nextBtn.onclick = nextQuestion;
-            quizButtonsContainerElement.appendChild(submitBtn); quizButtonsContainerElement.appendChild(nextBtn);
+             // Buttons
+             const submitBtn = document.createElement('button'); submitBtn.className = 'btn submit-btn'; submitBtn.id = 'submit-btn'; submitBtn.textContent = 'Submit Answer'; submitBtn.onclick = checkAnswer;
+             const nextBtn = document.createElement('button'); nextBtn.className = 'btn next-btn hidden'; nextBtn.id = 'next-btn'; nextBtn.textContent = quizState.currentQuestionIndex === quizState.totalQuestions - 1 ? 'See Results' : 'Next Question'; nextBtn.onclick = nextQuestion;
+             quizButtonsContainerElement.appendChild(submitBtn); quizButtonsContainerElement.appendChild(nextBtn);
 
-             // Set initial disabled state for submit button based on type
-             submitBtn.disabled = true; // Start disabled
-             if (currentQuestion.type === 'multiple_choice') {
-                 // Enabled by listener in renderMultipleChoice
-             } else if (currentQuestion.type === 'matching') {
-                 // Enabled by listener in handleMatchingClick when all paired
-             } else if (currentQuestion.type === 'ordering') {
-                 // Enabled by listener in renderOrdering when all selected
-             } else {
-                  submitBtn.disabled = false; // Default to enabled if type unknown or simple
-             }
+             // Initial submit button state
+              submitBtn.disabled = true;
+              if (currentQuestion.type !== 'multiple_choice' && currentQuestion.type !== 'ordering' && currentQuestion.type !== 'matching') {
+                  submitBtn.disabled = false; // Enable for unknown types or types not needing selection
+              }
+              // Specific types enable button via their render/interaction logic
         }
 
+
         // --- Rendering Functions ---
-        function renderMultipleChoice(question, container) { /* Same as before */
-            if (!question.options || !Array.isArray(question.options)) { container.textContent = 'Error: Options invalid.'; return; }
-            const optionsDiv = document.createElement('div'); optionsDiv.className = 'options-container'; optionsDiv.id = 'options-list';
-            question.options.forEach((option, index) => {
-                const optionId = `option-${index}`, label = document.createElement('label'); label.className = 'option-label'; label.htmlFor = optionId;
-                const input = document.createElement('input'); input.type = 'radio'; input.name = 'question-option'; input.value = index; input.id = optionId; input.className = 'option-input';
-                input.addEventListener('change', () => { document.getElementById('submit-btn').disabled = false; }); // Enable on change
-                const text = document.createElement('span'); text.className = 'option-text'; text.textContent = option;
-                label.appendChild(input); label.appendChild(text); optionsDiv.appendChild(label);
-            }); container.appendChild(optionsDiv);
-         }
-        function renderMatching(question, container) { /* Same as before */
-             if (!question.prompts || !question.matches || !Array.isArray(question.prompts) || !Array.isArray(question.matches) || question.prompts.length !== question.matches.length) { container.textContent = 'Error: Matching data invalid.'; return; }
+        function renderMultipleChoice(question, container) {
+             if (!question.options?.length) { container.textContent = 'Error: Options invalid.'; return; }
+             const optionsDiv = document.createElement('div'); optionsDiv.className = 'options-container'; optionsDiv.id = 'options-list';
+             question.options.forEach((option, index) => {
+                 const id = `option-${index}`, lbl = document.createElement('label'); lbl.className = 'option-label'; lbl.htmlFor = id;
+                 const inp = document.createElement('input'); inp.type = 'radio'; inp.name = 'question-option'; inp.value = index; inp.id = id; inp.className = 'option-input';
+                 inp.addEventListener('change', () => { document.getElementById('submit-btn').disabled = false; });
+                 const txt = document.createElement('span'); txt.className = 'option-text'; txt.textContent = option;
+                 lbl.appendChild(inp); lbl.appendChild(txt); optionsDiv.appendChild(lbl);
+             }); container.appendChild(optionsDiv);
+        }
+        function renderMatching(question, container) {
+             if (!question.prompts?.length || !question.matches?.length || question.prompts.length !== question.matches.length) { container.textContent = 'Error: Matching data invalid.'; return; }
              quizState.matchingState.userPairs = {};
-             const instructions = document.createElement('p'); instructions.className = 'matching-instructions'; instructions.textContent = 'Click left item, then matching right item.'; container.appendChild(instructions);
-             const matchingContainer = document.createElement('div'); matchingContainer.className = 'matching-container';
-             const promptsCol = document.createElement('div'); promptsCol.className = 'matching-column'; promptsCol.id = 'prompts-column'; promptsCol.innerHTML = '<h4>Items</h4>';
-             const matchesCol = document.createElement('div'); matchesCol.className = 'matching-column'; matchesCol.id = 'matches-column'; matchesCol.innerHTML = '<h4>Matches</h4>';
-             const shuffledMatches = question.matches.map((text, idx) => ({ text, originalIndex: idx })).sort(() => Math.random() - 0.5);
-             question.prompts.forEach((promptText, index) => { const item = document.createElement('div'); item.className = 'matching-item prompt-item'; item.textContent = promptText; item.dataset.index = index; item.addEventListener('click', handleMatchingClick); promptsCol.appendChild(item); });
-             shuffledMatches.forEach((matchObj) => { const item = document.createElement('div'); item.className = 'matching-item match-item'; item.textContent = matchObj.text; item.dataset.index = matchObj.originalIndex; item.addEventListener('click', handleMatchingClick); matchesCol.appendChild(item); });
-             matchingContainer.appendChild(promptsCol); matchingContainer.appendChild(matchesCol); container.appendChild(matchingContainer);
-         }
-        function renderOrdering(question, container) { /* Same as before, includes checkAllSelected */
-             if (!question.items || !Array.isArray(question.items) || question.items.length === 0) { container.textContent = 'Error: Ordering data invalid.'; return; }
-             const numItems = question.items.length;
-             const instructions = document.createElement('p'); instructions.className = 'ordering-instructions'; instructions.textContent = `Select order number (1-${numItems}) for each.`; container.appendChild(instructions);
-             const orderingContainer = document.createElement('div'); orderingContainer.className = 'ordering-container'; orderingContainer.id = 'ordering-list';
-             const checkAllSelected = () => { const allSelected = Array.from(orderingContainer.querySelectorAll('.ordering-select')).every(s => s.value !== ""); const btn = document.getElementById('submit-btn'); if(btn) btn.disabled = !allSelected; };
-             question.items.forEach((itemText, index) => {
-                 const itemDiv = document.createElement('div'); itemDiv.className = 'ordering-item'; itemDiv.dataset.originalIndex = index;
-                 const select = document.createElement('select'); select.className = 'ordering-select'; select.dataset.itemIndex = index; const defaultOption = document.createElement('option'); defaultOption.value = ""; defaultOption.textContent = "-"; defaultOption.selected = true; defaultOption.disabled = true; select.appendChild(defaultOption);
-                 for (let i = 1; i <= numItems; i++) { const option = document.createElement('option'); option.value = i; option.textContent = i; select.appendChild(option); }
-                 select.addEventListener('change', checkAllSelected);
-                 const textSpan = document.createElement('span'); textSpan.className = 'ordering-text'; textSpan.textContent = itemText;
-                 itemDiv.appendChild(select); itemDiv.appendChild(textSpan); orderingContainer.appendChild(itemDiv);
-             }); container.appendChild(orderingContainer);
-         }
+             const instr = document.createElement('p'); instr.className = 'matching-instructions'; instr.textContent = 'Click left item, then right item. Click matched item to deselect.'; container.appendChild(instr);
+             const outer = document.createElement('div'); outer.style.position = 'relative';
+             const matchCont = document.createElement('div'); matchCont.className = 'matching-container'; matchCont.id = 'matching-cols';
+             const promCol = document.createElement('div'); promCol.className = 'matching-column'; promCol.id = 'prompts-column'; promCol.innerHTML = '<h4>Items</h4>';
+             const matCol = document.createElement('div'); matCol.className = 'matching-column'; matCol.id = 'matches-column'; matCol.innerHTML = '<h4>Matches</h4>';
+             matchingSvgElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); matchingSvgElement.id = 'matching-arrow-svg'; matchingSvgElement.innerHTML = '<defs><marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#60a5fa"/></marker></defs>'; outer.appendChild(matchingSvgElement);
+             const shuffled = question.matches.map((t, i) => ({ t, i })).sort(() => 0.5 - Math.random());
+             question.prompts.forEach((t, i) => { const it = document.createElement('div'); it.className = 'matching-item prompt-item'; it.textContent = t; it.dataset.index = i; it.id=`prompt-${i}`; it.onclick = handleMatchingClick; promCol.appendChild(it); });
+             shuffled.forEach(o => { const it = document.createElement('div'); it.className = 'matching-item match-item'; it.textContent = o.t; it.dataset.index = o.i; it.id=`match-${o.i}`; it.onclick = handleMatchingClick; matCol.appendChild(it); });
+             matchCont.append(promCol, matCol); outer.appendChild(matchCont); container.appendChild(outer);
+        }
+        function renderOrdering(question, container) {
+            if (!question.items?.length) { container.textContent = 'Error: Ordering data invalid.'; return; }
+            const num = question.items.length;
+            const instr = document.createElement('p'); instr.className = 'ordering-instructions'; instr.textContent = `Select order number (1-${num}) for each.`; container.appendChild(instr);
+            const orderCont = document.createElement('div'); orderCont.className = 'ordering-container'; orderCont.id = 'ordering-list';
+            const checkDone = () => { const allSel = Array.from(orderCont.querySelectorAll('.ordering-select')).every(s => s.value !== ""); const btn = document.getElementById('submit-btn'); if(btn) btn.disabled = !allSel; };
+            question.items.forEach((t, i) => {
+                const div = document.createElement('div'); div.className = 'ordering-item'; div.dataset.originalIndex = i;
+                const sel = document.createElement('select'); sel.className = 'ordering-select'; sel.dataset.itemIndex = i; const defOpt = document.createElement('option'); defOpt.value = ""; defOpt.textContent = "-"; defOpt.selected = true; defOpt.disabled = true; sel.appendChild(defOpt);
+                for (let j = 1; j <= num; j++) { const opt = document.createElement('option'); opt.value = j; opt.textContent = j; sel.appendChild(opt); }
+                sel.addEventListener('change', checkDone);
+                const span = document.createElement('span'); span.className = 'ordering-text'; span.textContent = t;
+                div.append(sel, span); orderCont.appendChild(div);
+            }); container.appendChild(orderCont);
+        }
 
         // --- Interaction Handlers ---
-        function handleMatchingClick(event) { /* Same as before */
-            const clickedItem = event.target; if (clickedItem.classList.contains('matched') || !clickedItem.classList.contains('matching-item')) return;
-            const isPrompt = clickedItem.classList.contains('prompt-item'); let currentSelection = quizState.matchingState.selectedPromptElement;
-            if (isPrompt) { if (currentSelection) currentSelection.classList.remove('selected'); if (currentSelection !== clickedItem) { clickedItem.classList.add('selected'); quizState.matchingState.selectedPromptElement = clickedItem; } else { quizState.matchingState.selectedPromptElement = null; } }
-            else { if (currentSelection) { const promptIndex = currentSelection.dataset.index, matchIndex = clickedItem.dataset.index; quizState.matchingState.userPairs[promptIndex] = parseInt(matchIndex, 10); currentSelection.classList.remove('selected'); currentSelection.classList.add('matched'); clickedItem.classList.add('matched'); currentSelection.style.cursor = 'default'; clickedItem.style.cursor = 'default'; quizState.matchingState.selectedPromptElement = null; const total = document.querySelectorAll('.prompt-item').length, matched = document.querySelectorAll('.prompt-item.matched').length; if (total === matched) { document.getElementById('submit-btn').disabled = false; } } }
+        function handleMatchingClick(event) { // Includes deselect logic
+             const clicked = event.target; if (!clicked.classList.contains('matching-item')) return;
+             const isPrompt = clicked.classList.contains('prompt-item'), isMatched = clicked.classList.contains('matched');
+             let currentSel = quizState.matchingState.selectedPromptElement; const idx = clicked.dataset.index;
+
+             if (isMatched) { // --- Deselection ---
+                 let pIdx = -1, mIdx = -1;
+                 if (isPrompt) { pIdx = idx; mIdx = quizState.matchingState.userPairs[pIdx]; }
+                 else { mIdx = idx; pIdx = Object.keys(quizState.matchingState.userPairs).find(k => quizState.matchingState.userPairs[k] == mIdx); }
+                 if (pIdx !== -1 && mIdx !== undefined) {
+                     const pEl = document.getElementById(`prompt-${pIdx}`), mEl = document.getElementById(`match-${mIdx}`);
+                     if (pEl) { pEl.classList.remove('matched'); pEl.style.cursor = 'pointer'; pEl.style.pointerEvents = 'auto'; }
+                     if (mEl) { mEl.classList.remove('matched'); mEl.style.cursor = 'pointer'; mEl.style.pointerEvents = 'auto'; }
+                     delete quizState.matchingState.userPairs[pIdx]; removeArrow(pIdx);
+                     if (currentSel) currentSel.classList.remove('selected'); quizState.matchingState.selectedPromptElement = null;
+                     document.getElementById('submit-btn').disabled = true; return;
+                 }
+             }
+             // --- Selection / Matching ---
+             if (isPrompt) { if (clicked === currentSel) { clicked.classList.remove('selected'); quizState.matchingState.selectedPromptElement = null; } else if (!isMatched) { if (currentSel) currentSel.classList.remove('selected'); clicked.classList.add('selected'); quizState.matchingState.selectedPromptElement = clicked; } }
+             else { if (currentSel && !isMatched) { const pIdx = currentSel.dataset.index, mIdx = idx; quizState.matchingState.userPairs[pIdx] = parseInt(mIdx, 10); currentSel.classList.remove('selected'); currentSel.classList.add('matched'); clicked.classList.add('matched'); drawArrow(currentSel, clicked, pIdx); quizState.matchingState.selectedPromptElement = null; const total = document.querySelectorAll('.prompt-item').length, matched = document.querySelectorAll('.prompt-item.matched').length; if (total === matched) document.getElementById('submit-btn').disabled = false; } }
+         }
+
+        // --- Arrow Drawing ---
+        function drawArrow(promptEl, matchEl, promptIndex) { /* Same */
+            if (!matchingSvgElement || !promptEl || !matchEl) return; const svgR = matchingSvgElement.getBoundingClientRect(), pR = promptEl.getBoundingClientRect(), mR = matchEl.getBoundingClientRect(); const sx = pR.right - svgR.left, sy = pR.top + pR.height/2 - svgR.top, ex = mR.left - svgR.left, ey = mR.top + mR.height/2 - svgR.top; let line = matchingSvgElement.querySelector(`#arrow-${promptIndex}`); if (!line) { line = document.createElementNS('http://www.w3.org/2000/svg', 'line'); line.id = `arrow-${promptIndex}`; matchingSvgElement.appendChild(line); } line.setAttribute('x1', sx); line.setAttribute('y1', sy); line.setAttribute('x2', ex); line.setAttribute('y2', ey); line.style.opacity = '1';
+         }
+        function removeArrow(promptIndex) { /* Same */
+            if (!matchingSvgElement) return; const line = matchingSvgElement.querySelector(`#arrow-${promptIndex}`); if (line) { line.style.opacity = '0'; setTimeout(() => line.remove(), 300); }
+         }
+        function updateAllArrowPositions() { /* Same */
+             if (!matchingSvgElement || !quizState || quizState.questions[quizState.currentQuestionIndex]?.type !== 'matching') return; const pairs = quizState.matchingState.userPairs; for (const pIdx in pairs) { if (pairs.hasOwnProperty(pIdx)) { const mIdx = pairs[pIdx], pEl = document.getElementById(`prompt-${pIdx}`), mEl = document.getElementById(`match-${mIdx}`); if (pEl && mEl) drawArrow(pEl, mEl, pIdx); } }
+         }
+        function setupArrowObserver() { /* Same */
+            const target = document.getElementById('matching-cols'); if (!target) return; const cfg = { attributes: true, childList: true, subtree: true, characterData: true }; const cb = debounce(() => updateAllArrowPositions(), 100); matchingArrowObserver = new MutationObserver(cb); matchingArrowObserver.observe(target, cfg);
          }
 
         // --- Answer Checking ---
-        function checkAnswer() { /* Same structure */
+        function checkAnswer() {
             if (!feedbackContainerElement || !quizButtonsContainerElement) return;
-            const currentQuestion = quizState.questions[quizState.currentQuestionIndex];
-            let result = { isCorrect: false, feedback: '', userResponse: null, scoreIncrement: 0 };
+            if (matchingArrowObserver) { matchingArrowObserver.disconnect(); matchingArrowObserver = null; } // Disconnect observer
+            const currentQuestion = quizState.questions[quizState.currentQuestionIndex]; let result = { isCorrect: false, feedback: '', userResponse: null, scoreIncrement: 0 };
             try { switch (currentQuestion.type) { case "matching": result = checkMatching(currentQuestion); break; case "ordering": result = checkOrdering(currentQuestion); break; case "multiple_choice": default: result = checkMultipleChoice(currentQuestion); break; } }
-            catch (error) { console.error("Check error:", error); result = { isCorrect: false, feedback: '<div class="incorrect-feedback">Error checking answer.</div>', userResponse: null, scoreIncrement: 0 }; }
-            quizState.selectedAnswers[quizState.currentQuestionIndex] = result.userResponse; if (result.isCorrect) { quizState.correctAnswers += result.scoreIncrement; }
+            catch (error) { console.error("Check error:", error); result = { isCorrect: false, feedback: '<div class="incorrect-feedback">Error checking.</div>', userResponse: null, scoreIncrement: 0 }; }
+            quizState.selectedAnswers[quizState.currentQuestionIndex] = result.userResponse; if (result.isCorrect) quizState.correctAnswers++; // Only count fully correct
             feedbackContainerElement.innerHTML = result.feedback; feedbackContainerElement.classList.remove('hidden');
             disableInputs(); const submitBtn = quizButtonsContainerElement.querySelector('#submit-btn'), nextBtn = quizButtonsContainerElement.querySelector('#next-btn'); if(submitBtn) submitBtn.classList.add('hidden'); if(nextBtn) nextBtn.classList.remove('hidden');
-         }
-        function checkMultipleChoice(question) { /* Same as before */
-            const sel = document.querySelector('input[name="question-option"]:checked'); if (!sel) return { isCorrect: false, feedback: '<div class="incorrect-feedback">Select answer.</div>', userResponse: null, scoreIncrement: 0 };
-            const idx = parseInt(sel.value, 10), correctText = question.answer, selText = question.options[idx], isCorrect = selText === correctText;
-            document.querySelectorAll('.option-label').forEach((lbl, i) => { const inp = lbl.querySelector('input'); if (question.options[i] === correctText) lbl.classList.add('correct-option'); if (inp && parseInt(inp.value, 10) === idx && !isCorrect) lbl.classList.add('incorrect-option'); });
-            const fb = isCorrect ? '<div class="correct-feedback">Correct! ✓</div>' : `<div class="incorrect-feedback">Incorrect. <span>Correct: ${correctText}</span></div>`;
-            return { isCorrect, feedback: fb, userResponse: idx, scoreIncrement: isCorrect ? 1 : 0 };
-         }
-        function checkMatching(question) { /* Same as before */
-            const userPairs = quizState.matchingState.userPairs, correctPairs = question.answer || {}, total = Object.keys(correctPairs).length; let correctCount = 0; if (total === 0) return { isCorrect: true, feedback: '<div class="correct-feedback">N/A</div>', userResponse: userPairs, scoreIncrement: 0 };
-            for (const pIdx in correctPairs) { if (userPairs.hasOwnProperty(pIdx) && userPairs[pIdx] === correctPairs[pIdx]) correctCount++; } const isFull = correctCount === total;
-            let fb = ''; if (isFull) fb = `<div class="correct-feedback">Correct! ✓ (${correctCount}/${total})</div>`; else if (correctCount > 0) fb = `<div class="partial-feedback">Partial. Matched ${correctCount}/${total}.</div>`; else fb = `<div class="incorrect-feedback">Incorrect. Matched 0/${total}.</div>`;
-            return { isCorrect: isFull, feedback: fb, userResponse: userPairs, scoreIncrement: isFull ? 1 : 0 };
-         }
-        function checkOrdering(question) { /* Same robust logic as verified before */
-            const items = question.items || []; const correctOrder = question.answer || []; const numItems = items.length;
-            if (numItems === 0 || !Array.isArray(correctOrder) || numItems !== correctOrder.length) { console.error("Invalid ordering data:", question); return { isCorrect: false, feedback: '<div class="incorrect-feedback">Error: Invalid question setup.</div>', userResponse: null, scoreIncrement: 0 }; }
-            const userOrderMap = {}, selectedNumbers = new Set(); let allSelected = true, hasDuplicate = false;
-            const selects = document.querySelectorAll('#ordering-list .ordering-select');
-            if (selects.length !== numItems) { console.error(`Select count mismatch`); return { isCorrect: false, feedback: '<div class="incorrect-feedback">Error processing form.</div>', userResponse: null, scoreIncrement: 0 }; }
-            selects.forEach(select => {
-                const itemIndex = parseInt(select.dataset.itemIndex, 10), val = select.value;
-                if (val === "") { allSelected = false; }
-                else { const num = parseInt(val, 10); if (isNaN(num) || num < 1 || num > numItems) { allSelected = false; return; } userOrderMap[itemIndex] = num; if (selectedNumbers.has(num)) hasDuplicate = true; selectedNumbers.add(num); }
-            });
-            // console.log("User Map:", userOrderMap); // Uncomment for debugging
-            if (!allSelected) { console.log("ValFail: Not all selected."); return { isCorrect: false, feedback: '<div class="incorrect-feedback">Select order for all items.</div>', userResponse: null, scoreIncrement: 0 }; }
-            if (hasDuplicate || selectedNumbers.size !== numItems) { console.log(`ValFail: Dups(${hasDuplicate}) or Count(${selectedNumbers.size} vs ${numItems})`); return { isCorrect: false, feedback: `<div class="incorrect-feedback">Use each number (1-${numItems}) once.</div>`, userResponse: null, scoreIncrement: 0 }; }
-            const userOrderedItems = new Array(numItems).fill(null); let ok = true;
-            for (const idxStr in userOrderMap) { if (userOrderMap.hasOwnProperty(idxStr)) { const idx = parseInt(idxStr, 10), text = items[idx], pos = userOrderMap[idx] - 1; if (text === undefined || pos < 0 || pos >= numItems) { ok = false; break; } if (userOrderedItems[pos] !== null) { ok = false; break; } userOrderedItems[pos] = text; } }
-            if (!ok || userOrderedItems.some(i => i === null)) { console.error("Construction Fail:", userOrderedItems); return { isCorrect: false, feedback: '<div class="incorrect-feedback">Error processing sequence.</div>', userResponse: userOrderedItems, scoreIncrement: 0 }; }
-            // console.log("User Ordered:", JSON.stringify(userOrderedItems)); console.log("Correct:", JSON.stringify(correctOrder)); // Uncomment for debugging
-            const isCorrect = JSON.stringify(userOrderedItems) === JSON.stringify(correctOrder); // console.log("Is Correct:", isCorrect);
-            let fb = ''; if (isCorrect) fb = `<div class="correct-feedback">Correct! ✓</div>`; else fb = `<div class="incorrect-feedback">Incorrect. <span>Correct: ${correctOrder.join(' → ')}</span></div>`;
-            selects.forEach(sel => { const idx = parseInt(sel.dataset.itemIndex, 10), userN = userOrderMap[idx], correctN = correctOrder.indexOf(items[idx]) + 1; sel.style.borderColor = (userN === correctN) ? '#16a34a' : '#ef4444'; sel.style.borderWidth = '2px'; });
-            return { isCorrect, feedback: fb, userResponse: userOrderedItems, scoreIncrement: isCorrect ? 1 : 0 };
         }
-        function disableInputs() { /* Same as before */
+        function checkMultipleChoice(question) { /* Same */
+            const sel = document.querySelector('input[name="question-option"]:checked'); if (!sel) return { isCorrect: false, feedback: '<div class="incorrect-feedback">Select answer.</div>', userResponse: null, scoreIncrement: 0 }; const idx = parseInt(sel.value, 10), correctText = question.answer, selText = question.options[idx], isCorrect = selText === correctText; document.querySelectorAll('.option-label').forEach((lbl, i) => { const inp = lbl.querySelector('input'); if (question.options[i] === correctText) lbl.classList.add('correct-option'); if (inp && parseInt(inp.value, 10) === idx && !isCorrect) lbl.classList.add('incorrect-option'); }); const fb = isCorrect ? '<div class="correct-feedback">Correct! ✓</div>' : `<div class="incorrect-feedback">Incorrect. <span>Correct: ${correctText}</span></div>`; return { isCorrect, feedback: fb, userResponse: idx, scoreIncrement: isCorrect ? 1 : 0 };
+        }
+        function checkMatching(question) { /* Same */
+             const userPairs = quizState.matchingState.userPairs, correctPairs = question.answer || {}, total = Object.keys(correctPairs).length; let correctCount = 0; if (total === 0) return { isCorrect: true, feedback: '<div class="correct-feedback">N/A</div>', userResponse: userPairs, scoreIncrement: 0 }; for (const pIdx in correctPairs) { if (userPairs.hasOwnProperty(pIdx) && userPairs[pIdx] === correctPairs[pIdx]) correctCount++; } const isFull = correctCount === total; let fb = ''; if (isFull) fb = `<div class="correct-feedback">Correct! ✓ (${correctCount}/${total})</div>`; else if (correctCount > 0) fb = `<div class="partial-feedback">Partial. Matched ${correctCount}/${total}.</div>`; else fb = `<div class="incorrect-feedback">Incorrect. Matched 0/${total}.</div>`; return { isCorrect: isFull, feedback: fb, userResponse: userPairs, scoreIncrement: isFull ? 1 : 0 };
+        }
+        function checkOrdering(question) { /* Same */
+            const items = question.items || [], correctOrder = question.answer || [], numItems = items.length; if (numItems === 0 || !Array.isArray(correctOrder) || numItems !== correctOrder.length) { console.error("Invalid ordering data:", question); return { isCorrect: false, feedback: '<div class="incorrect-feedback">Error: Invalid setup.</div>', userResponse: null, scoreIncrement: 0 }; } const userOrderMap = {}, selectedNumbers = new Set(); let allSelected = true, hasDuplicate = false; const selects = document.querySelectorAll('#ordering-list .ordering-select'); if (selects.length !== numItems) { return { isCorrect: false, feedback: '<div class="incorrect-feedback">Error processing form.</div>', userResponse: null, scoreIncrement: 0 }; } selects.forEach(sel => { const idx = parseInt(sel.dataset.itemIndex, 10), val = sel.value; if (val === "") allSelected = false; else { const num = parseInt(val, 10); if (isNaN(num) || num < 1 || num > numItems) { allSelected = false; return; } userOrderMap[idx] = num; if (selectedNumbers.has(num)) hasDuplicate = true; selectedNumbers.add(num); } }); if (!allSelected) return { isCorrect: false, feedback: '<div class="incorrect-feedback">Select order for all.</div>', userResponse: null, scoreIncrement: 0 }; if (hasDuplicate || selectedNumbers.size !== numItems) return { isCorrect: false, feedback: `<div class="incorrect-feedback">Use each number (1-${numItems}) once.</div>`, userResponse: null, scoreIncrement: 0 }; const userOrderedItems = new Array(numItems).fill(null); let ok = true; for (const idxStr in userOrderMap) { if (userOrderMap.hasOwnProperty(idxStr)) { const idx = parseInt(idxStr, 10), text = items[idx], pos = userOrderMap[idx] - 1; if (text === undefined || pos < 0 || pos >= numItems || userOrderedItems[pos] !== null) { ok = false; break; } userOrderedItems[pos] = text; } } if (!ok || userOrderedItems.some(i => i === null)) { console.error("Construction Fail:", userOrderMap, userOrderedItems); return { isCorrect: false, feedback: '<div class="incorrect-feedback">Error processing sequence.</div>', userResponse: userOrderedItems, scoreIncrement: 0 }; } const isCorrect = JSON.stringify(userOrderedItems) === JSON.stringify(correctOrder); let fb = ''; if (isCorrect) fb = `<div class="correct-feedback">Correct! ✓</div>`; else fb = `<div class="incorrect-feedback">Incorrect. <span>Correct: ${correctOrder.join(' → ')}</span></div>`; selects.forEach(sel => { const idx = parseInt(sel.dataset.itemIndex, 10), userN = userOrderMap[idx], correctN = correctOrder.indexOf(items[idx]) + 1; sel.style.borderColor = (userN === correctN) ? '#16a34a' : '#ef4444'; sel.style.borderWidth = '2px'; }); return { isCorrect, feedback: fb, userResponse: userOrderedItems, scoreIncrement: isCorrect ? 1 : 0 };
+        }
+        function disableInputs() { /* Same */
              document.querySelectorAll('input[name="question-option"], .ordering-select').forEach(i => i.disabled = true); document.querySelectorAll('.option-label').forEach(l => l.style.cursor = 'default'); document.querySelectorAll('.matching-item').forEach(i => { i.style.pointerEvents = 'none'; i.style.cursor = 'default'; });
-         }
-
+        }
 
         // --- Navigation and Results ---
-
-        function nextQuestion() {
-            quizState.currentQuestionIndex++;
-            if (quizState.currentQuestionIndex < quizState.totalQuestions) {
-                displayQuestion();
-            } else {
-                quizState.endTime = new Date();
-                displayResults();
-            }
+        function nextQuestion() { /* Same */
+            quizState.currentQuestionIndex++; if (quizState.currentQuestionIndex < quizState.totalQuestions) displayQuestion(); else { quizState.endTime = new Date(); displayResults(); }
         }
+        function displayResults() { // ADDED Redo Button
+             if (!quizContainerElement || !feedbackContainerElement || !quizButtonsContainerElement || !quizTitleElement) return;
+             quizContainerElement.innerHTML = ''; feedbackContainerElement.classList.add('hidden'); quizButtonsContainerElement.innerHTML = '';
+             quizTitleElement.textContent = 'Quiz Results'; // Update title for results
 
-        // Display results within the #quiz-container
-        function displayResults() {
-             if (!quizContainerElement || !feedbackContainerElement || !quizButtonsContainerElement) return;
+             const time = quizState.endTime && quizState.startTime ? (quizState.endTime - quizState.startTime) / 1000 : 0; const mins = Math.floor(time / 60), secs = Math.floor(time % 60); const timeStr = time > 0 ? `${mins}m ${secs}s` : 'N/A';
+             const score = quizState.totalQuestions > 0 ? (quizState.correctAnswers / quizState.totalQuestions) * 100 : 0;
+             let msg = ''; // Performance message logic...
+             if (quizState.totalQuestions === 0) msg = 'No questions.'; else if (score >= 90) msg = 'Excellent! 🎉'; else if (score >= 70) msg = 'Good work! 👍'; else if (score >= 50) msg = 'Not bad! 💪'; else msg = 'Needs practice. 📚';
 
-             quizContainerElement.innerHTML = ''; // Clear question area
-             feedbackContainerElement.classList.add('hidden'); // Hide feedback area
-             quizButtonsContainerElement.innerHTML = ''; // Clear standard buttons
-
-             const timeTaken = quizState.endTime && quizState.startTime ? (quizState.endTime - quizState.startTime) / 1000 : 0;
-             const minutes = Math.floor(timeTaken / 60);
-             const seconds = Math.floor(timeTaken % 60);
-             const timeString = timeTaken > 0 ? `${minutes}m ${seconds}s` : 'N/A';
-             const scorePercentage = quizState.totalQuestions > 0 ? (quizState.correctAnswers / quizState.totalQuestions) * 100 : 0;
-             let performanceMessage = ''; // Determine message based on score... (same as before)
-              if (quizState.totalQuestions === 0) performanceMessage = 'No questions were answered.';
-              else if (scorePercentage >= 90) performanceMessage = 'Excellent job! 🎉';
-              else if (scorePercentage >= 70) performanceMessage = 'Good work! 👍';
-              else if (scorePercentage >= 50) performanceMessage = 'Not bad. Keep practicing! 💪';
-              else performanceMessage = 'You might need more study time. 📚';
-
-
-             const resultsDiv = document.createElement('div');
-             resultsDiv.className = 'results-container';
+             const resultsDiv = document.createElement('div'); resultsDiv.className = 'results-container';
              resultsDiv.innerHTML = `
-                <h2 class="results-header">${performanceMessage}</h2>
-                <div class="results-score"> <div class="score-circle"> <span class="score-number">${scorePercentage.toFixed(0)}</span> <span class="score-percent-sign">%</span> </div> </div>
+                <h2 class="results-header">${msg}</h2>
+                <div class="results-score"> <div class="score-circle"> <span class="score-number">${score.toFixed(0)}</span> <span class="score-percent-sign">%</span> </div> </div>
                 <div class="results-details">
                     <p><strong>Subject:</strong> ${quizState.subject || 'N/A'}</p> <p><strong>Unit:</strong> ${quizState.unit || 'N/A'}</p> <p><strong>Lesson:</strong> ${quizState.lesson || 'N/A'}</p>
-                    <p><strong>Correct Answers:</strong> ${quizState.correctAnswers} out of ${quizState.totalQuestions}</p> <p><strong>Time Taken:</strong> ${timeString}</p>
+                    <p><strong>Correct:</strong> ${quizState.correctAnswers} / ${quizState.totalQuestions}</p> <p><strong>Time:</strong> ${timeStr}</p>
                 </div>`;
              quizContainerElement.appendChild(resultsDiv);
 
-             // Add Results Buttons to the button container
-             const actionsDiv = document.createElement('div');
-             actionsDiv.className = 'results-actions'; // Use specific class if needed
-             if (quizState.totalQuestions > 0) {
-                 const reviewBtn = document.createElement('button');
-                 reviewBtn.id = 'review-btn'; reviewBtn.className = 'btn review-btn'; reviewBtn.textContent = 'Review Answers';
-                 reviewBtn.addEventListener('click', reviewAnswers);
+             // Results Buttons
+             const actionsDiv = document.createElement('div'); actionsDiv.className = 'results-actions quiz-buttons'; // Use quiz-buttons for consistent layout
+             const redoBtn = document.createElement('button'); // NEW Redo button
+             redoBtn.className = 'btn redo-btn'; redoBtn.textContent = 'Redo Quiz';
+             redoBtn.onclick = () => {
+                 // Restart quiz with the original (unshuffled) list, which will be shuffled again in startQuiz
+                 startQuiz(quizState.subject, quizState.unit, quizState.lesson, quizState.originalQuestions);
+             };
+             actionsDiv.appendChild(redoBtn);
+
+             if (quizState.totalQuestions > 0) { // Show Review only if questions exist
+                 const reviewBtn = document.createElement('button'); reviewBtn.id = 'review-btn'; reviewBtn.className = 'btn review-btn'; reviewBtn.textContent = 'Review Answers'; reviewBtn.onclick = reviewAnswers;
                  actionsDiv.appendChild(reviewBtn);
              }
-             const backBtn = document.createElement('button');
-             backBtn.className = 'btn back-to-topics-btn'; backBtn.textContent = 'Back to Topics';
-             backBtn.onclick = showTopicList; // Use the view switching function
-             actionsDiv.appendChild(backBtn);
+             const backTopicsBtn = document.createElement('button'); backTopicsBtn.className = 'btn back-to-topics-btn'; backTopicsBtn.textContent = 'Back to Topics'; backTopicsBtn.onclick = showTopicList;
+             actionsDiv.appendChild(backTopicsBtn); // This will be on the far right due to justify-content: flex-end on quiz-buttons
+
+              // Adjust button order if needed (e.g., Back to Topics first)
+              // actionsDiv.insertBefore(backTopicsBtn, actionsDiv.firstChild); // Example: Move back button first
+
+
              quizButtonsContainerElement.appendChild(actionsDiv);
          }
 
-        // --- Answer Review Functions (Render into #quiz-container) ---
+        // --- Answer Review ---
+        function reviewAnswers() { // Renders review into quiz container
+             if (!quizContainerElement || !feedbackContainerElement || !quizButtonsContainerElement || !quizTitleElement) return;
+             quizContainerElement.innerHTML = ''; feedbackContainerElement.classList.add('hidden'); quizButtonsContainerElement.innerHTML = '';
+             quizTitleElement.textContent = `Review: ${quizState.lesson}`;
 
-        function reviewAnswers() {
-             if (!quizContainerElement || !feedbackContainerElement || !quizButtonsContainerElement) return;
-
-             quizContainerElement.innerHTML = ''; // Clear results
-             feedbackContainerElement.classList.add('hidden'); // Hide feedback
-             quizButtonsContainerElement.innerHTML = ''; // Clear results buttons
-
-             if (quizTitleElement) quizTitleElement.textContent = `Review: ${quizState.lesson}`; // Update title
-
-             const reviewDiv = document.createElement('div');
-             reviewDiv.className = 'review-container';
-
-             // Render each question review
-             quizState.questions.forEach((question, index) => {
-                 const questionReview = document.createElement('div');
-                 const userAnswer = quizState.selectedAnswers[index];
-                 let { correctnessClass, statusText } = calculateReviewStatus(question, userAnswer); // Use helper
-
-                 questionReview.className = `question-review ${correctnessClass}`;
-                 questionReview.innerHTML = `
-                    <div class="review-question-header">
-                        <span class="review-question-number">Question ${index + 1} (${question.type.replace('_', ' ')})</span>
-                        <span class="review-status">${statusText}</span>
-                    </div>
-                    <p class="review-question-text">${question.question || 'Missing question text'}</p>
-                    <div id="review-answer-content-${index}"></div>`;
-                 reviewDiv.appendChild(questionReview);
-
-                 const reviewContentContainer = reviewDiv.querySelector(`#review-answer-content-${index}`);
-                 if (reviewContentContainer) {
-                     try {
-                          switch (question.type) {
-                              case "matching": reviewMatchingReview(question, userAnswer, reviewContentContainer); break; // Renamed review renderers
-                              case "ordering": reviewOrderingReview(question, userAnswer, reviewContentContainer); break;
-                              case "multiple_choice": default: reviewMultipleChoiceReview(question, userAnswer, reviewContentContainer); break;
-                          }
-                     } catch (reviewError) {
-                         console.error("Error rendering review for question", index, reviewError);
-                         reviewContentContainer.innerHTML = `<p style="color: red;">Error displaying review.</p>`;
-                     }
+             const reviewDiv = document.createElement('div'); reviewDiv.className = 'review-container';
+             quizState.questions.forEach((q, i) => { // Iterate through SHUFFLED questions used in quiz
+                 const reviewBox = document.createElement('div');
+                 const userAns = quizState.selectedAnswers[i]; // Get user answer for this position
+                 let { correctnessClass, statusText } = calculateReviewStatus(q, userAns);
+                 reviewBox.className = `question-review ${correctnessClass}`;
+                 reviewBox.innerHTML = `<div class="review-question-header"><span class="review-question-number">Question ${i + 1} (${q.type.replace('_',' ')})</span><span class="review-status">${statusText}</span></div><p class="review-question-text">${q.question||'?'}</p><div id="review-answer-content-${i}"></div>`;
+                 reviewDiv.appendChild(reviewBox);
+                 const contentArea = reviewBox.querySelector(`#review-answer-content-${i}`);
+                 if (contentArea) {
+                     try { switch(q.type){ case "matching": reviewMatchingReview(q, userAns, contentArea); break; case "ordering": reviewOrderingReview(q, userAns, contentArea); break; case "multiple_choice": default: reviewMultipleChoiceReview(q, userAns, contentArea); break; } }
+                     catch(e){ console.error("Review render error:", e); contentArea.innerHTML = `<p style="color:red;">Error displaying review.</p>`; }
                  }
              });
-             quizContainerElement.appendChild(reviewDiv); // Add all reviews to quiz container
+             quizContainerElement.appendChild(reviewDiv);
 
-             // Add Review Buttons
-             const actionsDiv = document.createElement('div');
-             actionsDiv.className = 'review-actions'; // Specific class for review buttons layout
-             const backToResultsBtn = document.createElement('button');
-             backToResultsBtn.className = 'btn back-btn'; backToResultsBtn.textContent = '← Back to Results';
-             backToResultsBtn.addEventListener('click', displayResults);
-             actionsDiv.appendChild(backToResultsBtn);
-              const backToTopicsBtn = document.createElement('button');
-             backToTopicsBtn.className = 'btn back-to-topics-btn'; backToTopicsBtn.textContent = 'Back to Topics';
-             backToTopicsBtn.onclick = showTopicList;
-             actionsDiv.appendChild(backToTopicsBtn);
-
+             // Review Buttons
+             const actionsDiv = document.createElement('div'); actionsDiv.className = 'review-actions quiz-buttons'; // Use shared class
+             const backResultsBtn = document.createElement('button'); backResultsBtn.className = 'btn back-btn'; backResultsBtn.textContent = '← Back to Results'; backResultsBtn.onclick = displayResults; actionsDiv.appendChild(backResultsBtn);
+             const backTopicsBtn = document.createElement('button'); backTopicsBtn.className = 'btn back-to-topics-btn'; backTopicsBtn.textContent = 'Back to Topics'; backTopicsBtn.onclick = showTopicList; actionsDiv.appendChild(backTopicsBtn);
              quizButtonsContainerElement.appendChild(actionsDiv);
          }
-
-         // Helper to determine review status class/text
-         function calculateReviewStatus(question, userAnswer) {
-             let correctnessClass = 'incorrect'; let statusText = '✗ Incorrect'; let reviewCorrectness = false;
-             try {
-                 switch (question.type) {
-                     case "matching":
-                         const correctPairs = question.answer || {}; const totalPairs = Object.keys(correctPairs).length; let correctCount = 0;
-                         if (totalPairs > 0 && userAnswer && typeof userAnswer === 'object') {
-                             for (const promptIndex in correctPairs) {
-                                 if (userAnswer.hasOwnProperty(promptIndex) && userAnswer[promptIndex] === correctPairs[promptIndex]) correctCount++;
-                             }
-                         }
-                         reviewCorrectness = totalPairs > 0 && (correctCount === totalPairs);
-                         if (reviewCorrectness) { correctnessClass = 'correct'; statusText = '✓ Correct'; }
-                         else if (correctCount > 0) { correctnessClass = 'partial'; statusText = `~ Partial (${correctCount}/${totalPairs})`; }
-                         break; // Keep default incorrect if 0 correct
-                     case "ordering":
-                         if (userAnswer && Array.isArray(userAnswer) && question.answer && Array.isArray(question.answer)) {
-                             reviewCorrectness = JSON.stringify(userAnswer) === JSON.stringify(question.answer);
-                         }
-                         correctnessClass = reviewCorrectness ? 'correct' : 'incorrect'; statusText = reviewCorrectness ? '✓ Correct' : '✗ Incorrect';
-                         break;
-                     case "multiple_choice": default:
-                         if (userAnswer !== null && question.options && question.answer) {
-                             reviewCorrectness = (question.options[userAnswer] === question.answer);
-                         }
-                         correctnessClass = reviewCorrectness ? 'correct' : 'incorrect'; statusText = reviewCorrectness ? '✓ Correct' : '✗ Incorrect';
-                         break;
-                 }
-             } catch(e) { console.error("Error in calculateReviewStatus", e); /* Keep default incorrect */ }
-             return { correctnessClass, statusText };
+        function calculateReviewStatus(question, userAnswer) { /* Same */
+            let cl = 'incorrect', st = '✗ Incorrect', correct = false; try { switch (question.type) { case "matching": const cp = question.answer || {}, tot = Object.keys(cp).length; let ct = 0; if (tot > 0 && userAnswer && typeof userAnswer === 'object') { for (const pIdx in cp) { if (userAnswer.hasOwnProperty(pIdx) && userAnswer[pIdx] === cp[pIdx]) ct++; } } correct = tot > 0 && (ct === tot); if (correct) { cl = 'correct'; st = '✓ Correct'; } else if (ct > 0) { cl = 'partial'; st = `~ Partial (${ct}/${tot})`; } break; case "ordering": if (userAnswer && Array.isArray(userAnswer) && question.answer && Array.isArray(question.answer)) { correct = JSON.stringify(userAnswer) === JSON.stringify(question.answer); } cl = correct ? 'correct' : 'incorrect'; st = correct ? '✓ Correct' : '✗ Incorrect'; break; case "multiple_choice": default: if (userAnswer !== null && question.options && question.answer) { correct = (question.options[userAnswer] === question.answer); } cl = correct ? 'correct' : 'incorrect'; st = correct ? '✓ Correct' : '✗ Incorrect'; break; } } catch(e) { console.error("CalcReviewStatus Error:", e); } return { correctnessClass: cl, statusText: st };
+         }
+        function reviewMultipleChoiceReview(question, userAnswerIndex, container) { /* Same */
+            const div = document.createElement('div'); div.className = 'review-mc-answer'; const userTxt = (userAnswerIndex !== null && question.options?.[userAnswerIndex] !== undefined) ? question.options[userAnswerIndex] : 'No answer'; const isOk = (userAnswerIndex !== null) && (userTxt === question.answer); div.innerHTML = `<p><strong>Your answer:</strong> <span class="user-answer-text ${isOk ? 'correct' : (userAnswerIndex !== null ? 'incorrect' : '')}">${userTxt}</span></p>${!isOk ? `<p><strong>Correct answer:</strong> <span class="correct-answer-text">${question.answer || 'N/A'}</span></p>` : ''}`; container.appendChild(div);
+         }
+        function reviewMatchingReview(question, userPairs, container) { /* Same */
+             const div = document.createElement('div'); div.className = 'review-matching-answer'; div.innerHTML = `<p><strong>Matching Review:</strong></p>`; const grid = document.createElement('div'); grid.className = 'review-matching-grid'; const pCol = document.createElement('div'); pCol.className = 'review-matching-column'; const mCol = document.createElement('div'); mCol.className = 'review-matching-column'; const correct = question.answer || {}; (question.prompts || []).forEach((pTxt, pIdx) => { const userMIdx = userPairs ? userPairs[pIdx] : null, correctMIdx = correct[pIdx], isPairOk = userMIdx !== null && userMIdx === correctMIdx; const pDiv = document.createElement('div'); pDiv.textContent = pTxt; const mDiv = document.createElement('div'); const userMTxt = (userMIdx !== null && question.matches?.[userMIdx]) ? question.matches[userMIdx] : '(No match)'; const correctMTxt = (correctMIdx !== undefined && question.matches?.[correctMIdx]) ? question.matches[correctMIdx] : '(N/A)'; if (isPairOk) { pDiv.className='review-matched-pair-correct'; mDiv.textContent = correctMTxt; mDiv.className='review-matched-pair-correct'; } else { pDiv.className='review-matched-pair-incorrect'; mDiv.innerHTML = `<span style="text-decoration: line-through; color: #dc2626;">${userMTxt}</span> <span style="color: #059669;">(${correctMTxt})</span>`; mDiv.className='review-matched-pair-incorrect'; } pCol.appendChild(pDiv); mCol.appendChild(mDiv); }); grid.append(pCol, mCol); div.appendChild(grid); container.appendChild(div);
+         }
+        function reviewOrderingReview(question, userOrderedItems, container) { /* Same */
+             const div = document.createElement('div'); div.className = 'review-ordering-answer'; const correctOrd = question.answer || []; const isOk = userOrderedItems && (JSON.stringify(userOrderedItems) === JSON.stringify(correctOrd)); div.innerHTML = `<p><strong>Ordering Review:</strong></p>`; const list = document.createElement('div'); list.className = 'review-ordering-list'; correctOrd.forEach((corrTxt, corrIdx) => { const item = document.createElement('div'); item.className = 'review-ordering-list-item'; const userIdx = userOrderedItems ? userOrderedItems.indexOf(corrTxt) : -1; const userNum = (userIdx !== -1) ? userIdx + 1 : null; const correctNum = corrIdx + 1; let numSpan = ''; if (userNum === correctNum) numSpan = `<span class="review-order-number review-order-correct">${userNum}.</span>`; else if (userNum !== null) numSpan = `<span class="review-order-number review-order-incorrect">${userNum}.</span> <span class="review-order-number review-order-correct">(${correctNum}.)</span>`; else numSpan = `<span class="review-order-number review-order-incorrect">(N/P)</span> <span class="review-order-number review-order-correct">(${correctNum}.)</span>`; item.innerHTML = `${numSpan} ${corrTxt}`; list.appendChild(item); }); div.appendChild(list); if (!isOk && userOrderedItems) div.innerHTML += `<p style="margin-top:10px;"><strong>Your Order:</strong> ${userOrderedItems.join(' → ')}</p>`; container.appendChild(div);
          }
 
-
-         // Renamed Review Rendering functions (logic remains the same)
-         function reviewMultipleChoiceReview(question, userAnswerIndex, container) { /* Use logic from previous reviewMultipleChoice */
-              const div = document.createElement('div'); div.className = 'review-mc-answer';
-              const userSelectedText = (userAnswerIndex !== null && question.options && question.options[userAnswerIndex] !== undefined) ? question.options[userAnswerIndex] : 'No answer selected';
-              const isCorrect = (userAnswerIndex !== null) && (userSelectedText === question.answer);
-              div.innerHTML = `<p><strong>Your answer:</strong> <span class="user-answer-text ${isCorrect ? 'correct' : (userAnswerIndex !== null ? 'incorrect' : '')}">${userSelectedText}</span></p>${!isCorrect ? `<p><strong>Correct answer:</strong> <span class="correct-answer-text">${question.answer || 'N/A'}</span></p>` : ''}`;
-              container.appendChild(div);
-          }
-         function reviewMatchingReview(question, userPairs, container) { /* Use logic from previous reviewMatching */
-              const div = document.createElement('div'); div.className = 'review-matching-answer'; div.innerHTML = `<p><strong>Matching Review:</strong></p>`;
-              const reviewGrid = document.createElement('div'); reviewGrid.className = 'review-matching-grid';
-              const promptsCol = document.createElement('div'); promptsCol.className = 'review-matching-column';
-              const matchesCol = document.createElement('div'); matchesCol.className = 'review-matching-column';
-              const correctPairs = question.answer || {};
-
-              (question.prompts || []).forEach((promptText, promptIndex) => {
-                  const userMatchIndex = userPairs ? userPairs[promptIndex] : null;
-                  const correctMatchIndex = correctPairs[promptIndex]; // Can be undefined if data bad
-                  const isPairCorrect = userMatchIndex !== null && userMatchIndex === correctMatchIndex;
-
-                  const promptDiv = document.createElement('div'); promptDiv.textContent = promptText;
-                  const matchDiv = document.createElement('div');
-                  const userMatchText = (userMatchIndex !== null && question.matches && question.matches[userMatchIndex]) ? question.matches[userMatchIndex] : '(No match)';
-                  const correctMatchText = (correctMatchIndex !== undefined && question.matches && question.matches[correctMatchIndex]) ? question.matches[correctMatchIndex] : '(N/A)';
-
-                  if (isPairCorrect) {
-                      promptDiv.classList.add('review-matched-pair-correct'); matchDiv.textContent = correctMatchText; matchDiv.classList.add('review-matched-pair-correct');
-                  } else {
-                      promptDiv.classList.add('review-matched-pair-incorrect'); matchDiv.innerHTML = `<span style="text-decoration: line-through; color: #dc2626;">${userMatchText}</span> <span style="color: #059669;">(${correctMatchText})</span>`; matchDiv.classList.add('review-matched-pair-incorrect');
-                  }
-                  promptsCol.appendChild(promptDiv); matchesCol.appendChild(matchDiv);
-              });
-              reviewGrid.appendChild(promptsCol); reviewGrid.appendChild(matchesCol); div.appendChild(reviewGrid); container.appendChild(div);
-          }
-         function reviewOrderingReview(question, userOrderedItems, container) { /* Use logic from previous reviewOrdering */
-              const div = document.createElement('div'); div.className = 'review-ordering-answer';
-              const correctOrder = question.answer || [];
-              const isCorrect = userOrderedItems && (JSON.stringify(userOrderedItems) === JSON.stringify(correctOrder));
-              div.innerHTML = `<p><strong>Ordering Review:</strong></p>`;
-              const listDiv = document.createElement('div'); listDiv.className = 'review-ordering-list';
-
-              correctOrder.forEach((correctItemText, correctIndex) => {
-                   const itemDiv = document.createElement('div'); itemDiv.className = 'review-ordering-list-item';
-                   const userIndex = userOrderedItems ? userOrderedItems.indexOf(correctItemText) : -1;
-                   const userNumber = (userIndex !== -1) ? userIndex + 1 : null;
-                   const correctNumber = correctIndex + 1;
-                   let userNumSpan = '';
-                   if (userNumber === correctNumber) userNumSpan = `<span class="review-order-number review-order-correct">${userNumber}.</span>`;
-                   else if (userNumber !== null) userNumSpan = `<span class="review-order-number review-order-incorrect">${userNumber}.</span> <span class="review-order-number review-order-correct">(${correctNumber}.)</span>`;
-                   else userNumSpan = `<span class="review-order-number review-order-incorrect">(N/P)</span> <span class="review-order-number review-order-correct">(${correctNumber}.)</span>`; // N/P = Not Placed
-                   itemDiv.innerHTML = `${userNumSpan} ${correctItemText}`; listDiv.appendChild(itemDiv);
-              });
-              div.appendChild(listDiv);
-              if (!isCorrect && userOrderedItems) div.innerHTML += `<p style="margin-top: 10px;"><strong>Your Order:</strong> ${userOrderedItems.join(' → ')}</p>`;
-              container.appendChild(div);
-          }
-
-
-        // --- Error Display (within #quiz-container) ---
-        function showError(subject, unit, lesson, message = '') {
+        // --- Error Display ---
+        function showError(subject, unit, lesson, message = '') { // Renders error into quiz container
              if (!quizContainerElement || !feedbackContainerElement || !quizButtonsContainerElement || !quizTitleElement) return;
-
-            showQuizView(); // Ensure quiz view is visible
-            quizTitleElement.textContent = 'Error'; // Set title
-
-             quizContainerElement.innerHTML = ''; // Clear question area
-             feedbackContainerElement.classList.add('hidden'); // Hide feedback area
-             quizButtonsContainerElement.innerHTML = ''; // Clear standard buttons
-
-            const defaultMessage = `Sorry, no questions are available yet for ${lesson} in ${unit}.`;
-            const errorDiv = document.createElement('div');
-            errorDiv.className = 'error-display'; // Use new class for styling
-            errorDiv.innerHTML = `<div class="error-message">${message || defaultMessage}</div>`;
-
-             // Add Back Button
-             const backBtn = document.createElement('button');
-             backBtn.className = 'btn back-to-topics-btn';
-             backBtn.textContent = 'Back to Topics';
-             backBtn.onclick = showTopicList;
-             errorDiv.appendChild(backBtn);
-
-            quizContainerElement.appendChild(errorDiv); // Add error display to quiz container
+             showQuizView(); quizTitleElement.textContent = 'Error';
+             quizContainerElement.innerHTML = ''; feedbackContainerElement.classList.add('hidden'); quizButtonsContainerElement.innerHTML = '';
+             const msg = message || `Sorry, no questions available for ${lesson} in ${unit}.`;
+             const errDiv = document.createElement('div'); errDiv.className = 'error-display'; errDiv.innerHTML = `<div class="error-message">${msg}</div>`;
+             const backBtn = document.createElement('button'); backBtn.className = 'btn back-to-topics-btn'; backBtn.textContent = 'Back to Topics'; backBtn.onclick = showTopicList; errDiv.appendChild(backBtn);
+             quizContainerElement.appendChild(errDiv);
         }
 
         // --- Get Questions Data ---
-        function getQuestions(subject, unitTitle, lessonTitle) {
-             const activeSemesterBtn = document.querySelector('.semester-btn.active');
-             if (!activeSemesterBtn) { console.error("Cannot determine active semester."); return []; }
-             const activeSemester = activeSemesterBtn.dataset.semester;
-             if (!subject || !unitTitle || !lessonTitle || !activeSemester) { console.error("Missing params for getQuestions."); return []; }
-
+        function getQuestions(subject, unitTitle, lessonTitle) { // Adds default type if missing
+             const semBtn = document.querySelector('.semester-btn.active'); if (!semBtn) { console.error("No active semester."); return []; } const sem = semBtn.dataset.semester;
+             if (!subject || !unitTitle || !lessonTitle || !sem) { console.error("Missing params for getQuestions."); return []; }
              try {
-                 const subjectData = topicsData[subject];
-                 const semesterData = subjectData ? subjectData[activeSemester] : null;
-                 const units = semesterData ? semesterData.units : null;
-                 if (!units) { console.warn(`Data structure missing: ${subject} -> ${activeSemester}`); return []; }
-
-                 const unit = units.find(u => u && u.title === unitTitle);
-                 const lessons = unit ? unit.lessons : null;
-                 if (!lessons) { console.warn(`Unit "${unitTitle}" or lessons not found.`); return []; }
-
-                 const lesson = lessons.find(l => l && l.title === lessonTitle);
-                 if (!lesson) { console.warn(`Lesson "${lessonTitle}" not found.`); return []; }
-
-                 if (lesson.questions && Array.isArray(lesson.questions)) {
-                      // Add default type ONLY if 'type' is completely missing
-                      return lesson.questions.map(q => ({ type: q.type || 'multiple_choice', ...q }));
-                 } else { return []; }
-             } catch (error) {
-                 console.error("Error finding questions:", error); return [];
-             }
+                 const semData = topicsData[subject]?.[sem]; const units = semData?.units; if (!units) { console.warn(`Data missing: ${subject} -> ${sem}`); return []; }
+                 const unit = units.find(u => u?.title === unitTitle); const lessons = unit?.lessons; if (!lessons) { console.warn(`Unit "${unitTitle}" or lessons missing.`); return []; }
+                 const lesson = lessons.find(l => l?.title === lessonTitle); if (!lesson) { console.warn(`Lesson "${lessonTitle}" missing.`); return []; }
+                 if (lesson.questions?.length) { return lesson.questions.map(q => ({ ...(q.type ? {} : {type: 'multiple_choice'}), ...q })); } else { return []; } // Default to MC if type missing
+             } catch (e) { console.error("Error finding questions:", e); return []; }
          }
 
         // --- END OF questions.js ---
