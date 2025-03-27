@@ -1,0 +1,2125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Question Bank</title>
+    <style>
+        /* --- START OF styles.css --- */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #ffffff;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin: 0 0 20px 0;
+        }
+
+        .nav-section {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .subjects {
+            display: flex;
+            flex-wrap: wrap; /* Allow wrapping on smaller screens */
+            gap: 10px;
+        }
+
+        .secondary-nav {
+            display: flex;
+            gap: 10px;
+            padding-left: 10px; /* Slight indent */
+        }
+
+        .nav-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            transition: all 0.2s ease;
+        }
+
+        .nav-btn:hover {
+            background-color: #f8f9fa;
+        }
+
+        .nav-btn.active {
+            background-color: #0f172a;
+            color: white;
+            border-color: #0f172a; /* Match border */
+        }
+
+        .semester-toggle {
+            display: flex;
+            gap: 5px;
+            background-color: #f1f5f9;
+            padding: 4px;
+            border-radius: 6px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .semester-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            background: none;
+            color: #334155; /* Default color */
+            transition: all 0.2s ease;
+        }
+
+        .semester-btn.active {
+            background-color: #ffffff;
+            color: #0f172a; /* Active color */
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .unit-container {
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            border: 1px solid #e0e0e0;
+            margin-bottom: 20px;
+        }
+
+        .unit-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #1e293b; /* Darker title color */
+        }
+
+        .section {
+            margin-bottom: 25px;
+        }
+        /* Add this to remove bottom margin from the last section */
+        .section:last-child {
+            margin-bottom: 0;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 15px;
+            color: #4a5568;
+        }
+
+        .section-content {
+            padding: 15px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            font-size: 15px; /* Slightly larger font */
+            color: #334155; /* Content text color */
+        }
+         /* Remove margin from the last item in a section */
+        .section-content:last-child {
+            margin-bottom: 0;
+        }
+
+        .section-content:hover {
+            background-color: #f8f9fa;
+            border-color: #cbd5e1; /* Highlight border on hover */
+        }
+
+        .semester-content {
+            display: none;
+        }
+
+        .semester-content.active {
+            display: block;
+        }
+
+        .question-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6); /* Darker overlay */
+            z-index: 1000;
+            overflow-y: auto; /* Allow modal itself to scroll if content overflows */
+            padding: 20px 0; /* Add some padding top/bottom */
+        }
+
+        .modal-content {
+            position: relative;
+            background-color: #fff;
+            margin: 20px auto; /* Reduced top margin, auto horizontal margin */
+            padding: 30px; /* Increased padding */
+            width: 90%; /* Responsive width */
+            max-width: 800px;
+            border-radius: 12px;
+            max-height: calc(100vh - 40px); /* Limit height based on viewport */
+            overflow-y: auto; /* Allow content inside modal to scroll */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Stronger shadow */
+        }
+
+        .close-modal {
+            position: absolute;
+            right: 15px; /* Adjust position */
+            top: 15px;   /* Adjust position */
+            font-size: 28px; /* Larger close icon */
+            font-weight: bold;
+            cursor: pointer;
+            color: #666;
+            line-height: 1; /* Prevent extra spacing */
+        }
+        .close-modal:hover {
+            color: #333;
+        }
+
+        #modalTitle {
+            font-size: 20px; /* Slightly smaller modal title */
+            font-weight: 600;
+            margin-bottom: 25px; /* Increased spacing */
+            color: #1e293b;
+            padding-right: 30px; /* Ensure title doesn't overlap close button */
+        }
+
+        /* Enhanced Styles for Quiz Interface */
+
+        .question-container {
+            margin-bottom: 20px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            background-color: #f8fafc;
+        }
+
+        .question-progress {
+            font-size: 14px;
+            color: #64748b;
+            margin-bottom: 15px;
+            text-align: right; /* Align progress to the right */
+        }
+
+        .question-text {
+            font-size: 18px; /* Larger question text */
+            margin-bottom: 25px; /* Increased spacing */
+            line-height: 1.6;
+            color: #1e293b; /* Darker text */
+        }
+        .question-text strong {
+            font-weight: 600; /* Make "Question:" bolder */
+            margin-right: 5px;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 25px; /* Increased spacing */
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background-color: #fff; /* White background for options */
+        }
+
+        .option-label:hover {
+            background-color: #f1f5f9;
+            border-color: #cbd5e1;
+        }
+        /* Style for selected state before submission */
+        .option-label input:checked + .option-text {
+             font-weight: 500; /* Slightly bolder when selected */
+        }
+        .option-label input:checked {
+             accent-color: #2563eb; /* Color the radio button */
+        }
+
+        .option-input {
+            margin-right: 15px;
+            flex-shrink: 0; /* Prevent shrinking */
+        }
+
+        .option-text {
+            flex-grow: 1;
+            font-size: 16px; /* Slightly larger option text */
+            color: #334155;
+        }
+
+        .feedback-container {
+            padding: 15px;
+            margin: 20px 0; /* Increased margin */
+            border-radius: 6px;
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0; /* Add subtle border */
+        }
+
+        .correct-feedback {
+            color: #059669;
+            font-weight: 600; /* Bolder feedback */
+            font-size: 16px;
+        }
+
+        .incorrect-feedback {
+            color: #dc2626;
+            font-weight: 600; /* Bolder feedback */
+            font-size: 16px;
+        }
+        .incorrect-feedback span { /* Style for correct answer explanation */
+            display: block;
+            font-weight: 500;
+            margin-top: 8px;
+            font-size: 15px;
+            color: #475569;
+        }
+
+
+        .correct-option {
+            background-color: #dcfce7; /* Lighter green */
+            border-color: #16a34a;
+        }
+        .correct-option .option-text {
+            color: #065f46; /* Darker green text */
+        }
+
+        .incorrect-option {
+            background-color: #fee2e2;
+            border-color: #ef4444;
+        }
+        .incorrect-option .option-text {
+            color: #b91c1c; /* Darker red text */
+        }
+
+
+        .quiz-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 25px; /* Increased spacing */
+            border-top: 1px solid #e2e8f0; /* Separator line */
+            padding-top: 20px; /* Space above buttons */
+        }
+
+        .btn {
+            padding: 10px 20px; /* Slightly larger buttons */
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 15px; /* Slightly larger font */
+            font-weight: 500;
+            transition: all 0.2s ease;
+            line-height: 1.5; /* Ensure consistent height */
+        }
+
+        .submit-btn {
+            background-color: #2563eb;
+            color: white;
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            background-color: #1d4ed8;
+        }
+        .submit-btn:disabled {
+             background-color: #94a3b8;
+             cursor: not-allowed;
+        }
+
+        .next-btn {
+            background-color: #059669; /* Green for next */
+            color: white;
+        }
+
+        .next-btn:hover {
+            background-color: #047857;
+        }
+
+        .add-question-btn {
+            background-color: #2563eb;
+            color: white;
+            margin-top: 15px; /* Space above button */
+        }
+
+        .add-question-btn:hover {
+            background-color: #1d4ed8;
+        }
+
+        .hidden {
+            display: none !important; /* Use important to ensure hiding */
+        }
+
+        /* Error Message Styles */
+        .error-message {
+            padding: 20px;
+            background-color: #fffbeb;
+            border: 1px solid #fcd34d;
+            border-radius: 8px;
+            color: #b45309;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .add-question-prompt {
+            text-align: center;
+            color: #475569;
+        }
+        .add-question-prompt p {
+            margin-bottom: 10px;
+        }
+
+
+        /* Results Styles */
+        .results-container {
+            padding: 30px;
+            text-align: center;
+        }
+
+        .results-header {
+            font-size: 24px;
+            margin-bottom: 25px; /* Increased spacing */
+            color: #1e293b; /* Darker header */
+        }
+
+        .results-score {
+            margin: 30px 0 35px 0; /* Increased bottom margin */
+        }
+
+        .score-circle {
+            width: 140px; /* Larger circle */
+            height: 140px; /* Larger circle */
+            border-radius: 50%;
+            background-color: #f1f5f9;
+            display: flex;
+            flex-direction: column; /* Stack number and '%' sign */
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            border: 6px solid #2563eb; /* Thicker border */
+            box-shadow: 0 0 15px rgba(37, 99, 235, 0.2); /* Add subtle glow */
+        }
+
+        .score-number {
+            font-size: 40px; /* Larger score number */
+            font-weight: bold;
+            color: #1e293b;
+            line-height: 1;
+        }
+         .score-percent-sign { /* Style for the '%' sign */
+             font-size: 18px;
+             font-weight: 500;
+             color: #475569;
+             margin-top: 2px;
+         }
+
+        .results-details {
+            max-width: 400px;
+            margin: 0 auto 35px auto; /* Increased bottom margin */
+            text-align: left;
+            background-color: #f8fafc;
+            padding: 25px; /* Increased padding */
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .results-details p {
+            margin: 10px 0; /* Increased spacing */
+            font-size: 15px;
+            color: #334155;
+        }
+         .results-details p strong {
+            color: #1e293b;
+            min-width: 120px; /* Align keys */
+            display: inline-block;
+         }
+
+        .results-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px; /* Increased spacing */
+        }
+
+        .review-btn {
+            background-color: #16a34a; /* Green for review */
+            color: white;
+        }
+
+        .review-btn:hover {
+            background-color: #15803d;
+        }
+
+        .close-btn {
+            background-color: #64748b;
+            color: white;
+        }
+
+        .close-btn:hover {
+            background-color: #475569;
+        }
+
+        /* Review Answers Styles */
+        .review-container {
+            padding: 20px 0; /* Adjust padding */
+        }
+
+        .back-btn {
+            background-color: #64748b;
+            color: white;
+            margin-bottom: 25px; /* Increased spacing */
+        }
+
+        .back-btn:hover {
+            background-color: #475569;
+        }
+
+        .question-review {
+            padding: 20px; /* Increased padding */
+            margin-bottom: 20px; /* Increased spacing */
+            border-radius: 8px;
+            border: 1px solid #e2e8f0; /* Default border */
+            border-left-width: 5px; /* Thicker left border */
+        }
+
+        .question-review.correct {
+            border-left-color: #16a34a; /* Updated green */
+            background-color: #f0fdf4;
+        }
+
+        .question-review.incorrect {
+            border-left-color: #ef4444; /* Updated red */
+            background-color: #fef2f2;
+        }
+
+        .review-question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center; /* Align items vertically */
+            margin-bottom: 15px; /* Increased spacing */
+            padding-bottom: 10px; /* Add padding below header */
+            border-bottom: 1px solid #e2e8f0; /* Separator line */
+        }
+
+        .review-question-number {
+            font-weight: 600;
+            color: #1e293b;
+            font-size: 16px;
+        }
+
+        .review-status {
+            font-weight: 600; /* Bolder status */
+            font-size: 14px; /* Slightly smaller status */
+            padding: 3px 8px; /* Add padding */
+            border-radius: 4px; /* Rounded corners */
+        }
+
+        .question-review.correct .review-status {
+            color: #065f46; /* Darker green text */
+            background-color: #dcfce7; /* Light green background */
+        }
+
+        .question-review.incorrect .review-status {
+            color: #991b1b; /* Darker red text */
+            background-color: #fee2e2; /* Light red background */
+        }
+
+        .review-question-text {
+            margin-bottom: 15px;
+            font-size: 16px; /* Match question text size */
+            color: #334155;
+        }
+
+        .review-answers {
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 15px; /* Increased padding */
+            border-radius: 6px; /* Slightly rounder */
+            border: 1px solid #e2e8f0; /* Add border */
+            margin-top: 15px; /* Add margin top */
+        }
+
+        .review-answers p {
+            margin: 8px 0; /* Adjust spacing */
+            font-size: 15px;
+            color: #475569;
+        }
+         .review-answers p strong {
+            color: #1e293b;
+            margin-right: 5px;
+         }
+         /* Highlight correct answer within review */
+         .review-answers .correct-answer-text {
+             color: #059669;
+             font-weight: 500;
+         }
+         /* Highlight incorrect user answer */
+         .review-answers .user-answer-text.incorrect {
+             color: #dc2626;
+             text-decoration: line-through; /* Strikethrough incorrect answer */
+         }
+          /* Highlight correct user answer */
+         .review-answers .user-answer-text.correct {
+             color: #059669;
+             font-weight: 500;
+         }
+        /* --- END OF styles.css --- */
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Interactive Question Bank</h1>
+        </div>
+
+        <div class="nav-section">
+            <div class="subjects">
+                <button class="nav-btn" data-subject="اللغة العربية">
+                    <span>📚</span> اللغة العربية
+                </button>
+                <button class="nav-btn active" data-subject="english">
+                    <span>🌎</span> English
+                </button>
+                <button class="nav-btn" data-subject="التاريخ">
+                    <span>📜</span> التاريخ
+                </button>
+                <button class="nav-btn" data-subject="دين">
+                    <span>📖</span> دين
+                </button>
+            </div>
+
+            <div class="secondary-nav">
+                <div class="semester-toggle">
+                    <button class="semester-btn active" data-semester="first">First Semester</button>
+                    <button class="semester-btn" data-semester="second">Second Semester</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="content">
+            <!-- Content will be loaded dynamically by topics.js -->
+        </div>
+
+        <div class="question-modal" id="questionModal">
+            <div class="modal-content">
+                <span class="close-modal" onclick="closeModal()">×</span>
+                <h2 id="modalTitle"></h2>
+                <div id="questionContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- START OF topics.js ---
+
+        // Topics data structure for all subjects and semesters
+        const topicsData = {
+            "english": {
+                "first": {
+                    "title": "First Semester",
+                    "units": [
+                        {
+                            "title": "Unit 1",
+                            "lessons": [
+                                {
+                                    "title": "Reading and Vocabulary",
+                                    "questions": [
+                                        {
+                                            "question": "What literary device is used in the phrase 'the curtain of night fell'?",
+                                            "options": ["Simile", "Metaphor", "Alliteration", "Hyperbole"],
+                                            "answer": "Metaphor"
+                                        },
+                                        {
+                                            "question": "The word 'ambiguous' most closely means:",
+                                            "options": ["Clear", "Uncertain", "Definite", "Determined"],
+                                            "answer": "Uncertain"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "title": "Past&Present Tenses&Question Tags",
+                                    "questions": [
+                                        {
+                                            "question": "Choose the correct present tense: 'She _____ to school every day.'",
+                                            "options": ["go", "goes", "going", "went"],
+                                            "answer": "goes"
+                                        },
+                                        {
+                                            "question": "Which is the correct question tag? 'You're coming to the party, _____?'",
+                                            "options": ["aren't you", "don't you", "isn't you", "won't you"],
+                                            "answer": "aren't you"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "title": "Unit 2",
+                            "lessons": [
+                                {
+                                    "title": "Reading and Vocabulary",
+                                    "questions": [
+                                        {
+                                            "question": "What is the main idea of the passage about environmental protection?",
+                                            "options": ["Industrial growth", "Species extinction", "Sustainable practices", "Political activism"],
+                                            "answer": "Sustainable practices"
+                                        },
+                                         {
+                                            "question": "The word 'ubiquitous' means:",
+                                            "options": ["Rare", "Common", "Expensive", "Hidden"],
+                                            "answer": "Common"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "title": "Future Forms",
+                                    "questions": [
+                                        {
+                                            "question": "Which sentence uses the future perfect tense correctly?",
+                                            "options": [
+                                                "I will study tomorrow.",
+                                                "I will be studying when you arrive.",
+                                                "By next year, I will have graduated.",
+                                                "I am going to study later."
+                                            ],
+                                            "answer": "By next year, I will have graduated."
+                                        },
+                                        {
+                                            "question": "Choose the best future form: 'Look at those dark clouds! It _____ rain.'",
+                                            "options": ["will", "is going to", "will be", "is raining"],
+                                            "answer": "is going to"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "title": "Unit 3",
+                            "lessons": [
+                                {
+                                    "title": "Reading and Vocabulary",
+                                    "questions": [
+                                        {
+                                            "question": "What type of text primarily aims to inform or explain a topic?",
+                                            "options": ["Narrative", "Descriptive", "Persuasive", "Expository"],
+                                            "answer": "Expository"
+                                        },
+                                         {
+                                            "question": "The synonym for 'diligent' is:",
+                                            "options": ["Lazy", "Hardworking", "Careless", "Quick"],
+                                            "answer": "Hardworking"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "title": "Habits&Clauses",
+                                    "questions": [
+                                        {
+                                            "question": "Which sentence contains an adverb clause of time?",
+                                            "options": [
+                                                "The book that I read was interesting.",
+                                                "She smiled because she was happy.",
+                                                "Wait here until I return.",
+                                                "He lives in the house where I grew up."
+                                            ],
+                                            "answer": "Wait here until I return."
+                                        },
+                                         {
+                                            "question": "Identify the type of clause: 'I know *why he left*.'",
+                                            "options": ["Adjective Clause", "Adverb Clause", "Noun Clause", "Main Clause"],
+                                            "answer": "Noun Clause"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "title": "Unit 4",
+                            "lessons": [
+                                {
+                                    "title": "Reading and Vocabulary",
+                                    "questions": [] // Empty - will show 'No Questions Found'
+                                },
+                                {
+                                    "title": "Narration&Inversion",
+                                    "questions": [
+                                        {
+                                            "question": "Which sentence shows correct subject-verb inversion after a negative adverbial?",
+                                            "options": [
+                                                "Never I have seen such a thing.",
+                                                "Never have I seen such a thing.",
+                                                "I never have seen such a thing.",
+                                                "Have I never seen such a thing."
+                                            ],
+                                            "answer": "Never have I seen such a thing."
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "second": {
+                    "title": "Second Semester",
+                    "units": [
+                        {
+                            "title": "Unit 1",
+                            "lessons": [
+                                {
+                                    "title": "Reading and Vocabulary",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "Modal&Related&Articles",
+                                    "questions": []
+                                }
+                            ]
+                        },
+                        {
+                            "title": "Unit 2",
+                            "lessons": [
+                                {
+                                    "title": "Reading and Vocabulary",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "Reported Speach&Reporting Verbs",
+                                    "questions": []
+                                }
+                            ]
+                        },
+                        {
+                            "title": "Unit 3",
+                            "lessons": [
+                                {
+                                    "title": "Reading and Vocabulary",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "The Passive",
+                                    "questions": []
+                                }
+                            ]
+                        },
+                        {
+                            "title": "Unit 4",
+                            "lessons": [
+                                {
+                                    "title": "Reading and Vocabulary",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "Conditionals&Modals",
+                                    "questions": []
+                                }
+                            ]
+                        },
+                        {
+                            "title": "Unit 5",
+                            "lessons": [
+                                {
+                                    "title": "Reading and Vocabulary",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "Modals&Clauses",
+                                    "questions": []
+                                }
+                            ]
+                        }
+                    ]
+                }
+            },
+            "اللغة العربية": {
+                "first": {
+                    "title": "الفصل الأول",
+                    "units": [
+                        {
+                            "title": "الوحدة الأولى",
+                            "lessons": [
+                                {
+                                    "title": "من القيم الإنسانية في القرآن",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "اسلوب الطلب وجوابه المجزوم والتشبيه المفرد",
+                                    "questions": []
+                                }
+                            ]
+                        },
+                        {
+                            "title": "الوحدة الثانية",
+                            "lessons": [
+                                {
+                                    "title": "عمانيات",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "صور الفاعل والتشبيه التمثيلي",
+                                    "questions": []
+                                }
+                            ]
+                        },
+                        {
+                            "title": "الوحدة الثالثة",
+                            "lessons": [
+                                {
+                                    "title": "الزهايمر-الخرف المبكر",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "صور المبتدأ والخبر والجملة الخبرية والإنشائية",
+                                    "questions": []
+                                }
+                            ]
+                        },
+                        {
+                            "title": "الوحدة الرابعة",
+                            "lessons": [
+                                {
+                                    "title": "الإعلام ومشروع النهوض باللغة العربية",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "المفعول معه والأمر",
+                                    "questions": []
+                                }
+                            ]
+                        },
+                        {
+                            "title": "الوحدة الخامسة",
+                            "lessons": [
+                                {
+                                    "title": "التعليم التقني بوابة المستقبل في عالم متغير",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "انواع ما والإستفهام",
+                                    "questions": []
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "second": {
+                    "title": "الفصل الثاني",
+                    "units": [
+                        {
+                            "title": "الوحدة الأولى",
+                            "lessons": [
+                                {
+                                    "title": "في فتح القدس",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "معاني حروف الجر والتشخيص",
+                                    "questions": []
+                                }
+                            ]
+                        },
+                        {
+                            "title": "الوحدة الثانية",
+                            "lessons": [
+                                {
+                                    "title": "قصة-حفنة تمر",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "اسم الفاعل واسم المفعول والطباق والمقابلة",
+                                    "questions": []
+                                }
+                            ]
+                        },
+                        {
+                            "title": "الوحدة الثالثة",
+                            "lessons": [
+                                {
+                                    "title": "شاعرات من بلدي",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "اسم الزمان واسم المكان وجمع التكسير (القلة والكثرة)",
+                                    "questions": []
+                                }
+                            ]
+                        },
+                        {
+                            "title": "الوحدة الرابعة",
+                            "lessons": [
+                                {
+                                    "title": "من مقامات بديع الزمان الهمذاني",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "مصدر المرة ومصدر الهيئة والبحر المتدارك",
+                                    "questions": []
+                                }
+                            ]
+                        },
+                        {
+                            "title": "الوحدة الخامسة",
+                            "lessons": [
+                                {
+                                    "title": "الذكاء الاصطناعي-عالم جديد",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "اسم الآلة",
+                                    "questions": []
+                                }
+                            ]
+                        }
+                    ]
+                }
+            },
+            "التاريخ": {
+                "first": {
+                    "title": "الفصل الأول",
+                    "units": [
+                        {
+                            "title": "الأردن في العصور القديمة",
+                            "lessons": [
+                                {
+                                    "title": "الأردن في العصور الحجرية",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "الأردن في العصر الحديدي",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "مملكة الأنباط",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "مظاهر الحضارة اليونانية في الأردن",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "مظاهر الحضارة الرومانية-البيزنطية في الأردن",
+                                    "questions": []
+                                }
+                            ]
+                        },
+                        {
+                            "title": "الأردن في صدر الإسلام",
+                            "lessons": [
+                                {
+                                    "title": "الأردن في صدر الإسلام",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "الأردن في العصر الأموي",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "الأردن في العصر العباسي",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "الأردن خلال حملات الفرنجة",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "الأردن في العصر الأيوبي",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "الأردن في العصر المملوكي",
+                                    "questions": []
+                                }
+                            ]
+                        },
+                        {
+                            "title": "الأردن في العصر الحديث",
+                            "lessons": [
+                                {
+                                    "title": "الأوضاع السياسية والإدارية في الأردن في العهد العثماني",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "الأوضاع الإجتماعية والإقتصادية الأردن في العهد العثماني",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "الثورة العربية الكبرى",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "الأردن في عهد المملكة العربية السورية والحكومات المحلية",
+                                    "questions": []
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "second": {
+                    "title": "الفصل الثاني",
+                    "units": [
+                        {
+                            "title": "الحياة السياسية في الأردن",
+                            "lessons": [
+                                {
+                                    "title": "تأسيس الإمارة الأردنية",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "استقلال المملكة الأردنية الهاشمية",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "تطور الحياة السياسية في الأردن بين عامي (1948-1957)",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "تطور الحياة السياسية في الأردن بين عامي (1958-1999)",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "الحياة السياسية في الأردن منذ 1999",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "الأردن والعلاقات العربية والدولية",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "القوات المسلحة الأردنية - الجيش العربي",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "الأجهزة الأمنية الأردنية",
+                                    "questions": []
+                                }
+                            ]
+                        },
+                        {
+                            "title": "الحياة الاقتصادية في الأردن",
+                            "lessons": [
+                                {
+                                    "title": "الحياة الاقتصادية في الأردن بين عامي (1921-1950)",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "الحياة الاقتصادية في الأردن بين عامي (1951-1967)",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "الحياة الاقتصادية في الأردن بين عامي (1968-1999)",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "الحياة الاقتصادية في الأردن منذ عام 1999",
+                                    "questions": []
+                                }
+                            ]
+                        },
+                        {
+                            "title": "الحياة الاجتماعية في الأردن",
+                            "lessons": [
+                                {
+                                    "title": "الحياة الاجتماعية في الأردن بين عامي (1921-1950)",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "الحياة الاجتماعية في الأردن بين عامي (1951-1999)",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "الحياة الاجتماعية في الأردن منذ عام 1999",
+                                    "questions": []
+                                }
+                            ]
+                        },
+                        {
+                            "title": "التعليم والثقافة في الأردن",
+                            "lessons": [
+                                {
+                                    "title": "التعليم العام في الأردن بين عامي (1921-1950)",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "التعليم العام في الأردن بين عامي (1951-1987)",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "التعليم العام في الأردن بين عامي (1988-2024)",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "التعليم العالي والبحث العلمي في الأردن منذ عام 1951",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "الحياة الثقافية في الأردن في عهد الإمارة",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "الحياة الثقافية في الأردن منذ عام 1946",
+                                    "questions": []
+                                }
+                            ]
+                        },
+                        {
+                            "title": "الأردن والقضية الفلسطينية",
+                            "lessons": [
+                                {
+                                    "title": "موقف الأردن من القضية الفلسطينية بين عامي (1916-1951)",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "موقف الأردن من القضية الفلسطينية منذ عام 1951",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "الوصاية والإعمار الهاشمي للمقدسات الدينية في القدس",
+                                    "questions": []
+                                }
+                            ]
+                        }
+                    ]
+                }
+            },
+            "دين": {
+                "first": {
+                    "title": "الفصل الأول",
+                    "units": [
+                        {
+                            "title": "الوحدة الأولى",
+                            "lessons": [
+                                {
+                                    "title": "سورة آل عمران (102-105)",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "حديث اتقاء الشبهات",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "من صور الضلال",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "كرامة الإنسان في الشريعة",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "الزواج-مشروعيته ومقدماته",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "الجهاد في الإسلام",
+                                    "questions": []
+                                }
+                            ]
+                        },
+                        {
+                            "title": "الوحدة الثانية",
+                            "lessons": [
+                                {
+                                    "title": "جهود علماء المسلمين في خدمة القرآن",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "العزيمة والرخصة",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "معركة مؤتة (8 هجري)",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "المحرمات من النساء",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "التعايش الإنساني",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "الحقوق الإجتماعية للمرأة في الإسلام",
+                                    "questions": []
+                                }
+                            ]
+                        },
+                        {
+                            "title": "الوحدة الثالثة",
+                            "lessons": [
+                                {
+                                    "title": "سورة آل عمران (169-174)",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "حديث - رضا الله تعالى",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "فتح مكة (8 هجري)",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "من خصائص الشريعة - الإيجابية",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "شروط صحة عقد الزواج",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "الحقوق المالية للمرأة في الإسلام",
+                                    "questions": []
+                                }
+                            ]
+                        },
+                        {
+                            "title": "الوحدة الرابعة",
+                            "lessons": [
+                                {
+                                    "title": "سورة الروم (21-24)",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "مكانة السنة النبوية في التشريع",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "مراعاة الأعراف في الشريعة",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "حقوق الزوجين",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "تنظيم النسل وتحديده",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "الأمن الغذائي في الإسلام",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "الإسلام والوحدة الوطنية",
+                                    "questions": []
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "second": {
+                    "title": "الفصل الثاني",
+                    "units": [
+                        {
+                            "title": "الوحدة الأولى",
+                            "lessons": [
+                                {
+                                    "title": "سورة البقرة (284-286)",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "دلائل وجود الله تعالى",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "إعجاز القرآن الكريم",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "الأمر بالمعروف والنهي عن المنكر",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "اليوم الآخر - احداثه وآثار الإيمان به",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "الإجتهاد في الإسلام",
+                                    "questions": []
+                                }
+                            ]
+                        },
+                        {
+                            "title": "الوحدة الثانية",
+                            "lessons": [
+                                {
+                                    "title": "سورة الأعراف (31-34)",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "مراعاة المصالح في الشريعة",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "جهود علماء المسلمين في الحفاظ على السنة النبوية",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "حديث - منهج الإسلام في الحياة",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "رسائل النبي الى الملوك والزعماء في عصره",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "يوم تبوك (9 هجري)",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "الحقوق السياسية للمرأة في الإسلام",
+                                    "questions": []
+                                }
+                            ]
+                        },
+                        {
+                            "title": "الوحدة الثالثة",
+                            "lessons": [
+                                {
+                                    "title": "سورة الفرقان (63-77)",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "الطلاق",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "العدة",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "الوصية في الشريعة",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "الميراث في الشريعة",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "من خصائص الشريعة - الوسطية",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "مجالات الوقف ودورها في التنمية",
+                                    "questions": []
+                                }
+                            ]
+                        },
+                        {
+                            "title": "الوحدة الرابعة",
+                            "lessons": [
+                                {
+                                    "title": "حديث - مفهوم الإفلاس بين الدنيا والآخرة",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "مقاصد الشريعة",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "منهج الإسلام في مكافحة الجريمة",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "من وصايا النبي في حجة الوداع",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "المسؤولية المجتمعية في الإسلام",
+                                    "questions": []
+                                },
+                                {
+                                    "title": "حقوق الإنسان بين الإسلام والإعلان العالمي لحقوق الإنسان",
+                                    "questions": []
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        };
+
+        // Function to generate HTML for a semester's content
+        function generateSemesterContent(subject, semester) {
+            // Basic error checking for missing data
+            if (!topicsData[subject] || !topicsData[subject][semester]) {
+                console.error(`Data missing for subject: ${subject}, semester: ${semester}`);
+                return `<div id="${subject}-${semester}" class="semester-content"><p>Content not available.</p></div>`;
+            }
+
+            const semesterData = topicsData[subject][semester];
+            let html = `
+                <div id="${subject}-${semester}" class="semester-content">
+                    <div class="unit-container">
+                        <div class="unit-title">${semesterData.title}</div>
+            `;
+
+            // Check if units exist and is an array
+            if (semesterData.units && Array.isArray(semesterData.units)) {
+                semesterData.units.forEach(unit => {
+                    // Basic check for unit structure
+                    if (unit && unit.title) {
+                        html += `
+                            <div class="section">
+                                <div class="section-title">${unit.title}</div>
+                        `;
+
+                        // Check if lessons exist and is an array
+                        if (unit.lessons && Array.isArray(unit.lessons)) {
+                            unit.lessons.forEach(lesson => {
+                                // Basic check for lesson structure
+                                if (lesson && lesson.title) {
+                                    // Add data attributes for subject, unit, and lesson title
+                                    html += `
+                                        <div class="section-content" data-subject="${subject}" data-unit="${unit.title}" data-lesson="${lesson.title}">${lesson.title}</div>
+                                    `;
+                                } else {
+                                     console.warn(`Invalid lesson structure in unit: ${unit.title}, subject: ${subject}, semester: ${semester}`, lesson);
+                                }
+                            });
+                        } else {
+                            console.warn(`No lessons array found for unit: ${unit.title}, subject: ${subject}, semester: ${semester}`);
+                        }
+
+                        html += `
+                            </div> <!-- .section -->
+                        `;
+                    } else {
+                         console.warn(`Invalid unit structure in subject: ${subject}, semester: ${semester}`, unit);
+                    }
+                });
+            } else {
+                 console.warn(`No units array found for subject: ${subject}, semester: ${semester}`);
+            }
+
+
+            html += `
+                    </div> <!-- .unit-container -->
+                </div> <!-- .semester-content -->
+            `;
+
+            return html;
+        }
+
+        // Generate content for all subjects and semesters
+        function generateAllContent() {
+            let contentHTML = '';
+            const contentDiv = document.getElementById('content');
+            if (!contentDiv) {
+                console.error("Content container element not found!");
+                return;
+            }
+
+            for (const subject in topicsData) {
+                if (topicsData.hasOwnProperty(subject)) { // Ensure it's not from prototype
+                    for (const semester in topicsData[subject]) {
+                         if (topicsData[subject].hasOwnProperty(semester)) {
+                            contentHTML += generateSemesterContent(subject, semester);
+                         }
+                    }
+                }
+            }
+
+            contentDiv.innerHTML = contentHTML;
+        }
+
+        // Initialize content when the page loads (deferring the initial updateContent call to questions.js)
+        document.addEventListener('DOMContentLoaded', generateAllContent);
+
+        // --- END OF topics.js ---
+    </script>
+
+    <script>
+        // --- START OF questions.js ---
+
+        // Global variables for quiz tracking
+        let quizState = {
+            currentQuestionIndex: 0,
+            correctAnswers: 0,
+            totalQuestions: 0,
+            startTime: null,
+            endTime: null,
+            selectedAnswers: [], // Stores user's selected option index for each question
+            questions: [],       // Holds the actual questions for the current quiz
+            subject: '',
+            unit: '',
+            lesson: ''
+        };
+
+        // Wait for DOM to be fully loaded before adding listeners and updating content
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add event listeners for subject buttons
+            document.querySelectorAll('.nav-btn[data-subject]').forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove active class from all subject buttons
+                    document.querySelectorAll('.nav-btn[data-subject]').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    // Add active class to clicked button
+                    this.classList.add('active');
+
+                    // Update the displayed content
+                    updateContent();
+                });
+            });
+
+            // Add event listeners for semester buttons
+            document.querySelectorAll('.semester-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove active class from all semester buttons
+                    document.querySelectorAll('.semester-btn').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    // Add active class to clicked button
+                    this.classList.add('active');
+
+                    // Update the displayed content
+                    updateContent();
+                });
+            });
+
+            // Set up the initial content view and attach necessary event listeners
+            updateContent();
+        });
+
+
+        // Function to update the main content area based on selected subject and semester
+        function updateContent() {
+            const activeSubjectBtn = document.querySelector('.nav-btn[data-subject].active');
+            const activeSemesterBtn = document.querySelector('.semester-btn.active');
+
+            // Ensure buttons are found before proceeding
+            if (!activeSubjectBtn || !activeSemesterBtn) {
+                console.error("Could not find active subject or semester button.");
+                // Optionally display a default or error state
+                // generateAllContent(); // Regenerate if needed, though unlikely necessary here
+                // const defaultContent = document.getElementById('english-first');
+                // if (defaultContent) defaultContent.classList.add('active');
+                return;
+            }
+
+            const activeSubject = activeSubjectBtn.dataset.subject;
+            const activeSemester = activeSemesterBtn.dataset.semester;
+
+            // Hide all semester content divs first
+            document.querySelectorAll('.semester-content').forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // Construct the ID for the content to show and display it
+            const contentId = `${activeSubject}-${semester}`;
+            const contentElement = document.getElementById(contentId);
+            if (contentElement) {
+                contentElement.classList.add('active');
+
+                // IMPORTANT: Attach click handlers *only* to the visible section-content elements
+                // Remove previous listeners if any (safer, though potentially less performant if called often)
+                contentElement.querySelectorAll('.section-content').forEach(section => {
+                     // Clone and replace to remove old listeners cleanly
+                    const newSection = section.cloneNode(true);
+                    section.parentNode.replaceChild(newSection, section);
+
+                    // Add listener to the new element
+                    newSection.addEventListener('click', function() {
+                        const subject = this.dataset.subject;
+                        const unit = this.dataset.unit;
+                        const lesson = this.dataset.lesson;
+                        handleSectionClick(subject, unit, lesson);
+                    });
+                });
+
+            } else {
+                console.warn(`Content element with ID "${contentId}" not found.`);
+                // Maybe show a 'content loading' or 'error' message in the #content area
+                document.getElementById('content').innerHTML = `<p>Error loading content for ${activeSubject} - ${activeSemester}.</p>`;
+            }
+        }
+
+
+        // Handles clicking on a specific lesson/topic section
+        function handleSectionClick(subject, unit, lesson) {
+            console.log(`Clicked: Subject=${subject}, Unit=${unit}, Lesson=${lesson}`);
+            try {
+                // Get the questions for this lesson from the data structure (defined in topics.js)
+                const questions = getQuestions(subject, unit, lesson);
+
+                if (questions && questions.length > 0) {
+                    startQuiz(subject, unit, lesson, questions);
+                } else {
+                    // No questions found for this lesson
+                    console.log(`No questions found for ${subject} - ${unit} - ${lesson}`);
+                    showError(subject, unit, lesson);
+                }
+            } catch (error) {
+                console.error("Error handling section click:", error);
+                showError(subject, unit, lesson, "An error occurred while loading questions.");
+            }
+        }
+
+        // Initializes and starts a new quiz
+        function startQuiz(subject, unit, lesson, questions) {
+            // Reset quiz state
+            quizState = {
+                currentQuestionIndex: 0,
+                correctAnswers: 0,
+                totalQuestions: questions.length,
+                startTime: new Date(),
+                endTime: null,
+                selectedAnswers: new Array(questions.length).fill(null), // Reset selected answers
+                questions: questions,
+                subject: subject,
+                unit: unit,
+                lesson: lesson
+            };
+
+            // Display the first question
+            displayQuestion();
+
+            // Show the modal
+            const modal = document.getElementById('questionModal');
+            modal.style.display = 'block';
+            modal.scrollTop = 0; // Scroll modal to top
+        }
+
+        // Displays the current question in the modal
+        function displayQuestion() {
+            const modal = document.getElementById('questionModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const questionContent = document.getElementById('questionContent');
+            const currentQuestion = quizState.questions[quizState.currentQuestionIndex];
+
+            if (!currentQuestion) {
+                console.error("Error: Tried to display a question that doesn't exist at index", quizState.currentQuestionIndex);
+                // Potentially end quiz or show an error
+                displayResults(); // Show results as we are out of bounds
+                return;
+            }
+
+            modalTitle.textContent = `${quizState.lesson}`; // Simplified title
+            // modalTitle.textContent = `${quizState.subject} - ${quizState.unit} - ${quizState.lesson}`;
+
+            // Build question container
+            questionContent.innerHTML = ''; // Clear previous content
+            const questionDiv = document.createElement('div');
+            questionDiv.className = 'question-container';
+
+            // Question number and progress
+            const progressText = document.createElement('div');
+            progressText.className = 'question-progress';
+            progressText.textContent = `Question ${quizState.currentQuestionIndex + 1} of ${quizState.totalQuestions}`;
+            questionDiv.appendChild(progressText);
+
+            // Question text
+            const questionText = document.createElement('p');
+            questionText.className = 'question-text';
+            // Use innerHTML carefully if questions might contain HTML, otherwise textContent
+            questionText.innerHTML = `<strong>Q:</strong> ${currentQuestion.question}`;
+            questionDiv.appendChild(questionText);
+
+            // Options container
+            if (currentQuestion.options && Array.isArray(currentQuestion.options) && currentQuestion.options.length > 0) {
+                const optionsDiv = document.createElement('div');
+                optionsDiv.className = 'options-container';
+                optionsDiv.id = 'options-list'; // Add ID for easier selection later
+
+                currentQuestion.options.forEach((option, index) => {
+                    const optionId = `option-${index}`;
+                    const optionLabel = document.createElement('label');
+                    optionLabel.className = 'option-label';
+                    optionLabel.htmlFor = optionId; // Associate label with input
+
+                    const optionInput = document.createElement('input');
+                    optionInput.type = 'radio';
+                    optionInput.name = 'question-option'; // Group radio buttons
+                    optionInput.value = index;
+                    optionInput.id = optionId;
+                    optionInput.className = 'option-input';
+
+                    const optionText = document.createElement('span');
+                    optionText.className = 'option-text';
+                    optionText.textContent = option; // Use textContent for safety
+
+                    optionLabel.appendChild(optionInput);
+                    optionLabel.appendChild(optionText);
+                    optionsDiv.appendChild(optionLabel);
+                });
+
+                questionDiv.appendChild(optionsDiv);
+            } else {
+                 const noOptionsMsg = document.createElement('p');
+                 noOptionsMsg.textContent = "No options provided for this question.";
+                 questionDiv.appendChild(noOptionsMsg);
+            }
+
+            // Feedback section (initially hidden)
+            const feedbackDiv = document.createElement('div');
+            feedbackDiv.className = 'feedback-container hidden'; // Start hidden
+            feedbackDiv.id = 'feedback';
+            questionDiv.appendChild(feedbackDiv);
+
+            // Buttons
+            const buttonsDiv = document.createElement('div');
+            buttonsDiv.className = 'quiz-buttons';
+
+            const submitBtn = document.createElement('button');
+            submitBtn.className = 'btn submit-btn';
+            submitBtn.id = 'submit-btn'; // Add ID
+            submitBtn.textContent = 'Submit Answer';
+            submitBtn.onclick = checkAnswer;
+            submitBtn.disabled = true; // Disabled initially
+
+             // Enable submit button when an option is selected
+             if (currentQuestion.options && currentQuestion.options.length > 0) {
+                questionDiv.addEventListener('change', (event) => {
+                    if (event.target.type === 'radio' && event.target.name === 'question-option') {
+                         submitBtn.disabled = false;
+                     }
+                 });
+             }
+
+
+            const nextBtn = document.createElement('button');
+            nextBtn.className = 'btn next-btn hidden'; // Start hidden
+            nextBtn.id = 'next-btn'; // Add ID
+            nextBtn.textContent = quizState.currentQuestionIndex === quizState.totalQuestions - 1 ? 'See Results' : 'Next Question';
+            nextBtn.onclick = nextQuestion;
+
+            buttonsDiv.appendChild(submitBtn);
+            buttonsDiv.appendChild(nextBtn);
+            questionDiv.appendChild(buttonsDiv);
+
+            questionContent.appendChild(questionDiv);
+            modal.querySelector('.modal-content').scrollTop = 0; // Scroll content within modal to top
+        }
+
+        // Checks the selected answer against the correct answer
+        function checkAnswer() {
+            const selectedOptionInput = document.querySelector('input[name="question-option"]:checked');
+            // If somehow clicked submit without selection (should be disabled, but belt-and-suspenders)
+            if (!selectedOptionInput) {
+                 // Maybe show a gentle nudge instead of alert
+                 const feedbackDiv = document.getElementById('feedback');
+                 if (feedbackDiv) {
+                     feedbackDiv.innerHTML = '<div class="incorrect-feedback">Please select an answer first.</div>';
+                     feedbackDiv.classList.remove('hidden');
+                 }
+                 return;
+             }
+
+            const selectedIndex = parseInt(selectedOptionInput.value, 10);
+            const currentQuestion = quizState.questions[quizState.currentQuestionIndex];
+
+            // Store the selected answer index
+            quizState.selectedAnswers[quizState.currentQuestionIndex] = selectedIndex;
+
+            // Validate if answer and options exist before comparing
+            if (!currentQuestion.answer || !currentQuestion.options || !currentQuestion.options[selectedIndex]) {
+                 console.error("Invalid question data for checking answer:", currentQuestion);
+                 // Show generic error feedback
+                 const feedbackDiv = document.getElementById('feedback');
+                 feedbackDiv.classList.remove('hidden');
+                 feedbackDiv.innerHTML = '<div class="incorrect-feedback">Error checking answer.</div>';
+                 // Disable buttons to prevent further action on this broken question
+                 document.getElementById('submit-btn').classList.add('hidden');
+                 document.getElementById('next-btn').classList.remove('hidden'); // Allow moving on
+                 return;
+             }
+
+
+            const correctOptionText = currentQuestion.answer;
+            const selectedOptionText = currentQuestion.options[selectedIndex];
+            const isCorrect = selectedOptionText === correctOptionText;
+
+            if (isCorrect) {
+                quizState.correctAnswers++;
+            }
+
+            // Show feedback
+            const feedbackDiv = document.getElementById('feedback');
+            feedbackDiv.classList.remove('hidden'); // Make feedback visible
+            feedbackDiv.innerHTML = isCorrect
+                ? '<div class="correct-feedback">Correct! ✓</div>'
+                : `<div class="incorrect-feedback">Incorrect. <span>The correct answer is: ${correctOptionText}</span></div>`;
+
+            // Disable all radio buttons after submission
+            document.querySelectorAll('input[name="question-option"]').forEach(input => {
+                input.disabled = true;
+                // Find the label associated with the input to apply styling
+                const label = input.closest('.option-label');
+                if (label) {
+                     label.style.cursor = 'default'; // Change cursor for disabled options
+                     const optionIndex = parseInt(input.value, 10);
+                     // Highlight correct answer
+                     if (currentQuestion.options[optionIndex] === correctOptionText) {
+                         label.classList.add('correct-option');
+                     }
+                     // Highlight user's incorrect selection
+                     else if (optionIndex === selectedIndex && !isCorrect) {
+                         label.classList.add('incorrect-option');
+                     }
+                 }
+            });
+
+            // Hide submit button and show next button
+            document.getElementById('submit-btn').classList.add('hidden');
+            document.getElementById('next-btn').classList.remove('hidden');
+        }
+
+        // Moves to the next question or shows results if the quiz is finished
+        function nextQuestion() {
+            quizState.currentQuestionIndex++;
+
+            if (quizState.currentQuestionIndex < quizState.totalQuestions) {
+                displayQuestion(); // Display the next question
+            } else {
+                // End of quiz
+                quizState.endTime = new Date();
+                displayResults(); // Show the final results
+            }
+        }
+
+        // Displays the final quiz results
+        function displayResults() {
+            const modalTitle = document.getElementById('modalTitle');
+            const questionContent = document.getElementById('questionContent');
+
+            modalTitle.textContent = 'Quiz Results';
+
+            // Calculate time taken
+            const timeTaken = quizState.endTime && quizState.startTime ? (quizState.endTime - quizState.startTime) / 1000 : 0; // in seconds
+            const minutes = Math.floor(timeTaken / 60);
+            const seconds = Math.floor(timeTaken % 60);
+            const timeString = timeTaken > 0 ? `${minutes}m ${seconds}s` : 'N/A';
+
+            // Calculate score percentage, handle division by zero if totalQuestions is 0
+            const scorePercentage = quizState.totalQuestions > 0 ? (quizState.correctAnswers / quizState.totalQuestions) * 100 : 0;
+
+            // Determine performance message
+            let performanceMessage = '';
+            if (quizState.totalQuestions === 0) {
+                 performanceMessage = 'No questions were answered.';
+            } else if (scorePercentage >= 90) {
+                performanceMessage = 'Excellent job! 🎉';
+            } else if (scorePercentage >= 70) {
+                performanceMessage = 'Good work! 👍';
+            } else if (scorePercentage >= 50) {
+                performanceMessage = 'Not bad. Keep practicing! 💪';
+            } else {
+                performanceMessage = 'You might need more study time. 📚';
+            }
+
+            // Build results container
+            questionContent.innerHTML = ''; // Clear previous content
+            const resultsDiv = document.createElement('div');
+            resultsDiv.className = 'results-container';
+
+            resultsDiv.innerHTML = `
+                <h2 class="results-header">${performanceMessage}</h2>
+                <div class="results-score">
+                    <div class="score-circle">
+                        <span class="score-number">${scorePercentage.toFixed(0)}</span>
+                        <span class="score-percent-sign">%</span>
+                    </div>
+                </div>
+                <div class="results-details">
+                    <p><strong>Subject:</strong> ${quizState.subject || 'N/A'}</p>
+                    <p><strong>Unit:</strong> ${quizState.unit || 'N/A'}</p>
+                    <p><strong>Lesson:</strong> ${quizState.lesson || 'N/A'}</p>
+                    <p><strong>Correct Answers:</strong> ${quizState.correctAnswers} out of ${quizState.totalQuestions}</p>
+                    <p><strong>Time Taken:</strong> ${timeString}</p>
+                </div>
+
+                <div class="results-actions">
+                    ${quizState.totalQuestions > 0 ? '<button id="review-btn" class="btn review-btn">Review Answers</button>' : ''}
+                    <button class="btn close-btn" onclick="closeModal()">Close</button>
+                </div>
+            `;
+
+            questionContent.appendChild(resultsDiv);
+             // Scroll content within modal to top
+            const modalContentDiv = document.getElementById('questionModal').querySelector('.modal-content');
+            if(modalContentDiv) modalContentDiv.scrollTop = 0;
+
+            // Add event listener for review button if it exists
+            const reviewBtn = document.getElementById('review-btn');
+             if (reviewBtn) {
+                reviewBtn.addEventListener('click', reviewAnswers);
+             }
+        }
+
+
+        // Displays a review of all questions and answers
+        function reviewAnswers() {
+            const modalTitle = document.getElementById('modalTitle');
+            const questionContent = document.getElementById('questionContent');
+            modalTitle.textContent = 'Review Answers'; // Update title
+
+            // Build review container
+            questionContent.innerHTML = ''; // Clear previous content
+            const reviewDiv = document.createElement('div');
+            reviewDiv.className = 'review-container';
+
+            // Add a back to results button
+            const backBtn = document.createElement('button');
+            backBtn.className = 'btn back-btn';
+            backBtn.textContent = '← Back to Results';
+            backBtn.addEventListener('click', displayResults); // Link back to results view
+            reviewDiv.appendChild(backBtn);
+
+            // Display each question with the user's answer and the correct answer
+            quizState.questions.forEach((question, index) => {
+                const selectedAnswerIndex = quizState.selectedAnswers[index];
+                const correctAnswerText = question.answer;
+                const userSelectedText = selectedAnswerIndex !== null && question.options[selectedAnswerIndex] !== undefined
+                                         ? question.options[selectedAnswerIndex]
+                                         : 'No answer selected';
+
+                const isCorrect = selectedAnswerIndex !== null && userSelectedText === correctAnswerText;
+
+                const questionReview = document.createElement('div');
+                questionReview.className = `question-review ${isCorrect ? 'correct' : 'incorrect'}`;
+
+                questionReview.innerHTML = `
+                    <div class="review-question-header">
+                        <span class="review-question-number">Question ${index + 1}</span>
+                        <span class="review-status">${isCorrect ? '✓ Correct' : '✗ Incorrect'}</span>
+                    </div>
+                    <p class="review-question-text">${question.question}</p>
+                    <div class="review-answers">
+                        <p><strong>Your answer:</strong> <span class="user-answer-text ${isCorrect ? 'correct' : (selectedAnswerIndex !== null ? 'incorrect' : '')}">${userSelectedText}</span></p>
+                        ${!isCorrect ? `<p><strong>Correct answer:</strong> <span class="correct-answer-text">${correctAnswerText}</span></p>` : ''}
+                    </div>
+                `;
+
+                reviewDiv.appendChild(questionReview);
+            });
+
+            questionContent.appendChild(reviewDiv);
+             // Scroll content within modal to top
+             const modalContentDiv = document.getElementById('questionModal').querySelector('.modal-content');
+             if(modalContentDiv) modalContentDiv.scrollTop = 0;
+        }
+
+        // Shows an error message in the modal when no questions are found
+        function showError(subject, unit, lesson, message = '') {
+            const modal = document.getElementById('questionModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const questionContent = document.getElementById('questionContent');
+
+            modalTitle.textContent = 'No Questions Available';
+            const defaultMessage = `Sorry, no questions are available yet for ${lesson} in ${unit}.`;
+
+            questionContent.innerHTML = `
+                <div class="error-message">
+                    ${message || defaultMessage}
+                </div>
+                <div class="add-question-prompt">
+                    <p>Would you like to be notified when questions are added?</p>
+                    <button class="btn add-question-btn" id="notify-btn">Notify Me (Coming Soon)</button>
+                     <button class="btn close-btn" onclick="closeModal()" style="margin-left: 10px;">Close</button>
+                </div>
+            `;
+
+            modal.style.display = 'block';
+             modal.scrollTop = 0; // Scroll modal to top
+
+            // Optionally add event listener for a future 'Notify Me' or 'Add Questions' button
+            const notifyBtn = questionContent.querySelector('#notify-btn');
+            if (notifyBtn) {
+                notifyBtn.disabled = true; // Disable for now
+                // notifyBtn.addEventListener('click', function() {
+                //     alert('Notification feature coming soon!');
+                //     // closeModal(); // Maybe close modal after clicking
+                // });
+            }
+        }
+
+
+        // Closes the question modal
+        function closeModal() {
+            const modal = document.getElementById('questionModal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+            // Optionally reset quiz state if modal close means abandoning quiz
+            // quizState = { ... }; // Reset to initial state if desired
+        }
+
+
+        // Function to retrieve questions for a specific lesson (defined here, uses topicsData from topics.js)
+        function getQuestions(subject, unitTitle, lessonTitle) {
+            const activeSemesterBtn = document.querySelector('.semester-btn.active');
+            if (!activeSemesterBtn) {
+                console.error("Cannot determine active semester in getQuestions.");
+                return []; // Return empty array if semester unknown
+            }
+            const activeSemester = activeSemesterBtn.dataset.semester;
+
+            // Basic validation
+            if (!subject || !unitTitle || !lessonTitle || !activeSemester) {
+                 console.error("Missing parameters for getQuestions:", { subject, unitTitle, lessonTitle, activeSemester });
+                 return [];
+            }
+
+
+            // Navigate through the topicsData structure (defined in topics.js)
+            try {
+                // Check if data exists at each level
+                if (!topicsData || !topicsData[subject] || !topicsData[subject][activeSemester] || !topicsData[subject][activeSemester].units) {
+                     console.warn(`Data structure missing for ${subject} -> ${activeSemester}`);
+                     return [];
+                }
+
+                const semesterData = topicsData[subject][activeSemester];
+
+                const unit = semesterData.units.find(u => u && u.title === unitTitle);
+                if (!unit || !unit.lessons) {
+                    console.warn(`Unit "${unitTitle}" or its lessons not found in ${subject} -> ${activeSemester}.`);
+                    return []; // Unit or lessons array not found
+                }
+
+                // Find the lesson object within the unit's lessons array
+                const lesson = unit.lessons.find(l => l && l.title === lessonTitle);
+
+                if (!lesson) {
+                    console.warn(`Lesson "${lessonTitle}" not found in unit "${unitTitle}".`);
+                    return []; // Lesson object not found
+                }
+
+                // Return the questions array (or an empty array if 'questions' property doesn't exist or isn't an array)
+                return (lesson.questions && Array.isArray(lesson.questions)) ? lesson.questions : [];
+
+            } catch (error) {
+                console.error("Error finding questions in data structure:", error, { subject, unitTitle, lessonTitle, activeSemester });
+                return []; // Return empty array on error
+            }
+        }
+
+
+        // --- END OF questions.js ---
+    </script>
+
+</body>
+</html>
