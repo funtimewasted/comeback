@@ -525,16 +525,17 @@
         };
 
         // Generate HTML for topic lists (Adding Question Counter & Corrected Structure)
-        function generateSemesterContent(subject, semester) {
+function generateSemesterContent(subject, semester) {
     // Check data validity
     if (!topicsData[subject]?.[semester]) {
         console.error(`Data missing for ${subject}, ${semester}`);
-        return `<div id="${subject}-${semester}" class="semester-content"><div class="section"><p>Content unavailable.</p></div></div>`;
+        return `<div id="${subject.replace(/\s+/g, '-')}-${semester}" class="semester-content"><div class="section"><p>Content unavailable.</p></div></div>`; // Added replacement here for error case too
     }
     const semesterData = topicsData[subject][semester];
+    const sanitizedSubject = subject.replace(/\s+/g, '-'); // <-- ADDED: Replace spaces with hyphens
 
-    // Start semester container
-    let html = `<div id="${subject}-${semester}" class="semester-content">`;
+    // Start semester container using the sanitized ID
+    let html = `<div id="${sanitizedSubject}-${semester}" class="semester-content">`; // <-- UPDATED: Use sanitizedSubject
 
     // Add Semester Title Container SEPARATELY
     html += `<div class="semester-title-container">
@@ -555,7 +556,7 @@
                          if (lesson?.title) {
                              const qCount = lesson.questions?.length || 0;
                              const countText = qCount === 1 ? "1 question" : `${qCount} questions`;
-                             // Lesson Box (clickable)
+                             // Lesson Box (clickable) - Make sure data-subject still uses original name
                              html += `<div class="section-content" data-subject="${subject}" data-unit="${unit.title}" data-lesson="${lesson.title}">
                                          <span>${lesson.title}</span>
                                          <span class="lesson-q-count">(${countText})</span>
@@ -708,23 +709,32 @@ document.addEventListener('DOMContentLoaded', generateAllContent);
 
         // --- Core Functions ---
         function updateContent() { // Updates topic list view
-            const activeSubjectBtn = document.querySelector('.nav-btn[data-subject].active');
-            const activeSemesterBtn = document.querySelector('.semester-btn.active');
-            if (!activeSubjectBtn || !activeSemesterBtn || !contentElement) return;
-            const activeSubject = activeSubjectBtn.dataset.subject;
-            const activeSemester = activeSemesterBtn.dataset.semester;
-            contentElement.querySelectorAll('.semester-content').forEach(c => c.classList.remove('active'));
-            const contentId = `${activeSubject}-${activeSemester}`;
-            const semesterContentElement = contentElement.querySelector(`#${contentId}`);
-            if (semesterContentElement) {
-                semesterContentElement.classList.add('active');
-                semesterContentElement.querySelectorAll('.section-content').forEach(lessonBox => { // Target lesson boxes
-                    const newLessonBox = lessonBox.cloneNode(true);
-                    lessonBox.parentNode.replaceChild(newLessonBox, lessonBox);
-                    newLessonBox.addEventListener('click', () => handleSectionClick(newLessonBox.dataset.subject, newLessonBox.dataset.unit, newLessonBox.dataset.lesson));
-                });
-            } else { console.warn(`Semester content ID "${contentId}" not found.`); }
-        }
+    const activeSubjectBtn = document.querySelector('.nav-btn[data-subject].active');
+    const activeSemesterBtn = document.querySelector('.semester-btn.active');
+    if (!activeSubjectBtn || !activeSemesterBtn || !contentElement) return;
+
+    const activeSubject = activeSubjectBtn.dataset.subject;
+    const activeSemester = activeSemesterBtn.dataset.semester;
+    const sanitizedSubject = activeSubject.replace(/\s+/g, '-'); // <-- ADDED: Apply the SAME replacement
+
+    contentElement.querySelectorAll('.semester-content').forEach(c => c.classList.remove('active'));
+
+    const contentId = `${sanitizedSubject}-${activeSemester}`; // <-- UPDATED: Use sanitizedSubject
+    const semesterContentElement = contentElement.querySelector(`#${contentId}`);
+
+    if (semesterContentElement) {
+        semesterContentElement.classList.add('active');
+        // Re-attach listeners - This part looks okay, ensures clicks work after updates
+        semesterContentElement.querySelectorAll('.section-content').forEach(lessonBox => {
+            const newLessonBox = lessonBox.cloneNode(true);
+            lessonBox.parentNode.replaceChild(newLessonBox, lessonBox);
+            // Ensure the dataset attributes on the lesson box still use the ORIGINAL subject name if needed elsewhere
+            newLessonBox.addEventListener('click', () => handleSectionClick(newLessonBox.dataset.subject, newLessonBox.dataset.unit, newLessonBox.dataset.lesson));
+        });
+    } else {
+        console.warn(`Semester content ID "#${contentId}" not found.`); // Updated log message
+    }
+}
 
         function handleSectionClick(subject, unit, lesson) { // Starts quiz if questions found
              if (!subject || !unit || !lesson) { alert("Error identifying topic."); return; }
