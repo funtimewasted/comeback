@@ -1606,54 +1606,70 @@
 
 
         // Function to update the main content area based on selected subject and semester
+                // Function to update the main content area based on selected subject and semester
         function updateContent() {
+            // console.log("updateContent called"); // Optional: for debugging
             const activeSubjectBtn = document.querySelector('.nav-btn[data-subject].active');
             const activeSemesterBtn = document.querySelector('.semester-btn.active');
 
             // Ensure buttons are found before proceeding
             if (!activeSubjectBtn || !activeSemesterBtn) {
                 console.error("Could not find active subject or semester button.");
-                // Optionally display a default or error state
-                // generateAllContent(); // Regenerate if needed, though unlikely necessary here
-                // const defaultContent = document.getElementById('english-first');
-                // if (defaultContent) defaultContent.classList.add('active');
                 return;
             }
 
             const activeSubject = activeSubjectBtn.dataset.subject;
-            const activeSemester = activeSemesterBtn.dataset.semester;
+            const activeSemester = activeSemesterBtn.dataset.semester; // Get the correct active semester
+            // console.log(`Selected: Subject=${activeSubject}, Semester=${activeSemester}`); // Optional: for debugging
 
             // Hide all semester content divs first
             document.querySelectorAll('.semester-content').forEach(content => {
                 content.classList.remove('active');
             });
+            // console.log("All .semester-content hidden"); // Optional: for debugging
 
             // Construct the ID for the content to show and display it
-            const contentId = `${activeSubject}-${semester}`;
+            // *** THE FIX IS HERE: Use activeSemester, not semester ***
+            const contentId = `${activeSubject}-${activeSemester}`;
+            // console.log(`Looking for content element with ID: ${contentId}`); // Optional: for debugging
             const contentElement = document.getElementById(contentId);
-            if (contentElement) {
-                contentElement.classList.add('active');
 
-                // IMPORTANT: Attach click handlers *only* to the visible section-content elements
-                // Remove previous listeners if any (safer, though potentially less performant if called often)
-                contentElement.querySelectorAll('.section-content').forEach(section => {
-                     // Clone and replace to remove old listeners cleanly
+            if (contentElement) {
+                contentElement.classList.add('active'); // Show the correct content div
+                // console.log(`Element ${contentId} found and set to active.`); // Optional: for debugging
+
+                // Re-attach click handlers ONLY to the visible section-content elements within the active container
+                const sectionsToAttach = contentElement.querySelectorAll('.section-content');
+                // console.log(`Found ${sectionsToAttach.length} .section-content elements to attach listeners to.`); // Optional: for debugging
+
+                sectionsToAttach.forEach(section => {
+                     // Clone and replace to remove any previously attached listeners cleanly
                     const newSection = section.cloneNode(true);
                     section.parentNode.replaceChild(newSection, section);
 
-                    // Add listener to the new element
+                    // Add the click listener to the new (cloned) element
                     newSection.addEventListener('click', function() {
                         const subject = this.dataset.subject;
                         const unit = this.dataset.unit;
                         const lesson = this.dataset.lesson;
-                        handleSectionClick(subject, unit, lesson);
+                        // Defensive check: Ensure data attributes exist before handling click
+                        if (subject && unit && lesson) {
+                            handleSectionClick(subject, unit, lesson);
+                        } else {
+                            console.error("Missing data attributes on clicked section:", this);
+                        }
                     });
                 });
+                // console.log("Listeners re-attached."); // Optional: for debugging
 
             } else {
+                // If the content div for the selected subject/semester doesn't exist
                 console.warn(`Content element with ID "${contentId}" not found.`);
-                // Maybe show a 'content loading' or 'error' message in the #content area
-                document.getElementById('content').innerHTML = `<p>Error loading content for ${activeSubject} - ${activeSemester}.</p>`;
+                // Display an error message in the main content area
+                const contentArea = document.getElementById('content');
+                 if(contentArea){
+                    contentArea.innerHTML = `<div class="unit-container"><p style="padding: 20px; text-align: center; color: #dc2626;">Error: Content for ${activeSubject} - ${activeSemester} could not be loaded. Please check if it exists in topics.js.</p></div>`;
+                 }
             }
         }
 
