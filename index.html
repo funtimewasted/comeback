@@ -1099,45 +1099,95 @@
 
          function checkOrdering(question) {
             const numItems = question.items.length;
-            const userOrderMap = {}; const selectedNumbers = new Set();
-            let isValid = true; let duplicateNumber = false;
+            if (numItems === 0) { // Handle empty case
+                return { isCorrect: true, feedback: '<div class="correct-feedback">N/A</div>', userResponse: [], scoreIncrement: 0 };
+            }
 
-            document.querySelectorAll('.ordering-select').forEach(select => {
+            const userOrderMap = {}; // { originalIndex: selectedOrderNumber }
+            const selectedNumbers = new Set();
+            let allSelected = true;
+            let hasDuplicate = false;
+
+            const selects = document.querySelectorAll('#ordering-list .ordering-select'); // Target selects within the container
+
+            selects.forEach(select => {
                 const itemIndex = parseInt(select.dataset.itemIndex, 10);
                 const selectedValue = select.value;
-                if (selectedValue === "") isValid = false;
-                else {
+
+                if (selectedValue === "") {
+                    allSelected = false;
+                } else {
                     const orderNum = parseInt(selectedValue, 10);
                     userOrderMap[itemIndex] = orderNum;
-                    if (selectedNumbers.has(orderNum)) duplicateNumber = true;
+                    if (selectedNumbers.has(orderNum)) {
+                        hasDuplicate = true;
+                    }
                     selectedNumbers.add(orderNum);
                 }
             });
 
-            if (!isValid) return { isCorrect: false, feedback: '<div class="incorrect-feedback">Select an order for every item.</div>', userResponse: null, scoreIncrement: 0 };
-            if (duplicateNumber || selectedNumbers.size !== numItems) return { isCorrect: false, feedback: `<div class="incorrect-feedback">Use each number (1-${numItems}) once.</div>`, userResponse: null, scoreIncrement: 0 };
-
-            const userOrderedItems = new Array(numItems);
-            for (const originalIndex in userOrderMap) {
-                const itemText = question.items[originalIndex];
-                const userPosition = userOrderMap[originalIndex] - 1;
-                userOrderedItems[userPosition] = itemText;
+            // 1. Check if all items have a selection
+            if (!allSelected) {
+                return { isCorrect: false, feedback: '<div class="incorrect-feedback">Please select an order number for every item.</div>', userResponse: null, scoreIncrement: 0 };
             }
+
+            // 2. Check if all numbers from 1 to numItems were used exactly once
+            if (hasDuplicate || selectedNumbers.size !== numItems) {
+                 return { isCorrect: false, feedback: `<div class="incorrect-feedback">Please use each order number (1-${numItems}) exactly once.</div>`, userResponse: null, scoreIncrement: 0 };
+            }
+
+            // If validation passes, construct the user's ordered array
+            const userOrderedItems = new Array(numItems).fill(null); // Initialize with nulls
+            let constructionOk = true;
+            for (const originalIndex in userOrderMap) {
+                 if (userOrderMap.hasOwnProperty(originalIndex)) {
+                     const itemText = question.items[originalIndex];
+                     const userPosition = userOrderMap[originalIndex] - 1; // 0-based index
+                     if (userPosition >= 0 && userPosition < numItems) {
+                         if (userOrderedItems[userPosition] === null) { // Check if position is already filled (shouldn't happen if no duplicates)
+                             userOrderedItems[userPosition] = itemText;
+                         } else {
+                             constructionOk = false; break; // Error in logic if this happens
+                         }
+                     } else {
+                         constructionOk = false; break; // Invalid position calculated
+                     }
+                 }
+            }
+
+             if (!constructionOk || userOrderedItems.some(item => item === null)) {
+                 console.error("Error constructing user's ordered list.", userOrderMap, userOrderedItems);
+                 return { isCorrect: false, feedback: '<div class="incorrect-feedback">Error processing your order.</div>', userResponse: null, scoreIncrement: 0 };
+             }
+
+
+            // Compare with the correct answer
             const correctOrder = question.answer;
             const isCorrect = JSON.stringify(userOrderedItems) === JSON.stringify(correctOrder);
+
             let feedback = '';
-            if (isCorrect) feedback = `<div class="correct-feedback">Correct! Order is perfect. ✓</div>`;
-            else feedback = `<div class="incorrect-feedback">Incorrect. <span>Correct order: ${correctOrder.join(' → ')}</span></div>`; // Show correct order
+            if (isCorrect) {
+                feedback = `<div class="correct-feedback">Correct! The order is perfect. ✓</div>`;
+            } else {
+                feedback = `<div class="incorrect-feedback">Incorrect. <span>Correct order: ${correctOrder.join(' → ')}</span></div>`;
+            }
 
-             document.querySelectorAll('.ordering-item').forEach(itemDiv => { // Add visual feedback
-                  const originalIndex = parseInt(itemDiv.dataset.originalIndex, 10);
-                  const userNum = userOrderMap[originalIndex];
-                  const correctNum = correctOrder.indexOf(question.items[originalIndex]) + 1;
-                  const select = itemDiv.querySelector('select');
-                  if (select) { select.style.borderColor = (userNum === correctNum) ? '#16a34a' : '#ef4444'; select.style.borderWidth = '2px'; }
-              });
+             // Add visual feedback to selects
+             selects.forEach(select => {
+                 const originalIndex = parseInt(select.dataset.itemIndex, 10);
+                 const userNum = userOrderMap[originalIndex];
+                 const correctNum = correctOrder.indexOf(question.items[originalIndex]) + 1;
+                 select.style.borderColor = (userNum === correctNum) ? '#16a34a' : '#ef4444';
+                 select.style.borderWidth = '2px';
+             });
 
-            return { isCorrect, feedback, userResponse: userOrderedItems, scoreIncrement: isCorrect ? 1 : 0 };
+
+            return {
+                isCorrect: isCorrect,
+                feedback: feedback,
+                userResponse: userOrderedItems, // Store the user's ordered array
+                scoreIncrement: isCorrect ? 1 : 0
+            };
         }
 
 
