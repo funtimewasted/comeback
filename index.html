@@ -43,7 +43,8 @@
             --shadow-color: rgba(0,0,0,0.05);
             --matched-item-bg: #e5e7eb;
             --matched-item-border: #9ca3af;
-            --toggle-icon: '☀️';
+            --modal-overlay-bg: rgba(15, 23, 42, 0.6); /* Dark blue overlay */
+            --modal-bg: #ffffff;
         }
 
         body.dark-theme {
@@ -83,29 +84,74 @@
             --shadow-color: rgba(0,0,0,0.2);
             --matched-item-bg: #475569;
             --matched-item-border: #64748b;
-            --toggle-icon: '🌙';
+            --modal-overlay-bg: rgba(0, 0, 0, 0.7); /* Darker overlay */
+            --modal-bg: #1e293b;
         }
 
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             margin: 0;
-            padding: 20px;
+            padding: 0; /* Remove body padding */
             background-color: var(--body-bg);
             color: var(--text-color);
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
+        /* --- Welcome View --- */
+        #welcome-view {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+            background-color: var(--body-bg);
+            color: var(--text-color);
+            padding: 40px 20px;
+        }
+        #welcome-view h1 {
+            font-size: 28px;
+            color: var(--text-heading);
+            margin-bottom: 15px;
+        }
+        #welcome-view p {
+            font-size: 16px;
+            color: var(--text-muted);
+            max-width: 600px;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+        #welcome-view .info-section {
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        #welcome-view .info-section strong {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--text-heading);
+        }
+        #welcome-view .get-started-btn {
+            margin-top: 30px;
+        }
+
+        /* --- Main Container (Initially hidden if welcome is shown) --- */
         .container {
             max-width: 1200px;
-            margin: 0 auto;
+            margin: 20px auto; /* Added margin */
             background-color: var(--container-bg);
             padding: 20px 30px;
             border-radius: 12px;
             box-shadow: 0 2px 10px var(--shadow-color);
             border: 1px solid var(--border-color);
-            transition: background-color 0.3s ease, border-color 0.3s ease;
+            transition: background-color 0.3s ease, border-color 0.3s ease, opacity 0.5s ease;
+            opacity: 1; /* Default opacity */
         }
+        .container.initially-hidden {
+            opacity: 0;
+            pointer-events: none; /* Prevent interaction when hidden */
+        }
+
 
         .header {
             display: flex;
@@ -123,28 +169,24 @@
             color: var(--text-heading);
         }
 
-        #theme-toggle {
+        /* --- Settings Button --- */
+        #settings-btn {
             background: none;
             border: 1px solid var(--button-border);
             color: var(--text-muted);
             padding: 6px 10px;
             border-radius: 6px;
             cursor: pointer;
-            font-size: 18px; /* Adjust size for icon */
+            font-size: 20px; /* Adjust size for icon */
             line-height: 1;
             transition: all 0.2s ease;
         }
-         #theme-toggle::before {
-             content: var(--toggle-icon); /* Display icon */
-             display: inline-block;
-             margin-right: 4px;
-         }
-
-        #theme-toggle:hover {
+        #settings-btn:hover {
             background-color: var(--button-hover-bg);
             border-color: var(--border-color-hover);
             color: var(--text-color);
         }
+
 
         /* Nav Section hiding */
         .nav-section {
@@ -292,6 +334,10 @@
         .redo-btn:hover { background-color: #ea580c; border-color: #ea580c; }
         .close-btn, .back-to-topics-btn, .back-btn { background-color: var(--button-secondary-bg); color: white; border-color: var(--button-secondary-bg); }
         .close-btn:hover, .back-to-topics-btn:hover, .back-btn:hover { background-color: var(--button-secondary-hover-bg); border-color: var(--button-secondary-hover-bg); }
+        .reset-data-btn { background-color: var(--incorrect-border); color: var(--incorrect-text); border-color: var(--incorrect-border); }
+        body.dark-theme .reset-data-btn { color: white; }
+        .reset-data-btn:hover { filter: brightness(1.1); }
+
 
         .hidden { display: none !important; }
 
@@ -299,16 +345,47 @@
         .error-display { padding: 30px; text-align: center; background-color: var(--incorrect-bg); border: 1px solid var(--incorrect-border); border-radius: 8px; }
         .error-message { color: var(--incorrect-text); font-weight: 500; margin-bottom: 20px; }
 
-        /* --- Results Styles --- */
-        .results-container { padding: 10px 0; text-align: center; }
-        .results-header { font-size: 24px; margin-bottom: 25px; color: var(--text-heading); }
-        .results-score { margin: 30px 0 35px 0; }
-        .score-circle { width: 140px; height: 140px; border-radius: 50%; background-color: var(--feedback-bg); display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 0 auto; border: 6px solid var(--accent-color); box-shadow: 0 0 15px color-mix(in srgb, var(--accent-color) 20%, transparent); }
-        .score-number { font-size: 40px; font-weight: bold; color: var(--text-heading); line-height: 1; }
-        .score-percent-sign { font-size: 18px; font-weight: 500; color: var(--text-muted); margin-top: 2px; }
-        .results-details { max-width: 450px; margin: 0 auto 35px auto; text-align: left; background-color: var(--feedback-bg); padding: 25px; border-radius: 8px; border: 1px solid var(--feedback-border); }
-        .results-details p { margin: 10px 0; font-size: 15px; color: var(--text-color); }
-        .results-details p strong { color: var(--text-heading); min-width: 120px; display: inline-block; }
+        /* --- Results Styles (IMPROVED) --- */
+        .results-container { padding: 20px 0; text-align: center; }
+        .results-header { font-size: 28px; font-weight: 600; margin-bottom: 30px; color: var(--text-heading); }
+        .results-score { margin: 30px 0 40px 0; }
+        .score-circle {
+            width: 150px; height: 150px; border-radius: 50%;
+            background-color: var(--feedback-bg);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            margin: 0 auto;
+            border: 8px solid var(--accent-color);
+            box-shadow: 0 0 20px color-mix(in srgb, var(--accent-color) 25%, transparent), inset 0 0 10px color-mix(in srgb, var(--accent-color) 15%, transparent);
+            transition: border-color 0.3s ease;
+        }
+        .score-number { font-size: 44px; font-weight: bold; color: var(--text-heading); line-height: 1; }
+        .score-percent-sign { font-size: 20px; font-weight: 500; color: var(--text-muted); margin-top: 4px; }
+        .results-details {
+            max-width: 500px; margin: 0 auto 35px auto; text-align: left;
+            background-color: var(--feedback-bg);
+            padding: 20px 30px; border-radius: 10px;
+            border: 1px solid var(--feedback-border);
+            box-shadow: 0 2px 5px var(--shadow-color);
+        }
+        .results-details p {
+            margin: 12px 0; font-size: 16px; color: var(--text-color);
+            display: flex; align-items: center; gap: 10px;
+        }
+        .results-details p strong { /* Label */
+            color: var(--text-heading); min-width: 80px; /* Reduced width */
+            display: inline-block; font-weight: 600;
+        }
+        .results-details p .detail-value { /* Value part */
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+        .results-details p .detail-icon { /* Icon */
+            font-size: 18px;
+            color: var(--accent-color);
+            width: 20px; /* Fixed width for alignment */
+            text-align: center;
+        }
+
 
         /* --- Review Answers Styles --- */
         .review-container { padding: 10px 0; }
@@ -344,31 +421,106 @@
         /* Review Ordering */
         .review-ordering-list { margin-top: 10px; }
         .review-ordering-list-item { display: flex; align-items: center; margin-bottom: 5px; padding: 5px 8px; border-radius: 4px; border: 1px solid var(--border-color); background-color: var(--container-bg); }
+        .review-order-number { font-weight: 600; margin-right: 8px; }
+        .review-order-correct { color: var(--correct-text); }
+        .review-order-incorrect { color: var(--incorrect-text); text-decoration: line-through; }
+        /* Styles for numbers added in JS review function */
+
+
+        /* --- Settings Modal --- */
+        #settings-modal {
+            position: fixed; inset: 0;
+            background-color: var(--modal-overlay-bg);
+            display: flex; justify-content: center; align-items: center;
+            z-index: 100;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        #settings-modal.visible {
+            opacity: 1; pointer-events: auto;
+        }
+        .modal-content {
+            background-color: var(--modal-bg);
+            padding: 25px 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px var(--shadow-color);
+            width: 90%; max-width: 400px;
+            border: 1px solid var(--border-color);
+            position: relative;
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+        }
+        #settings-modal.visible .modal-content {
+            transform: scale(1);
+        }
+        .modal-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 20px; padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .modal-title { font-size: 20px; font-weight: 600; color: var(--text-heading); }
+        .modal-close-btn { font-size: 24px; background: none; border: none; color: var(--text-muted); cursor: pointer; line-height: 1; padding: 0 5px; }
+        .modal-section { margin-bottom: 20px; }
+        .modal-section h4 { font-size: 16px; font-weight: 500; color: var(--text-heading); margin: 0 0 12px 0; }
+        .theme-options label {
+            display: flex; align-items: center; gap: 10px;
+            margin-bottom: 10px; cursor: pointer;
+            font-size: 15px; color: var(--text-color);
+        }
+        .theme-options input[type="radio"] { accent-color: var(--accent-color); }
+        .modal-footer {
+            margin-top: 25px; padding-top: 15px;
+            border-top: 1px solid var(--border-color);
+            text-align: right;
+        }
 
         /* --- END OF styles.css --- */
     </style>
 </head>
 <body>
-    <div class="container">
+
+    <!-- Welcome View (Shows First) -->
+    <div id="welcome-view">
+        <h1>Welcome to the Interactive Question Bank!</h1>
+        <p>Your place to practice and master course material.</p>
+
+        <div class="info-section">
+            <strong>Created By:</strong>
+            <span>[Your Name / Group Name Here]</span>
+        </div>
+        <div class="info-section">
+            <strong>Testers:</strong>
+            <span>[Tester Name 1], [Tester Name 2]</span>
+        </div>
+        <div class="info-section">
+            <strong>Honorable Mentions:</strong>
+            <span>[Mention Anyone Else Here]</span>
+        </div>
+
+        <button class="btn submit-btn get-started-btn">Get Started</button>
+    </div>
+
+    <!-- Main Application Container (Initially Hidden by JS if welcome is shown) -->
+    <div class="container initially-hidden">
         <div class="header">
             <h1>Interactive Question Bank</h1>
-            <button id="theme-toggle" title="Toggle Theme"></button>
+            <button id="settings-btn" title="Settings">⚙️</button> <!-- Settings Icon -->
         </div>
 
         <!-- Navigation -->
         <div class="nav-section">
-            <div class="subjects">
-                <button class="nav-btn" data-subject="اللغة العربية"><span>📚</span> اللغة العربية</button>
-                <button class="nav-btn active" data-subject="english"><span>🌎</span> English</button>
-                <button class="nav-btn" data-subject="التاريخ"><span>📜</span> التاريخ</button>
-                <button class="nav-btn" data-subject="دين"><span>📖</span> دين</button>
-            </div>
-            <div class="secondary-nav">
-                <div class="semester-toggle">
-                    <button class="semester-btn active" data-semester="first">First Semester</button>
-                    <button class="semester-btn" data-semester="second">Second Semester</button>
-                </div>
-            </div>
+             <div class="subjects">
+                 <button class="nav-btn" data-subject="اللغة العربية"><span>📚</span> اللغة العربية</button>
+                 <button class="nav-btn active" data-subject="english"><span>🌎</span> English</button>
+                 <button class="nav-btn" data-subject="التاريخ"><span>📜</span> التاريخ</button>
+                 <button class="nav-btn" data-subject="دين"><span>📖</span> دين</button>
+             </div>
+             <div class="secondary-nav">
+                 <div class="semester-toggle">
+                     <button class="semester-btn active" data-semester="first">First Semester</button>
+                     <button class="semester-btn" data-semester="second">Second Semester</button>
+                 </div>
+             </div>
         </div>
 
         <!-- Content Area for Topic Lists -->
@@ -394,6 +546,38 @@
         </div>
 
     </div> <!-- End of .container -->
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Settings</h3>
+                <button class="modal-close-btn" onclick="toggleSettingsModal(false)" title="Close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-section">
+                    <h4>Theme</h4>
+                    <div class="theme-options">
+                        <label>
+                            <input type="radio" name="theme" value="light"> Light Mode ☀️
+                        </label>
+                        <label>
+                            <input type="radio" name="theme" value="dark"> Dark Mode 🌙
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-section">
+                    <h4>Data Management</h4>
+                    <button class="btn reset-data-btn" id="reset-data-button">Reset Saved Data</button>
+                     <p style="font-size: 12px; color: var(--text-muted); margin-top: 8px;">Clears theme preference and shows the welcome screen on next load.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                 <button class="btn close-btn" onclick="toggleSettingsModal(false)">Close</button>
+            </div>
+        </div>
+    </div>
+
 
     <script>
         // --- START OF topics.js ---
@@ -524,75 +708,76 @@
             }
         };
 
-        // Generate HTML for topic lists (Adding Question Counter & Corrected Structure)
-function generateSemesterContent(subject, semester) {
-    // Check data validity
-    if (!topicsData[subject]?.[semester]) {
-        console.error(`Data missing for ${subject}, ${semester}`);
-        return `<div id="${subject.replace(/\s+/g, '-')}-${semester}" class="semester-content"><div class="section"><p>Content unavailable.</p></div></div>`; // Added replacement here for error case too
-    }
-    const semesterData = topicsData[subject][semester];
-    const sanitizedSubject = subject.replace(/\s+/g, '-'); // <-- ADDED: Replace spaces with hyphens
+        // Generate HTML for topic lists (Handles sanitized IDs)
+        function generateSemesterContent(subject, semester) {
+            const sanitizedSubject = subject.replace(/\s+/g, '-');
+            const id = `${sanitizedSubject}-${semester}`; // ID used for the container
 
-    // Start semester container using the sanitized ID
-    let html = `<div id="${sanitizedSubject}-${semester}" class="semester-content">`; // <-- UPDATED: Use sanitizedSubject
+            // Check data validity
+            if (!topicsData[subject]?.[semester]) {
+                console.error(`Data missing for ${subject}, ${semester}`);
+                return `<div id="${id}" class="semester-content"><div class="section"><p>Content unavailable.</p></div></div>`;
+            }
+            const semesterData = topicsData[subject][semester];
 
-    // Add Semester Title Container SEPARATELY
-    html += `<div class="semester-title-container">
-                 <div class="unit-title">${semesterData.title}</div>
-            </div>`;
+            // Start semester container
+            let html = `<div id="${id}" class="semester-content">`;
 
-    // Check units array - Render Unit Sections *after* the title container
-    if (!semesterData.units?.length) {
-         html += `<div class="section"><p>No units available for this semester.</p></div>`; // Message within a section box
-    } else {
-         // Loop through each Unit and create a .section for it
-         semesterData.units.forEach(unit => {
-             if (unit?.title) {
-                 html += `<div class="section"> <div class="section-title">${unit.title}</div>`; // Unit box + Title
-                 // Check lessons array within the unit
-                 if (unit.lessons?.length) {
-                     unit.lessons.forEach(lesson => {
-                         if (lesson?.title) {
-                             const qCount = lesson.questions?.length || 0;
-                             const countText = qCount === 1 ? "1 question" : `${qCount} questions`;
-                             // Lesson Box (clickable) - Make sure data-subject still uses original name
-                             html += `<div class="section-content" data-subject="${subject}" data-unit="${unit.title}" data-lesson="${lesson.title}">
-                                         <span>${lesson.title}</span>
-                                         <span class="lesson-q-count">(${countText})</span>
-                                       </div>`;
-                         } else { console.warn(`Invalid lesson in unit: ${unit.title}`, lesson); }
-                     });
-                 } else {
-                     html += `<p style="margin:10px 0 0 0; font-size:14px; color:var(--text-muted);">(No lessons)</p>`;
-                 }
-                 html += `</div>`; // End Unit section (.section)
-             } else { console.warn(`Invalid unit in ${subject}, ${semester}`, unit); }
-         });
-    }
-    html += `</div>`; // End semester content
-    return html;
-}
+            // Add Semester Title Container SEPARATELY
+            html += `<div class="semester-title-container">
+                         <div class="unit-title">${semesterData.title}</div>
+                    </div>`;
+
+            // Check units array - Render Unit Sections *after* the title container
+            if (!semesterData.units?.length) {
+                 html += `<div class="section"><p>No units available for this semester.</p></div>`; // Message within a section box
+            } else {
+                 // Loop through each Unit and create a .section for it
+                 semesterData.units.forEach(unit => {
+                     if (unit?.title) {
+                         html += `<div class="section"> <div class="section-title">${unit.title}</div>`; // Unit box + Title
+                         // Check lessons array within the unit
+                         if (unit.lessons?.length) {
+                             unit.lessons.forEach(lesson => {
+                                 if (lesson?.title) {
+                                     const qCount = lesson.questions?.length || 0;
+                                     const countText = qCount === 1 ? "1 question" : `${qCount} questions`;
+                                     // Lesson Box (clickable) - data-subject retains ORIGINAL name
+                                     html += `<div class="section-content" data-subject="${subject}" data-unit="${unit.title}" data-lesson="${lesson.title}">
+                                                 <span>${lesson.title}</span>
+                                                 <span class="lesson-q-count">(${countText})</span>
+                                               </div>`;
+                                 } else { console.warn(`Invalid lesson in unit: ${unit.title}`, lesson); }
+                             });
+                         } else {
+                             html += `<p style="margin:10px 0 0 0; font-size:14px; color:var(--text-muted);">(No lessons)</p>`;
+                         }
+                         html += `</div>`; // End Unit section (.section)
+                     } else { console.warn(`Invalid unit in ${subject}, ${semester}`, unit); }
+                 });
+            }
+            html += `</div>`; // End semester content
+            return html;
+        }
 
 
-// Generate all content on load
-function generateAllContent() {
-    let contentHTML = '';
-    const contentDiv = document.getElementById('content');
-    if (!contentDiv) { console.error("#content not found!"); return; }
-    Object.keys(topicsData).forEach(subject => {
-        Object.keys(topicsData[subject]).forEach(semester => {
-            contentHTML += generateSemesterContent(subject, semester);
-        });
-    });
-    contentDiv.innerHTML = contentHTML;
-    // IMPORTANT: After generating content, call updateContent once to show the default view correctly
-    // and attach initial listeners. This should be called within the DOMContentLoaded listener in questions.js,
-    // but since topics.js runs first and generates the HTML, we ensure it's ready.
-    // We will rely on the call within questions.js's DOMContentLoaded.
-}
+        // Generate all content on load
+        function generateAllContent() {
+            let contentHTML = '';
+            const contentDiv = document.getElementById('content');
+            if (!contentDiv) { console.error("#content not found!"); return; }
+            Object.keys(topicsData).forEach(subject => {
+                Object.keys(topicsData[subject]).forEach(semester => {
+                    contentHTML += generateSemesterContent(subject, semester);
+                });
+            });
+            contentDiv.innerHTML = contentHTML;
+            // Initial updateContent call is now handled in DOMContentLoaded in questions.js
+        }
 
-document.addEventListener('DOMContentLoaded', generateAllContent);
+        // Call generation immediately (since this script runs before DOMContentLoaded of the next script)
+        generateAllContent();
+
 
         // --- END OF topics.js ---
     </script>
@@ -607,15 +792,20 @@ document.addEventListener('DOMContentLoaded', generateAllContent);
             matchingState: { selectedPromptElement: null, userPairs: {} }
         };
 
+        // --- Constants for LocalStorage ---
+        const LS_THEME_KEY = 'quizAppTheme';
+        const LS_VISITED_KEY = 'quizAppVisited';
+
         // --- DOM Element References ---
         let contentElement, quizViewElement, quizTitleElement, quizContainerElement,
             feedbackContainerElement, quizButtonsContainerElement, matchingSvgElement,
-            navSectionElement;
+            navSectionElement, welcomeViewElement, mainContainerElement, settingsModalElement,
+            settingsButtonElement;
         let matchingArrowObserver = null;
         let resizeTimeout = null;
 
         // --- Utility Functions ---
-        function shuffleArray(array) {
+        function shuffleArray(array) { /* ... (same as before) ... */
              const newArray = [...array];
              for (let i = newArray.length - 1; i > 0; i--) {
                  const j = Math.floor(Math.random() * (i + 1));
@@ -623,7 +813,7 @@ document.addEventListener('DOMContentLoaded', generateAllContent);
              }
              return newArray;
         }
-        function debounce(func, wait) {
+        function debounce(func, wait) { /* ... (same as before) ... */
             let timeout;
             return function executedFunction(...args) {
                 const later = () => {
@@ -638,16 +828,98 @@ document.addEventListener('DOMContentLoaded', generateAllContent);
         // --- Theme Management ---
         function applyTheme(theme) {
             document.body.classList.toggle('dark-theme', theme === 'dark');
+            // Update radio buttons in modal if it exists
+            const themeRadios = settingsModalElement?.querySelectorAll('input[name="theme"]');
+            if(themeRadios) {
+                themeRadios.forEach(radio => {
+                    radio.checked = radio.value === theme;
+                });
+            }
         }
-        function toggleTheme() {
-            const isDark = document.body.classList.contains('dark-theme');
-            const newTheme = isDark ? 'light' : 'dark';
+
+        function handleThemeChange(event) {
+            const newTheme = event.target.value;
             applyTheme(newTheme);
-            localStorage.setItem('quizTheme', newTheme);
+            localStorage.setItem(LS_THEME_KEY, newTheme);
         }
+
+        function loadAndApplyTheme() {
+            const savedTheme = localStorage.getItem(LS_THEME_KEY);
+            // Default to dark if nothing is saved
+            const currentTheme = savedTheme || 'dark';
+            applyTheme(currentTheme);
+            // Make sure the default is saved if it wasn't already
+            if (!savedTheme) {
+                localStorage.setItem(LS_THEME_KEY, 'dark');
+            }
+        }
+
+        // --- Settings Modal ---
+        function toggleSettingsModal(show) {
+            if (!settingsModalElement) return;
+            if (show) {
+                // Ensure radio reflects current theme BEFORE showing
+                const currentTheme = localStorage.getItem(LS_THEME_KEY) || 'dark';
+                const themeRadios = settingsModalElement.querySelectorAll('input[name="theme"]');
+                themeRadios.forEach(radio => {
+                    radio.checked = radio.value === currentTheme;
+                });
+                settingsModalElement.classList.remove('hidden');
+                // Delay adding visible class for transition effect
+                setTimeout(() => settingsModalElement.classList.add('visible'), 10);
+            } else {
+                settingsModalElement.classList.remove('visible');
+                // Wait for transition before hiding completely
+                setTimeout(() => settingsModalElement.classList.add('hidden'), 300);
+            }
+        }
+
+        function resetSavedData() {
+            if (confirm('Are you sure you want to reset all saved data? This includes your theme preference and will show the welcome screen again.')) {
+                localStorage.removeItem(LS_THEME_KEY);
+                localStorage.removeItem(LS_VISITED_KEY);
+                // Optionally remove other saved data if added later
+                alert('Saved data has been reset. The page will now reload with defaults.');
+                location.reload(); // Reload to apply defaults and show welcome
+            }
+        }
+
+         // --- Welcome Screen Logic ---
+         function handleWelcome() {
+             if (!welcomeViewElement || !mainContainerElement) return;
+             const hasVisited = localStorage.getItem(LS_VISITED_KEY);
+
+             if (hasVisited) {
+                 // Hide welcome, show main app immediately
+                 welcomeViewElement.classList.add('hidden');
+                 mainContainerElement.classList.remove('initially-hidden');
+                 // Start fade-in transition after a short delay
+                 setTimeout(() => { mainContainerElement.style.opacity = 1; }, 50);
+             } else {
+                 // Welcome is visible by default, hide main container
+                 welcomeViewElement.classList.remove('hidden'); // Ensure it's visible
+                 mainContainerElement.classList.add('initially-hidden');
+                 mainContainerElement.style.opacity = 0; // Set initial state for transition later
+
+                 const getStartedBtn = welcomeViewElement.querySelector('.get-started-btn');
+                 if (getStartedBtn) {
+                     getStartedBtn.addEventListener('click', () => {
+                         localStorage.setItem(LS_VISITED_KEY, 'true');
+                         welcomeViewElement.classList.add('hidden');
+                         mainContainerElement.classList.remove('initially-hidden');
+                         // Start fade-in transition
+                        setTimeout(() => { mainContainerElement.style.opacity = 1; }, 50);
+                     }, { once: true }); // Only fire once
+                 }
+             }
+         }
+
 
         // --- DOM Ready Listener ---
         document.addEventListener('DOMContentLoaded', () => {
+            // Get DOM elements
+            welcomeViewElement = document.getElementById('welcome-view');
+            mainContainerElement = document.querySelector('.container');
             contentElement = document.getElementById('content');
             quizViewElement = document.getElementById('quiz-view');
             quizTitleElement = document.getElementById('quiz-title');
@@ -655,14 +927,39 @@ document.addEventListener('DOMContentLoaded', generateAllContent);
             feedbackContainerElement = document.getElementById('feedback-container');
             quizButtonsContainerElement = document.getElementById('quiz-buttons-container');
             navSectionElement = document.querySelector('.nav-section');
+            settingsButtonElement = document.getElementById('settings-btn');
+            settingsModalElement = document.getElementById('settings-modal');
 
-            const themeToggleBtn = document.getElementById('theme-toggle');
-            if (themeToggleBtn) themeToggleBtn.addEventListener('click', toggleTheme);
-            applyTheme(localStorage.getItem('quizTheme') || 'light');
+            // --- Initial Setup ---
+            loadAndApplyTheme(); // Load theme first
+            handleWelcome();     // Handle welcome screen visibility
 
+            // --- Event Listeners ---
+            if (settingsButtonElement) {
+                 settingsButtonElement.addEventListener('click', () => toggleSettingsModal(true));
+            }
+            if (settingsModalElement) {
+                // Theme selection listeners
+                const themeRadios = settingsModalElement.querySelectorAll('input[name="theme"]');
+                themeRadios.forEach(radio => radio.addEventListener('change', handleThemeChange));
+
+                // Reset data listener
+                const resetBtn = document.getElementById('reset-data-button');
+                if(resetBtn) resetBtn.addEventListener('click', resetSavedData);
+
+                 // Close modal if clicking the overlay background
+                 settingsModalElement.addEventListener('click', (event) => {
+                     if (event.target === settingsModalElement) {
+                         toggleSettingsModal(false);
+                     }
+                 });
+            }
+
+
+            // Navigation Listeners
             document.querySelectorAll('.nav-btn[data-subject]').forEach(button => {
                 button.addEventListener('click', function() {
-                    if (!quizViewElement.classList.contains('hidden') && !confirm("Leave quiz? Progress lost.")) return;
+                    if (!quizViewElement.classList.contains('hidden') && !confirm("Leave quiz? Progress will be lost.")) return;
                     showTopicList();
                     document.querySelectorAll('.nav-btn[data-subject]').forEach(btn => btn.classList.remove('active'));
                     this.classList.add('active');
@@ -671,7 +968,7 @@ document.addEventListener('DOMContentLoaded', generateAllContent);
             });
             document.querySelectorAll('.semester-btn').forEach(button => {
                 button.addEventListener('click', function() {
-                    if (!quizViewElement.classList.contains('hidden') && !confirm("Leave quiz? Progress lost.")) return;
+                    if (!quizViewElement.classList.contains('hidden') && !confirm("Leave quiz? Progress will be lost.")) return;
                     showTopicList();
                     document.querySelectorAll('.semester-btn').forEach(btn => btn.classList.remove('active'));
                     this.classList.add('active');
@@ -679,16 +976,44 @@ document.addEventListener('DOMContentLoaded', generateAllContent);
                 });
             });
 
+             // Topic Click Listener (using Event Delegation)
+             if (contentElement) {
+                 contentElement.addEventListener('click', (event) => {
+                     const lessonBox = event.target.closest('.section-content');
+                     if (lessonBox) {
+                        // Check if a quiz is active - prompt if necessary
+                        if (!quizViewElement.classList.contains('hidden')) {
+                            if (!confirm("Leave current quiz? Progress will be lost.")) {
+                                return; // Don't start new quiz if user cancels
+                            }
+                            // If confirmed, showTopicList will handle resetting state etc.
+                           showTopicList();
+                           // We still want to proceed to load the NEW quiz after resetting
+                        }
+                         handleSectionClick(lessonBox.dataset.subject, lessonBox.dataset.unit, lessonBox.dataset.lesson);
+                     }
+                 });
+             }
+
+            // Resize Listener
             window.addEventListener('resize', debounce(updateAllArrowPositions, 250));
-            updateContent();
+
+            // Initial content display (if not on welcome screen)
+            if (localStorage.getItem(LS_VISITED_KEY)) {
+                 updateContent();
+            }
         });
 
         // --- View Management ---
         function showTopicList() {
-            if (contentElement && quizViewElement && navSectionElement) {
+            if (contentElement && quizViewElement && navSectionElement && mainContainerElement) {
+                mainContainerElement.classList.remove('hidden'); // Ensure main container is visible
                 contentElement.classList.remove('hidden');
                 quizViewElement.classList.add('hidden');
                 navSectionElement.classList.remove('hidden'); // SHOW Nav
+                updateContent(); // Ensure the correct topic list is shown
+
+                // Cleanup Quiz specific things
                 if (matchingArrowObserver) { matchingArrowObserver.disconnect(); matchingArrowObserver = null; }
                 if(matchingSvgElement) matchingSvgElement.innerHTML = '<defs><marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="var(--accent-color)"/></marker></defs>';
                 quizState = { // Reset state
@@ -696,10 +1021,12 @@ document.addEventListener('DOMContentLoaded', generateAllContent);
                     selectedAnswers: [], questions: [], originalQuestions: [], subject: '', unit: '', lesson: '',
                     matchingState: { selectedPromptElement: null, userPairs: {} }
                 };
+                 mainContainerElement.scrollIntoView({ behavior: 'smooth', block: 'start' }); // Scroll to top of container
             }
         }
         function showQuizView() {
-             if (contentElement && quizViewElement && navSectionElement) {
+             if (contentElement && quizViewElement && navSectionElement && mainContainerElement) {
+                 mainContainerElement.classList.remove('hidden'); // Ensure main container is visible
                  contentElement.classList.add('hidden');
                  quizViewElement.classList.remove('hidden');
                  navSectionElement.classList.add('hidden'); // HIDE Nav
@@ -708,37 +1035,34 @@ document.addEventListener('DOMContentLoaded', generateAllContent);
         }
 
         // --- Core Functions ---
-        function updateContent() { // Updates topic list view
-    const activeSubjectBtn = document.querySelector('.nav-btn[data-subject].active');
-    const activeSemesterBtn = document.querySelector('.semester-btn.active');
-    if (!activeSubjectBtn || !activeSemesterBtn || !contentElement) return;
+        function updateContent() { // Updates topic list view (Handles sanitized IDs, no listener re-attachment needed)
+            const activeSubjectBtn = document.querySelector('.nav-btn[data-subject].active');
+            const activeSemesterBtn = document.querySelector('.semester-btn.active');
+            if (!activeSubjectBtn || !activeSemesterBtn || !contentElement) return;
 
-    const activeSubject = activeSubjectBtn.dataset.subject;
-    const activeSemester = activeSemesterBtn.dataset.semester;
-    const sanitizedSubject = activeSubject.replace(/\s+/g, '-'); // <-- ADDED: Apply the SAME replacement
+            const activeSubject = activeSubjectBtn.dataset.subject;
+            const activeSemester = activeSemesterBtn.dataset.semester;
+            const sanitizedSubject = activeSubject.replace(/\s+/g, '-'); // Apply the SAME replacement
 
-    contentElement.querySelectorAll('.semester-content').forEach(c => c.classList.remove('active'));
+            contentElement.querySelectorAll('.semester-content').forEach(c => c.classList.remove('active'));
 
-    const contentId = `${sanitizedSubject}-${activeSemester}`; // <-- UPDATED: Use sanitizedSubject
-    const semesterContentElement = contentElement.querySelector(`#${contentId}`);
+            const contentId = `${sanitizedSubject}-${activeSemester}`; // Use sanitizedSubject
+            const semesterContentElement = contentElement.querySelector(`#${contentId}`);
 
-    if (semesterContentElement) {
-        semesterContentElement.classList.add('active');
-        // Re-attach listeners - This part looks okay, ensures clicks work after updates
-        semesterContentElement.querySelectorAll('.section-content').forEach(lessonBox => {
-            const newLessonBox = lessonBox.cloneNode(true);
-            lessonBox.parentNode.replaceChild(newLessonBox, lessonBox);
-            // Ensure the dataset attributes on the lesson box still use the ORIGINAL subject name if needed elsewhere
-            newLessonBox.addEventListener('click', () => handleSectionClick(newLessonBox.dataset.subject, newLessonBox.dataset.unit, newLessonBox.dataset.lesson));
-        });
-    } else {
-        console.warn(`Semester content ID "#${contentId}" not found.`); // Updated log message
-    }
-}
+            if (semesterContentElement) {
+                semesterContentElement.classList.add('active');
+                // No listener re-attachment needed due to event delegation
+            } else {
+                console.warn(`Semester content ID "#${contentId}" not found.`);
+            }
+        }
+
 
         function handleSectionClick(subject, unit, lesson) { // Starts quiz if questions found
              if (!subject || !unit || !lesson) { alert("Error identifying topic."); return; }
             try {
+                // Ensure we are showing the quiz view before fetching/starting
+                showQuizView();
                 const originalQuestions = getQuestions(subject, unit, lesson);
                 if (originalQuestions?.length) {
                     startQuiz(subject, unit, lesson, originalQuestions); // Pass original list
@@ -754,17 +1078,30 @@ document.addEventListener('DOMContentLoaded', generateAllContent);
                 subject: subject, unit: unit, lesson: lesson, matchingState: { selectedPromptElement: null, userPairs: {} }
             };
             if (quizTitleElement) quizTitleElement.textContent = `${lesson}`;
-            showQuizView(); displayQuestion();
+            // showQuizView(); // Already called in handleSectionClick
+            displayQuestion();
         }
 
         function displayQuestion() { // Renders current question
+             /* ... (rest of displayQuestion is largely the same) ... */
              if (!quizContainerElement || !feedbackContainerElement || !quizButtonsContainerElement) return;
              const currentQuestion = quizState.questions[quizState.currentQuestionIndex];
-             if (!currentQuestion) { displayResults(); return; }
+             if (!currentQuestion) { displayResults(); return; } // Should go to results if no more questions
 
-             quizContainerElement.innerHTML = ''; feedbackContainerElement.innerHTML = ''; feedbackContainerElement.classList.add('hidden'); quizButtonsContainerElement.innerHTML = '';
-             if (matchingSvgElement) matchingSvgElement.innerHTML = '<defs><marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="var(--accent-color)"/></marker></defs>';
-             if (matchingArrowObserver) { matchingArrowObserver.disconnect(); matchingArrowObserver = null; }
+             quizContainerElement.innerHTML = '';
+             feedbackContainerElement.innerHTML = '';
+             feedbackContainerElement.classList.add('hidden');
+             quizButtonsContainerElement.innerHTML = '';
+
+             // Cleanup previous matching SVGs/observers if any
+             if (matchingSvgElement && matchingSvgElement.parentNode) {
+                 matchingSvgElement.parentNode.removeChild(matchingSvgElement);
+                 matchingSvgElement = null;
+             }
+             if (matchingArrowObserver) {
+                 matchingArrowObserver.disconnect();
+                 matchingArrowObserver = null;
+             }
 
              const qWrap = document.createElement('div'); qWrap.className = 'question-display-wrapper';
              const pTxt = document.createElement('div'); pTxt.className = 'question-progress'; pTxt.textContent = `Question ${quizState.currentQuestionIndex + 1}/${quizState.totalQuestions}`; qWrap.appendChild(pTxt);
@@ -773,24 +1110,31 @@ document.addEventListener('DOMContentLoaded', generateAllContent);
 
              try {
                   switch (currentQuestion.type) {
-                      case "matching": renderMatching(currentQuestion, typeWrap); setupArrowObserver(); break;
+                      case "matching":
+                          renderMatching(currentQuestion, typeWrap);
+                          // Ensure observer setup happens *after* elements are in DOM
+                          requestAnimationFrame(setupArrowObserver); // Use rAF
+                          break;
                       case "ordering": renderOrdering(currentQuestion, typeWrap); break;
                       case "multiple_choice": default: renderMultipleChoice(currentQuestion, typeWrap); break;
                   }
-             } catch (e) { console.error("Render error:", e); typeWrap.innerHTML = `<p style="color:red;">Error display.</p>`; }
+             } catch (e) { console.error("Render error:", e); typeWrap.innerHTML = `<p style="color:red;">Error displaying question.</p>`; }
              qWrap.appendChild(typeWrap); quizContainerElement.appendChild(qWrap);
 
              // Buttons
              const subBtn = document.createElement('button'); subBtn.className = 'btn submit-btn'; subBtn.id = 'submit-btn'; subBtn.textContent = 'Submit'; subBtn.onclick = checkAnswer;
-             const nxtBtn = document.createElement('button'); nxtBtn.className = 'btn next-btn hidden'; nxtBtn.id = 'next-btn'; nxtBtn.textContent = quizState.currentQuestionIndex === quizState.totalQuestions - 1 ? 'Results' : 'Next'; nxtBtn.onclick = nextQuestion;
+             const nxtBtn = document.createElement('button'); nxtBtn.className = 'btn next-btn hidden'; nxtBtn.id = 'next-btn'; nxtBtn.textContent = quizState.currentQuestionIndex === quizState.totalQuestions - 1 ? 'View Results' : 'Next Question'; nxtBtn.onclick = nextQuestion;
              quizButtonsContainerElement.append(subBtn, nxtBtn);
 
              subBtn.disabled = true; // Start disabled, enable via specific renderers/handlers
-             if (currentQuestion.type !== 'multiple_choice' && currentQuestion.type !== 'ordering' && currentQuestion.type !== 'matching') { subBtn.disabled = false; }
+             // Enable immediately if not one of the types requiring user input to enable
+             if (currentQuestion.type !== 'multiple_choice' && currentQuestion.type !== 'ordering' && currentQuestion.type !== 'matching') {
+                 subBtn.disabled = false;
+             }
         }
 
         // --- Rendering Functions ---
-        function renderMultipleChoice(question, container) {
+        function renderMultipleChoice(question, container) { /* ... (same as before) ... */
             if (!question.options?.length) { container.textContent = 'Err: Options invalid.'; return; }
             const optionsDiv = document.createElement('div');
             optionsDiv.className = 'options-container';
@@ -818,18 +1162,27 @@ document.addEventListener('DOMContentLoaded', generateAllContent);
             });
             container.appendChild(optionsDiv);
         }
-        function renderMatching(question, container) {
+        function renderMatching(question, container) { /* ... (same as before, ensure matchingSvgElement is created) ... */
              if (!question.prompts?.length || !question.matches?.length || question.prompts.length !== question.matches.length) { container.textContent = 'Err: Match data invalid.'; return; }
-             quizState.matchingState.userPairs = {};
+             quizState.matchingState.userPairs = {}; // Reset pairs for this question
              const instr = document.createElement('p');
              instr.className = 'matching-instructions';
-             instr.textContent = 'Click left item, then right item. Click matched item to deselect.';
+             instr.textContent = 'Click a left item, then its corresponding right item. Click a matched item again to deselect the pair.';
              container.appendChild(instr);
+
              const outer = document.createElement('div');
-             outer.style.position = 'relative';
+             outer.style.position = 'relative'; // Needed for the absolute positioned SVG
+
+             // Create SVG element specifically for this question instance
+             matchingSvgElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+             matchingSvgElement.id = 'matching-arrow-svg';
+             matchingSvgElement.innerHTML = '<defs><marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="var(--accent-color)"/></marker></defs>';
+             outer.appendChild(matchingSvgElement); // Add SVG first (so it's behind)
+
              const matchCont = document.createElement('div');
              matchCont.className = 'matching-container';
-             matchCont.id = 'matching-cols';
+             matchCont.id = 'matching-cols'; // ID for observer
+
              const promCol = document.createElement('div');
              promCol.className = 'matching-column';
              promCol.id = 'prompts-column';
@@ -838,120 +1191,289 @@ document.addEventListener('DOMContentLoaded', generateAllContent);
              matCol.className = 'matching-column';
              matCol.id = 'matches-column';
              matCol.innerHTML = '<h4>Matches</h4>';
-             matchingSvgElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-             matchingSvgElement.id = 'matching-arrow-svg';
-             matchingSvgElement.innerHTML = '<defs><marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="var(--accent-color)"/></marker></defs>';
-             outer.appendChild(matchingSvgElement);
-             const shuffled = question.matches.map((t, i) => ({ text: t, originalIndex: i })).sort(() => 0.5 - Math.random());
-             question.prompts.forEach((t, i) => {
-                 const it = document.createElement('div'); it.className = 'matching-item prompt-item'; it.textContent = t; it.dataset.index = i; it.id=`prompt-${i}`; it.onclick = handleMatchingClick; promCol.appendChild(it);
+
+             // Shuffle the 'matches' side for randomness
+             const shuffledMatches = question.matches
+                 .map((text, originalIndex) => ({ text, originalIndex }))
+                 .sort(() => 0.5 - Math.random());
+
+             // Create prompt items
+             question.prompts.forEach((promptText, promptIndex) => {
+                 const item = document.createElement('div');
+                 item.className = 'matching-item prompt-item';
+                 item.textContent = promptText;
+                 item.dataset.index = promptIndex;
+                 item.id = `prompt-${promptIndex}`;
+                 item.onclick = handleMatchingClick;
+                 promCol.appendChild(item);
              });
-             shuffled.forEach(o => {
-                 const it = document.createElement('div'); it.className = 'matching-item match-item'; it.textContent = o.text; it.dataset.index = o.originalIndex; it.id=`match-${o.originalIndex}`; it.onclick = handleMatchingClick; matCol.appendChild(it);
+
+             // Create match items (using shuffled order)
+             shuffledMatches.forEach(matchObject => {
+                 const item = document.createElement('div');
+                 item.className = 'matching-item match-item';
+                 item.textContent = matchObject.text;
+                 item.dataset.index = matchObject.originalIndex; // Store the ORIGINAL index
+                 item.id = `match-${matchObject.originalIndex}`;
+                 item.onclick = handleMatchingClick;
+                 matCol.appendChild(item);
              });
+
              matchCont.append(promCol, matCol);
-             outer.appendChild(matchCont);
+             outer.appendChild(matchCont); // Add columns after SVG
              container.appendChild(outer);
         }
-        function renderOrdering(question, container) {
+        function renderOrdering(question, container) { /* ... (same as before) ... */
             if (!question.items?.length) { container.textContent = 'Err: Ordering data invalid.'; return; }
             const num = question.items.length;
             const instr = document.createElement('p');
             instr.className = 'ordering-instructions';
-            instr.textContent = `Select order number (1-${num}) for each.`;
+            instr.textContent = `Select the correct order number (1-${num}) for each item.`;
             container.appendChild(instr);
             const orderCont = document.createElement('div');
             orderCont.className = 'ordering-container';
             orderCont.id = 'ordering-list';
-            const checkDone = () => {
+
+            const checkAllSelected = () => {
                 const allSelects = orderCont.querySelectorAll('.ordering-select');
+                // Check if every select has a value (not the placeholder "-")
                 const allSelected = Array.from(allSelects).every(s => s.value !== "");
-                const btn = document.getElementById('submit-btn');
-                if(btn) btn.disabled = !allSelected;
+                const submitBtn = document.getElementById('submit-btn');
+                if(submitBtn) submitBtn.disabled = !allSelected;
             };
-            question.items.forEach((t, i) => {
-                const div = document.createElement('div'); div.className = 'ordering-item'; div.dataset.originalIndex = i;
-                const sel = document.createElement('select'); sel.className = 'ordering-select'; sel.dataset.itemIndex = i;
-                const defOpt = document.createElement('option'); defOpt.value = ""; defOpt.textContent = "-"; defOpt.selected = true; defOpt.disabled = true; sel.appendChild(defOpt);
-                for (let j = 1; j <= num; j++) { const opt = document.createElement('option'); opt.value = j; opt.textContent = j; sel.appendChild(opt); }
-                sel.addEventListener('change', checkDone);
-                const span = document.createElement('span'); span.className = 'ordering-text'; span.textContent = t;
-                div.append(sel, span); orderCont.appendChild(div);
+
+            // Shuffle items visually for the user
+            const shuffledItems = question.items
+                .map((text, originalIndex) => ({ text, originalIndex }))
+                .sort(() => 0.5 - Math.random());
+
+            shuffledItems.forEach(({ text, originalIndex }) => {
+                const div = document.createElement('div');
+                div.className = 'ordering-item';
+                div.dataset.originalIndex = originalIndex; // Store original index if needed later
+
+                const sel = document.createElement('select');
+                sel.className = 'ordering-select';
+                sel.dataset.itemIndex = originalIndex; // Link select to the original item index
+
+                const defOpt = document.createElement('option');
+                defOpt.value = ""; defOpt.textContent = "-"; defOpt.selected = true; defOpt.disabled = true;
+                sel.appendChild(defOpt);
+
+                for (let j = 1; j <= num; j++) {
+                    const opt = document.createElement('option');
+                    opt.value = j; opt.textContent = j;
+                    sel.appendChild(opt);
+                }
+                sel.addEventListener('change', checkAllSelected); // Check completeness on change
+
+                const span = document.createElement('span');
+                span.className = 'ordering-text';
+                span.textContent = text; // Display the text
+
+                div.append(sel, span);
+                orderCont.appendChild(div);
             });
             container.appendChild(orderCont);
         }
 
+
         // --- Interaction Handlers ---
-        function handleMatchingClick(event) { // Includes deselect logic
-             const clicked = event.target; if (!clicked.classList.contains('matching-item')) return;
-             const isP = clicked.classList.contains('prompt-item'), isM = clicked.classList.contains('matched');
-             let curSel = quizState.matchingState.selectedPromptElement; const idx = clicked.dataset.index;
-             if (isM) {
-                 let pIdx = -1, mIdx = -1;
-                 if (isP) { pIdx = idx; mIdx = quizState.matchingState.userPairs[pIdx]; }
-                 else { mIdx = idx; pIdx = Object.keys(quizState.matchingState.userPairs).find(k => quizState.matchingState.userPairs[k] == mIdx); }
-                 if (pIdx != -1 && mIdx !== undefined) {
-                     const pEl = document.getElementById(`prompt-${pIdx}`), mEl = document.getElementById(`match-${mIdx}`);
-                     if (pEl) { pEl.classList.remove('matched'); pEl.style.cursor = 'pointer'; }
-                     if (mEl) { mEl.classList.remove('matched'); mEl.style.cursor = 'pointer'; }
-                     delete quizState.matchingState.userPairs[pIdx]; removeArrow(pIdx);
-                     if (curSel) curSel.classList.remove('selected'); quizState.matchingState.selectedPromptElement = null;
+        function handleMatchingClick(event) { /* ... (same as before) ... */
+             const clickedItem = event.target.closest('.matching-item');
+             if (!clickedItem) return; // Click wasn't on an item
+
+             const isPrompt = clickedItem.classList.contains('prompt-item');
+             const isAlreadyMatched = clickedItem.classList.contains('matched');
+             const clickedIndex = clickedItem.dataset.index;
+             let selectedPrompt = quizState.matchingState.selectedPromptElement;
+
+             // --- Case 1: Clicking an already matched item (prompt or match) ---
+             if (isAlreadyMatched) {
+                 let promptIndexToClear = -1;
+                 let matchIndexToClear = -1;
+
+                 if (isPrompt) {
+                     // Clicked a matched prompt item
+                     promptIndexToClear = clickedIndex;
+                     matchIndexToClear = quizState.matchingState.userPairs[promptIndexToClear];
+                 } else {
+                     // Clicked a matched match item
+                     matchIndexToClear = clickedIndex;
+                     // Find the corresponding prompt index
+                     promptIndexToClear = Object.keys(quizState.matchingState.userPairs).find(pIdx => quizState.matchingState.userPairs[pIdx] == matchIndexToClear);
+                 }
+
+                 if (promptIndexToClear != -1 && matchIndexToClear !== undefined) {
+                     const promptElement = document.getElementById(`prompt-${promptIndexToClear}`);
+                     const matchElement = document.getElementById(`match-${matchIndexToClear}`);
+
+                     if (promptElement) {
+                         promptElement.classList.remove('matched', 'selected'); // Remove both states
+                         promptElement.style.cursor = 'pointer';
+                     }
+                     if (matchElement) {
+                         matchElement.classList.remove('matched');
+                         matchElement.style.cursor = 'pointer';
+                     }
+
+                     delete quizState.matchingState.userPairs[promptIndexToClear]; // Remove from user's pairs
+                     removeArrow(promptIndexToClear); // Remove the visual arrow
+
+                     // If the cleared prompt was the currently selected one, deselect it
+                     if (selectedPrompt && selectedPrompt.dataset.index == promptIndexToClear) {
+                         quizState.matchingState.selectedPromptElement = null;
+                     }
+
+                     // Disable submit button as the match is broken
                      const submitBtn = document.getElementById('submit-btn');
-                     if (submitBtn) submitBtn.disabled = true; // Always disable on deselect
-                     return;
+                     if (submitBtn) submitBtn.disabled = true;
+                 }
+                 return; // Done handling the deselect case
+             }
+
+             // --- Case 2: Clicking a prompt item (that isn't already matched) ---
+             if (isPrompt) {
+                 if (clickedItem === selectedPrompt) {
+                     // Clicking the currently selected prompt again: Deselect it
+                     clickedItem.classList.remove('selected');
+                     quizState.matchingState.selectedPromptElement = null;
+                 } else {
+                     // Clicking a new prompt: Deselect old, select new
+                     if (selectedPrompt) {
+                         selectedPrompt.classList.remove('selected');
+                     }
+                     clickedItem.classList.add('selected');
+                     quizState.matchingState.selectedPromptElement = clickedItem;
                  }
              }
-             if (isP) {
-                 if (clicked === curSel) { clicked.classList.remove('selected'); quizState.matchingState.selectedPromptElement = null; }
-                 else if (!isM) { if (curSel) curSel.classList.remove('selected'); clicked.classList.add('selected'); quizState.matchingState.selectedPromptElement = clicked; }
-             } else {
-                 if (curSel && !isM) {
-                     const pIdx = curSel.dataset.index, mIdx = idx; quizState.matchingState.userPairs[pIdx] = parseInt(mIdx, 10);
-                     curSel.classList.remove('selected'); curSel.classList.add('matched'); clicked.classList.add('matched');
-                     drawArrow(curSel, clicked, pIdx); quizState.matchingState.selectedPromptElement = null;
-                     const tot = document.querySelectorAll('.prompt-item').length, matchCt = document.querySelectorAll('.prompt-item.matched').length;
+             // --- Case 3: Clicking a match item (that isn't already matched) ---
+             else { // It's a match item
+                 if (selectedPrompt) {
+                     // A prompt is currently selected: Create the pair
+                     const promptIndex = selectedPrompt.dataset.index;
+                     const matchIndex = clickedIndex;
+
+                     // Store the user's pair (prompt index -> match index)
+                     quizState.matchingState.userPairs[promptIndex] = parseInt(matchIndex, 10);
+
+                     // Update visuals: mark both as matched, remove 'selected' from prompt
+                     selectedPrompt.classList.remove('selected');
+                     selectedPrompt.classList.add('matched');
+                     selectedPrompt.style.cursor = 'pointer'; // Allow clicking again to deselect
+
+                     clickedItem.classList.add('matched');
+                     clickedItem.style.cursor = 'pointer'; // Allow clicking again to deselect
+
+                     drawArrow(selectedPrompt, clickedItem, promptIndex); // Draw the connecting arrow
+
+                     // Clear the selected prompt state
+                     quizState.matchingState.selectedPromptElement = null;
+
+                     // Check if all prompts are now matched to enable submit
+                     const totalPrompts = document.querySelectorAll('.prompt-item').length;
+                     const matchedCount = Object.keys(quizState.matchingState.userPairs).length;
                      const submitBtn = document.getElementById('submit-btn');
-                     if (submitBtn && tot === matchCt && tot > 0) submitBtn.disabled = false;
+                     if (submitBtn && totalPrompts > 0 && totalPrompts === matchedCount) {
+                         submitBtn.disabled = false;
+                     }
                  }
+                 // Else: Clicking a match item with no prompt selected - do nothing
              }
          }
 
+
         // --- Arrow Drawing ---
-        function drawArrow(promptEl, matchEl, promptIndex) { // Corrected coordinates
+        function drawArrow(promptEl, matchEl, promptIndex) { /* ... (same as before) ... */
             if (!matchingSvgElement || !promptEl || !matchEl) return;
             const svgRect = matchingSvgElement.getBoundingClientRect();
+            // Adjust for scroll position if SVG isn't fixed
+            const scrollX = window.scrollX || window.pageXOffset;
+            const scrollY = window.scrollY || window.pageYOffset;
+
             const promptRect = promptEl.getBoundingClientRect();
             const matchRect = matchEl.getBoundingClientRect();
-            const startX = promptRect.right - svgRect.left; // Relative X
-            const startY = promptRect.top + promptRect.height/2 - svgRect.top; // Relative Y
-            const endX = matchRect.left - svgRect.left; // Relative X
-            const endY = matchRect.top + matchRect.height/2 - svgRect.top; // Relative Y
+
+            // Calculate coordinates relative to the SVG's top-left corner
+            const startX = promptRect.right - svgRect.left;
+            const startY = promptRect.top + promptRect.height/2 - svgRect.top;
+            const endX = matchRect.left - svgRect.left;
+            const endY = matchRect.top + matchRect.height/2 - svgRect.top;
+
             let line = matchingSvgElement.querySelector(`#arrow-${promptIndex}`);
-            if (!line) { line = document.createElementNS('http://www.w3.org/2000/svg', 'line'); line.id = `arrow-${promptIndex}`; matchingSvgElement.appendChild(line); }
-            line.setAttribute('x1', startX); line.setAttribute('y1', startY); line.setAttribute('x2', endX); line.setAttribute('y2', endY); line.style.opacity = '1';
+            if (!line) {
+                line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.id = `arrow-${promptIndex}`;
+                // Ensure line is added before setting attributes if it might affect rendering order
+                matchingSvgElement.appendChild(line);
+            }
+            line.setAttribute('x1', startX);
+            line.setAttribute('y1', startY);
+            line.setAttribute('x2', endX);
+            line.setAttribute('y2', endY);
+            // Ensure necessary styles are set (stroke, stroke-width, marker) via CSS or here
+             line.setAttribute('stroke', 'var(--accent-color)');
+             line.setAttribute('stroke-width', '2');
+             line.setAttribute('marker-end', 'url(#arrowhead)');
+            line.style.opacity = '1'; // Make visible
          }
-        function removeArrow(promptIndex) {
+        function removeArrow(promptIndex) { /* ... (same as before) ... */
             if (!matchingSvgElement) return; const line = matchingSvgElement.querySelector(`#arrow-${promptIndex}`);
             if (line) { line.style.opacity = '0'; setTimeout(() => line.remove(), 300); }
          }
-        function updateAllArrowPositions() {
+        function updateAllArrowPositions() { /* ... (same as before) ... */
              if (!matchingSvgElement || !quizState || quizState.questions[quizState.currentQuestionIndex]?.type !== 'matching') return;
              const pairs = quizState.matchingState.userPairs;
-             for (const pIdx in pairs) { if (pairs.hasOwnProperty(pIdx)) { const mIdx = pairs[pIdx]; const pEl = document.getElementById(`prompt-${pIdx}`), mEl = document.getElementById(`match-${mIdx}`); if (pEl && mEl) drawArrow(pEl, mEl, pIdx); } }
+             for (const pIdx in pairs) {
+                if (pairs.hasOwnProperty(pIdx)) {
+                    const mIdx = pairs[pIdx];
+                    const pEl = document.getElementById(`prompt-${pIdx}`);
+                    const mEl = document.getElementById(`match-${mIdx}`);
+                    if (pEl && mEl) { // Check if elements still exist
+                        drawArrow(pEl, mEl, pIdx);
+                    } else {
+                        // If an element is gone (e.g., during question change), remove arrow
+                        removeArrow(pIdx);
+                    }
+                }
+             }
          }
-        function setupArrowObserver() {
-            const target = document.getElementById('matching-cols'); if (!target) return;
+        function setupArrowObserver() { /* ... (same as before) ... */
+            // Ensure target exists before observing
+            const target = document.getElementById('matching-cols');
+            if (!target || !matchingSvgElement) { // Also check if SVG exists
+                console.warn("Cannot setup observer: Target or SVG missing.");
+                return;
+            }
+            // Disconnect previous observer if exists
+            if (matchingArrowObserver) {
+                matchingArrowObserver.disconnect();
+            }
+
             const config = { attributes: true, childList: true, subtree: true, characterData: true };
-            const callback = debounce(updateAllArrowPositions, 100);
+            // Use a debounced callback to avoid excessive updates during rapid changes
+            const callback = debounce(updateAllArrowPositions, 50); // Short debounce
             matchingArrowObserver = new MutationObserver(callback);
             matchingArrowObserver.observe(target, config);
-            setTimeout(updateAllArrowPositions, 50); // Initial draw attempt
+
+            // Also observe changes to the main container/quiz view dimensions or position if needed
+            // Example: observing the quiz container itself for layout shifts
+            const quizContainerTarget = document.getElementById('quiz-container');
+            if (quizContainerTarget) {
+                 matchingArrowObserver.observe(quizContainerTarget, { attributes: true, subtree: false });
+            }
+
+
+            // Initial draw attempt after a short delay to ensure layout is stable
+            setTimeout(updateAllArrowPositions, 100);
         }
 
+
         // --- Answer Checking ---
-        function checkAnswer() {
+        function checkAnswer() { /* ... (same as before, including disconnect) ... */
             if (!feedbackContainerElement || !quizButtonsContainerElement) return;
-            if (matchingArrowObserver) { matchingArrowObserver.disconnect(); matchingArrowObserver = null; }
+            if (matchingArrowObserver) { matchingArrowObserver.disconnect(); matchingArrowObserver = null; } // Disconnect observer on check
+
             const currentQuestion = quizState.questions[quizState.currentQuestionIndex];
             let result = { isCorrect: false, feedback: '', userResponse: null, scoreIncrement: 0 };
             try {
@@ -961,9 +1483,9 @@ document.addEventListener('DOMContentLoaded', generateAllContent);
                     case "multiple_choice": default: result = checkMultipleChoice(currentQuestion); break;
                 }
             } catch (error) { console.error("Check answer error:", error); result = { isCorrect: false, feedback: '<div class="incorrect-feedback">Error checking answer.</div>', userResponse: null, scoreIncrement: 0 }; }
-            quizState.selectedAnswers[quizState.currentQuestionIndex] = result.userResponse;
-            if (result.isCorrect) { // Score only full points
-                 quizState.correctAnswers++;
+            quizState.selectedAnswers[quizState.currentQuestionIndex] = result.userResponse; // Store what the user did
+            if (result.scoreIncrement > 0) { // Use scoreIncrement for flexibility
+                 quizState.correctAnswers += result.scoreIncrement; // Currently only 1 for fully correct
             }
             feedbackContainerElement.innerHTML = result.feedback;
             feedbackContainerElement.classList.remove('hidden');
@@ -972,112 +1494,224 @@ document.addEventListener('DOMContentLoaded', generateAllContent);
             if(submitBtn) submitBtn.classList.add('hidden');
             if(nextBtn) nextBtn.classList.remove('hidden');
         }
-        function checkMultipleChoice(question) {
-            const sel=document.querySelector('input[name="question-option"]:checked');
-            if(!sel) return {isCorrect:false, feedback:'<div class="incorrect-feedback">Select answer.</div>', userResponse:null, scoreIncrement:0};
-            const idx=parseInt(sel.value,10);
-            const cTxt=question.answer;
-            const sTxt=question.options?.[idx]; // Safe navigation
-            const isOk = sTxt === cTxt;
-            document.querySelectorAll('.option-label').forEach((l,i)=>{
-                const n=l.querySelector('input');
-                // Highlight correct always
-                if(question.options?.[i] === cTxt) l.classList.add('correct-option');
-                // Highlight incorrect user selection
-                if(n && parseInt(n.value,10) === idx && !isOk) l.classList.add('incorrect-option');
+        function checkMultipleChoice(question) { /* ... (same as before) ... */
+            const selectedRadio = document.querySelector('input[name="question-option"]:checked');
+            if(!selectedRadio) {
+                // Return a state indicating no answer was selected, maybe useful for review
+                return {isCorrect:false, feedback:'<div class="incorrect-feedback">Please select an answer.</div>', userResponse:null, scoreIncrement:0};
+            }
+            const selectedIndex = parseInt(selectedRadio.value, 10);
+            const correctAnswerText = question.answer;
+            const selectedAnswerText = question.options?.[selectedIndex]; // Safe navigation
+
+            const isCorrect = selectedAnswerText === correctAnswerText;
+
+            // Provide visual feedback on options
+            document.querySelectorAll('.option-label').forEach((label, index) => {
+                const input = label.querySelector('input');
+                // Always highlight the correct answer
+                if(question.options?.[index] === correctAnswerText) {
+                    label.classList.add('correct-option');
+                }
+                // If the user selected this option AND it was incorrect, mark it incorrect
+                if(input && input.checked && !isCorrect) {
+                    label.classList.add('incorrect-option');
+                }
             });
-            const fb = isOk ? '<div class="correct-feedback">Correct! ✓</div>' : `<div class="incorrect-feedback">Incorrect. <span>Correct: ${cTxt||'N/A'}</span></div>`;
-            return {isCorrect:isOk, feedback:fb, userResponse:idx, scoreIncrement: isOk ? 1:0};
+
+            const feedbackHTML = isCorrect
+                ? '<div class="correct-feedback">Correct! ✓</div>'
+                : `<div class="incorrect-feedback">Incorrect. <span>Correct answer: ${correctAnswerText || 'N/A'}</span></div>`;
+
+            return {isCorrect: isCorrect, feedback: feedbackHTML, userResponse: selectedIndex, scoreIncrement: isCorrect ? 1 : 0};
         }
-        function checkMatching(question) {
-             const userPairs=quizState.matchingState.userPairs;
-             const correct=question.answer||{};
-             const total=Object.keys(correct).length;
-             let ct=0;
-             if(total === 0) return {isCorrect:true, feedback:'<div class="correct-feedback">N/A</div>', userResponse:userPairs, scoreIncrement:0}; // Handle empty question
-             for(const pIdx in correct){
-                 if(userPairs.hasOwnProperty(pIdx) && userPairs[pIdx] === correct[pIdx]) ct++;
+        function checkMatching(question) { /* ... (same as before) ... */
+             const userPairs = quizState.matchingState.userPairs; // { promptIdx: matchIdx, ... }
+             const correctPairs = question.answer || {};       // { promptIdx: correctMatchIdx, ... }
+             const totalCorrectPairs = Object.keys(correctPairs).length;
+             let correctlyMatchedCount = 0;
+
+             if (totalCorrectPairs === 0) { // Handle edge case of empty matching question
+                 return {isCorrect: true, feedback: '<div class="correct-feedback">No matching required for this question.</div>', userResponse: userPairs, scoreIncrement: 0};
              }
-             const isFull = ct === total;
-             let fb = "";
-             if(isFull) fb=`<div class="correct-feedback">Correct! ✓ (${ct}/${total})</div>`;
-             else if (ct>0) fb=`<div class="partial-feedback">Partial. Matched ${ct}/${total}.</div>`;
-             else fb=`<div class="incorrect-feedback">Incorrect. Matched 0/${total}.</div>`;
-             return {isCorrect:isFull, feedback:fb, userResponse:userPairs, scoreIncrement: isFull ? 1:0}; // Score only if fully correct
+
+             // Iterate through the *correct* pairs to count user matches
+             for (const promptIndex in correctPairs) {
+                 if (userPairs.hasOwnProperty(promptIndex) && userPairs[promptIndex] === correctPairs[promptIndex]) {
+                     correctlyMatchedCount++;
+                 }
+             }
+
+             // Determine correctness (only fully correct counts)
+             const isFullyCorrect = correctlyMatchedCount === totalCorrectPairs && Object.keys(userPairs).length === totalCorrectPairs; // Also ensure user matched all items
+             const isPartiallyCorrect = correctlyMatchedCount > 0 && !isFullyCorrect;
+
+             // Generate feedback message
+             let feedbackHTML = "";
+             if (isFullyCorrect) {
+                 feedbackHTML = `<div class="correct-feedback">Correct! ✓ All pairs matched correctly.</div>`;
+             } else if (isPartiallyCorrect) {
+                 feedbackHTML = `<div class="partial-feedback">Partially Correct. You matched ${correctlyMatchedCount} out of ${totalCorrectPairs} pairs correctly.</div>`;
+             } else {
+                 feedbackHTML = `<div class="incorrect-feedback">Incorrect. You matched 0 out of ${totalCorrectPairs} pairs correctly.</div>`;
+             }
+
+             // Visual feedback (optional - could highlight correct/incorrect lines/items)
+             // Example: Iterate through userPairs and compare with correctPairs to style lines/items
+             for (const promptIndex in userPairs) {
+                 const userMatchIndex = userPairs[promptIndex];
+                 const correctMatchIndex = correctPairs[promptIndex];
+                 const line = matchingSvgElement?.querySelector(`#arrow-${promptIndex}`);
+                 const promptEl = document.getElementById(`prompt-${promptIndex}`);
+                 const userMatchEl = document.getElementById(`match-${userMatchIndex}`);
+
+                 if (userMatchIndex === correctMatchIndex) {
+                     // Style as correct (e.g., change line color, add class to items)
+                     if(line) line.style.stroke = 'var(--correct-border)';
+                     if(promptEl) promptEl.style.borderColor = 'var(--correct-border)';
+                     if(userMatchEl) userMatchEl.style.borderColor = 'var(--correct-border)';
+
+                 } else {
+                     // Style as incorrect
+                     if(line) line.style.stroke = 'var(--incorrect-border)';
+                     if(promptEl) promptEl.style.borderColor = 'var(--incorrect-border)';
+                     if(userMatchEl) userMatchEl.style.borderColor = 'var(--incorrect-border)';
+                     // Optionally, you could try drawing the correct line faintly
+                 }
+             }
+
+
+             return {
+                 isCorrect: isFullyCorrect, // Only true if 100% correct
+                 feedback: feedbackHTML,
+                 userResponse: userPairs, // Store the user's final pairs
+                 scoreIncrement: isFullyCorrect ? 1 : 0 // Score only for full correctness
+             };
         }
-        function checkOrdering(question) {
-            const items=question.items||[];
-            const correctOrder=question.answer||[];
-            const num=items.length;
-            if(num === 0 || !Array.isArray(correctOrder) || num !== correctOrder.length) {
-                console.error("Invalid ordering data:",question);
-                return {isCorrect:false, feedback:'<div class="incorrect-feedback">Err: Invalid setup.</div>', userResponse:null, scoreIncrement:0};
+        function checkOrdering(question) { /* ... (same as before) ... */
+            const originalItems = question.items || [];
+            const correctAnswerOrder = question.answer || []; // Array of item texts in correct order
+            const numItems = originalItems.length;
+
+            if(numItems === 0 || !Array.isArray(correctAnswerOrder) || numItems !== correctAnswerOrder.length) {
+                console.error("Invalid ordering data:", question);
+                return {isCorrect:false, feedback:'<div class="incorrect-feedback">Error: Invalid question setup.</div>', userResponse:null, scoreIncrement:0};
             }
-            const userMap={};
-            const selNums=new Set();
-            let allSel=!0, hasDup=!1;
-            const selects=document.querySelectorAll("#ordering-list .ordering-select");
-            if(selects.length !== num) {
-                console.error("Select count mismatch");
-                return {isCorrect:false, feedback:'<div class="incorrect-feedback">Err processing form.</div>', userResponse:null, scoreIncrement:0};
+
+            const userOrderMap = {}; // { originalIndex: userSelectedPosition (1-based) }
+            const selectedPositions = new Set();
+            let allSelected = true;
+            let hasDuplicates = false;
+
+            const selectElements = document.querySelectorAll("#ordering-list .ordering-select");
+
+            if(selectElements.length !== numItems) {
+                console.error("Ordering Error: Select element count mismatch.");
+                return {isCorrect:false, feedback:'<div class="incorrect-feedback">Error processing your selections.</div>', userResponse:null, scoreIncrement:0};
             }
-            selects.forEach(sel=>{
-                const idx=parseInt(sel.dataset.itemIndex,10);
-                const val=sel.value;
-                if("" === val) allSel=!1;
-                else {
-                    const n=parseInt(val,10);
-                    if(isNaN(n) || n<1 || n>num) return void(allSel=!1); // Invalid number selected
-                    userMap[idx]=n;
-                    if(selNums.has(n)) hasDup=!0;
-                    selNums.add(n);
+
+            // 1. Gather user input and validate completeness & uniqueness
+            selectElements.forEach(select => {
+                const itemIndex = parseInt(select.dataset.itemIndex, 10); // Original index of the item text
+                const selectedValue = select.value;
+
+                if (selectedValue === "") {
+                    allSelected = false;
+                } else {
+                    const position = parseInt(selectedValue, 10);
+                    if (isNaN(position) || position < 1 || position > numItems) {
+                        allSelected = false; // Invalid number selected
+                        return;
+                    }
+                    userOrderMap[itemIndex] = position;
+                    if (selectedPositions.has(position)) {
+                        hasDuplicates = true;
+                    }
+                    selectedPositions.add(position);
                 }
             });
 
-            // Validation checks
-            if(!allSel) return {isCorrect:false, feedback:'<div class="incorrect-feedback">Select order for all.</div>', userResponse:userMap, scoreIncrement:0}; // Store map even if incomplete for review
-            if(hasDup || selNums.size !== num) return {isCorrect:false, feedback:`<div class="incorrect-feedback">Use each number (1-${num}) once.</div>`, userResponse:userMap, scoreIncrement:0};
+            // 2. Provide feedback based on validation
+            if (!allSelected) {
+                return {isCorrect:false, feedback:'<div class="incorrect-feedback">Please select an order number for all items.</div>', userResponse: userOrderMap, scoreIncrement:0};
+            }
+            if (hasDuplicates || selectedPositions.size !== numItems) {
+                 const numberText = numItems > 1 ? `numbers 1-${numItems}` : 'number 1';
+                return {isCorrect:false, feedback:`<div class="incorrect-feedback">Please use each order ${numberText} exactly once.</div>`, userResponse: userOrderMap, scoreIncrement:0};
+            }
 
-            // Construct user's ordered list
-            const userItems=new Array(num).fill(null);
-            let ok=!0;
-            for(const idxStr in userMap){
-                if(userMap.hasOwnProperty(idxStr)){
-                    const idx=parseInt(idxStr,10);
-                    const txt=items[idx];
-                    const pos=userMap[idx]-1;
-                    if(void 0===txt || pos<0 || pos>=num || null!==userItems[pos]) { ok=!1; break; } // Error check
-                    userItems[pos]=txt;
+            // 3. Construct the user's ordered list of item texts
+            const userOrderedItems = new Array(numItems).fill(null);
+            let constructionOk = true;
+            for (const itemIndexStr in userOrderMap) {
+                if (userOrderMap.hasOwnProperty(itemIndexStr)) {
+                    const itemIndex = parseInt(itemIndexStr, 10);
+                    const itemText = originalItems[itemIndex]; // Get text using original index
+                    const userPosition = userOrderMap[itemIndex] - 1; // 0-based index for array
+
+                    if (itemText === undefined || userPosition < 0 || userPosition >= numItems || userOrderedItems[userPosition] !== null) {
+                        constructionOk = false; // Should not happen if validation passed, but safety check
+                        break;
+                    }
+                    userOrderedItems[userPosition] = itemText;
                 }
             }
-            if(!ok || userItems.some(i=>null===i)) {
-                console.error("Construction Fail:", userMap, userItems);
-                return {isCorrect:false, feedback:'<div class="incorrect-feedback">Err processing sequence.</div>', userResponse:userItems, scoreIncrement:0};
+
+            if (!constructionOk || userOrderedItems.some(item => item === null)) {
+                 console.error("Ordering Error: Failed to construct user sequence.", userOrderMap, userOrderedItems);
+                return {isCorrect:false, feedback:'<div class="incorrect-feedback">Error processing your sequence.</div>', userResponse: userOrderedItems, scoreIncrement:0};
             }
 
-            // Compare and provide feedback
-            const isOk = JSON.stringify(userItems) === JSON.stringify(correctOrder);
-            let fb = "";
-            isOk ? fb='<div class="correct-feedback">Correct! ✓</div>' : fb=`<div class="incorrect-feedback">Incorrect. <span>Correct: ${correctOrder.join(" → ")}</span></div>`;
+            // 4. Compare user's order with the correct order
+            const isCorrect = JSON.stringify(userOrderedItems) === JSON.stringify(correctAnswerOrder);
 
-            // Visual feedback on selects
-            selects.forEach(sel=>{
-                const idx=parseInt(sel.dataset.itemIndex,10);
-                const userN=userMap[idx];
-                const corrN=correctOrder.indexOf(items[idx])+1;
-                sel.style.borderColor = userN===corrN ? "var(--correct-border)" : "var(--incorrect-border)";
-                sel.style.borderWidth = "2px";
+            // 5. Generate feedback message
+            const feedbackHTML = isCorrect
+                ? '<div class="correct-feedback">Correct! ✓</div>'
+                : `<div class="incorrect-feedback">Incorrect. <span>Correct order: ${correctAnswerOrder.join(" → ")}</span></div>`;
+
+            // 6. Visual feedback on select dropdowns
+            selectElements.forEach(select => {
+                const itemIndex = parseInt(select.dataset.itemIndex, 10);
+                const itemText = originalItems[itemIndex];
+                const userSelectedPosition = userOrderMap[itemIndex]; // 1-based
+                const correctPosition = correctAnswerOrder.indexOf(itemText) + 1; // 1-based
+
+                if (userSelectedPosition === correctPosition) {
+                    select.style.borderColor = "var(--correct-border)";
+                    select.style.backgroundColor = "var(--correct-bg)"; // Subtle bg hint
+                } else {
+                    select.style.borderColor = "var(--incorrect-border)";
+                     select.style.backgroundColor = "var(--incorrect-bg)"; // Subtle bg hint
+                }
+                select.style.borderWidth = "2px";
             });
-            return {isCorrect:isOk, feedback:fb, userResponse:userItems, scoreIncrement: isOk ? 1:0};
+
+            return {
+                isCorrect: isCorrect,
+                feedback: feedbackHTML,
+                userResponse: userOrderedItems, // Store the ordered list of texts
+                scoreIncrement: isCorrect ? 1 : 0
+            };
         }
-        function disableInputs() {
+        function disableInputs() { /* ... (same as before) ... */
              document.querySelectorAll('input[name="question-option"], .ordering-select').forEach(i => i.disabled = true);
              document.querySelectorAll('.option-label').forEach(l => l.style.cursor = 'default');
-             document.querySelectorAll('.matching-item').forEach(i => { i.style.pointerEvents = 'none'; i.style.cursor = 'default'; });
+             document.querySelectorAll('.matching-item').forEach(i => {
+                 i.style.pointerEvents = 'none'; // Prevent further clicks
+                 i.style.cursor = 'default';
+                // Optionally remove hover effects if desired
+                // i.classList.add('disabled-match-item');
+             });
+             // Make arrows slightly less prominent? (Optional)
+             // if (matchingSvgElement) {
+             //     matchingSvgElement.style.opacity = 0.7;
+             // }
          }
 
+
         // --- Navigation and Results ---
-        function nextQuestion() {
+        function nextQuestion() { /* ... (same as before) ... */
             quizState.currentQuestionIndex++;
             if (quizState.currentQuestionIndex < quizState.totalQuestions) {
                 displayQuestion();
@@ -1086,85 +1720,435 @@ document.addEventListener('DOMContentLoaded', generateAllContent);
                 displayResults();
             }
         }
-        function displayResults() { // Includes Redo Button
+        function displayResults() { // Includes Redo Button & IMPROVED UI
              if (!quizContainerElement || !feedbackContainerElement || !quizButtonsContainerElement || !quizTitleElement) return;
-             quizContainerElement.innerHTML = ''; feedbackContainerElement.classList.add('hidden'); quizButtonsContainerElement.innerHTML = '';
-             quizTitleElement.textContent = 'Quiz Results';
 
-             const time = quizState.endTime && quizState.startTime ? (quizState.endTime - quizState.startTime)/1000 : 0; const mins = Math.floor(time/60), secs = Math.floor(time % 60); const timeStr = time > 0 ? `${mins}m ${secs}s` : 'N/A';
+             quizContainerElement.innerHTML = ''; // Clear previous content
+             feedbackContainerElement.classList.add('hidden');
+             quizButtonsContainerElement.innerHTML = '';
+             quizTitleElement.textContent = 'Quiz Results'; // Update title
+
+             const timeTaken = quizState.endTime && quizState.startTime ? (quizState.endTime - quizState.startTime) / 1000 : 0;
+             const minutes = Math.floor(timeTaken / 60);
+             const seconds = Math.floor(timeTaken % 60);
+             const timeString = timeTaken > 0 ? `${minutes}m ${seconds}s` : 'N/A';
+
              const score = quizState.totalQuestions > 0 ? (quizState.correctAnswers / quizState.totalQuestions) * 100 : 0;
-             let msg = ''; if (quizState.totalQuestions === 0) msg = 'No questions.'; else if (score >= 90) msg = 'Excellent! 🎉'; else if (score >= 70) msg = 'Good work! 👍'; else if (score >= 50) msg = 'Not bad! 💪'; else msg = 'Needs practice. 📚';
+             const scoreRounded = score.toFixed(0);
 
-             const resultsDiv = document.createElement('div'); resultsDiv.className = 'results-container';
-             resultsDiv.innerHTML = `<h2 class="results-header">${msg}</h2><div class="results-score"><div class="score-circle"><span class="score-number">${score.toFixed(0)}</span><span class="score-percent-sign">%</span></div></div><div class="results-details"><p><strong>Subject:</strong> ${quizState.subject||'N/A'}</p><p><strong>Unit:</strong> ${quizState.unit||'N/A'}</p><p><strong>Lesson:</strong> ${quizState.lesson||'N/A'}</p><p><strong>Correct:</strong> ${quizState.correctAnswers}/${quizState.totalQuestions}</p><p><strong>Time:</strong> ${timeStr}</p></div>`;
+             let resultMessage = '';
+             if (quizState.totalQuestions === 0) {
+                 resultMessage = 'No questions in this quiz.';
+             } else if (score >= 90) {
+                 resultMessage = 'Excellent! 🎉';
+             } else if (score >= 70) {
+                 resultMessage = 'Great Job! 👍';
+             } else if (score >= 50) {
+                 resultMessage = 'Good Effort! 💪';
+             } else {
+                 resultMessage = 'Keep Practicing! 📚';
+             }
+
+             const resultsDiv = document.createElement('div');
+             resultsDiv.className = 'results-container';
+
+             // Use innerHTML for structure, incorporating new styles and icons
+             resultsDiv.innerHTML = `
+                <h2 class="results-header">${resultMessage}</h2>
+                <div class="results-score">
+                    <div class="score-circle">
+                        <span class="score-number">${scoreRounded}</span>
+                        <span class="score-percent-sign">%</span>
+                    </div>
+                </div>
+                <div class="results-details">
+                    <p><span class="detail-icon">📚</span><strong>Subject:</strong> <span class="detail-value">${quizState.subject || 'N/A'}</span></p>
+                    <p><span class="detail-icon">🔖</span><strong>Unit:</strong> <span class="detail-value">${quizState.unit || 'N/A'}</span></p>
+                    <p><span class="detail-icon">📖</span><strong>Lesson:</strong> <span class="detail-value">${quizState.lesson || 'N/A'}</span></p>
+                    <p><span class="detail-icon">✅</span><strong>Correct:</strong> <span class="detail-value">${quizState.correctAnswers} / ${quizState.totalQuestions}</span></p>
+                    <p><span class="detail-icon">⏱️</span><strong>Time:</strong> <span class="detail-value">${timeString}</span></p>
+                </div>
+             `;
              quizContainerElement.appendChild(resultsDiv);
 
-             // Results Buttons
-             const actionsDiv = document.createElement('div'); actionsDiv.className = 'results-actions quiz-buttons';
-             const redoBtn = document.createElement('button'); redoBtn.className = 'btn redo-btn'; redoBtn.textContent = 'Redo Quiz';
-             redoBtn.onclick = () => { startQuiz(quizState.subject, quizState.unit, quizState.lesson, quizState.originalQuestions); };
-             actionsDiv.appendChild(redoBtn); // Redo Button
+             // --- Results Buttons ---
+             const actionsDiv = document.createElement('div');
+             actionsDiv.className = 'results-actions quiz-buttons'; // Re-use class for button container styling
 
-             if (quizState.totalQuestions > 0) { const revBtn = document.createElement('button'); revBtn.id = 'review-btn'; revBtn.className = 'btn review-btn'; revBtn.textContent = 'Review Answers'; revBtn.onclick = reviewAnswers; actionsDiv.appendChild(revBtn); }
-             const backTopicsBtn = document.createElement('button'); backTopicsBtn.className = 'btn back-to-topics-btn'; backTopicsBtn.textContent = 'Back to Topics'; backTopicsBtn.onclick = showTopicList;
+             // Redo Quiz Button
+             const redoBtn = document.createElement('button');
+             redoBtn.className = 'btn redo-btn';
+             redoBtn.textContent = '🔄 Redo Quiz'; // Added icon
+             redoBtn.onclick = () => {
+                 // Restart the quiz with the same set of original questions
+                 startQuiz(quizState.subject, quizState.unit, quizState.lesson, quizState.originalQuestions);
+             };
+             actionsDiv.appendChild(redoBtn);
+
+             // Review Answers Button (only if there were questions)
+             if (quizState.totalQuestions > 0) {
+                 const reviewBtn = document.createElement('button');
+                 reviewBtn.id = 'review-btn';
+                 reviewBtn.className = 'btn review-btn';
+                 reviewBtn.textContent = '🧐 Review Answers'; // Added icon
+                 reviewBtn.onclick = reviewAnswers;
+                 actionsDiv.appendChild(reviewBtn);
+             }
+
+             // Back to Topics Button
+             const backTopicsBtn = document.createElement('button');
+             backTopicsBtn.className = 'btn back-to-topics-btn'; // Specific class for potential right alignment
+             backTopicsBtn.textContent = '⬅️ Back to Topics'; // Added icon
+             backTopicsBtn.onclick = showTopicList;
              actionsDiv.appendChild(backTopicsBtn);
+
              quizButtonsContainerElement.appendChild(actionsDiv);
          }
 
         // --- Answer Review ---
-        function reviewAnswers() { // Renders review into quiz container
+        function reviewAnswers() { /* ... (same as before) ... */
              if (!quizContainerElement || !feedbackContainerElement || !quizButtonsContainerElement || !quizTitleElement) return;
              quizContainerElement.innerHTML = ''; feedbackContainerElement.classList.add('hidden'); quizButtonsContainerElement.innerHTML = '';
              quizTitleElement.textContent = `Review: ${quizState.lesson}`;
 
              const reviewDiv = document.createElement('div'); reviewDiv.className = 'review-container';
              quizState.questions.forEach((q, i) => { // Use the shuffled question order from the quiz attempt
-                 const box = document.createElement('div'); const userAns = quizState.selectedAnswers[i]; let { correctnessClass, statusText } = calculateReviewStatus(q, userAns); box.className = `question-review ${correctnessClass}`;
-                 box.innerHTML = `<div class="review-question-header"><span class="review-question-number">Q ${i + 1} (${q.type.replace('_',' ')})</span><span class="review-status">${statusText}</span></div><p class="review-question-text">${q.question||'?'}</p><div id="review-answer-content-${i}"></div>`; reviewDiv.appendChild(box);
-                 const contentArea = box.querySelector(`#review-answer-content-${i}`); if (contentArea) { try { switch(q.type){ case "matching": reviewMatchingReview(q, userAns, contentArea); break; case "ordering": reviewOrderingReview(q, userAns, contentArea); break; case "multiple_choice": default: reviewMultipleChoiceReview(q, userAns, contentArea); break; } } catch(e){ console.error("Review render err:", e); contentArea.innerHTML = `<p style="color:red;">Err display.</p>`; } }
+                 const box = document.createElement('div');
+                 const userAns = quizState.selectedAnswers[i]; // Get the user's response for this question index
+                 let { correctnessClass, statusText } = calculateReviewStatus(q, userAns);
+                 box.className = `question-review ${correctnessClass}`; // Add correct/incorrect/partial class
+
+                 // Header with status
+                 const qTypeDisplay = (q.type || 'multiple_choice').replace('_',' ');
+                 box.innerHTML = `<div class="review-question-header">
+                                     <span class="review-question-number">Question ${i + 1} (${qTypeDisplay})</span>
+                                     <span class="review-status">${statusText}</span>
+                                  </div>
+                                  <p class="review-question-text">${q.question||'?'}</p>
+                                  <div class="review-answer-content" id="review-answer-content-${i}"></div>`; // Container for specific answer review
+                 reviewDiv.appendChild(box);
+
+                 // Render the specific answer details
+                 const contentArea = box.querySelector(`#review-answer-content-${i}`);
+                 if (contentArea) {
+                     try {
+                         switch(q.type){
+                             case "matching": reviewMatchingReview(q, userAns, contentArea); break;
+                             case "ordering": reviewOrderingReview(q, userAns, contentArea); break;
+                             case "multiple_choice": default: reviewMultipleChoiceReview(q, userAns, contentArea); break;
+                         }
+                     } catch(e){
+                         console.error("Review render error:", e);
+                         contentArea.innerHTML = `<p style="color:red;">Error displaying review details.</p>`;
+                     }
+                 } else {
+                      console.warn(`Could not find content area for review index ${i}`);
+                 }
              });
              quizContainerElement.appendChild(reviewDiv);
 
              // Review Buttons
-             const actionsDiv = document.createElement('div'); actionsDiv.className = 'review-actions quiz-buttons';
-             const backResultsBtn = document.createElement('button'); backResultsBtn.className = 'btn back-btn'; backResultsBtn.textContent = '← Back to Results'; backResultsBtn.onclick = displayResults; actionsDiv.appendChild(backResultsBtn);
-             const backTopicsBtn = document.createElement('button'); backTopicsBtn.className = 'btn back-to-topics-btn'; backTopicsBtn.textContent = 'Back to Topics'; backTopicsBtn.onclick = showTopicList; actionsDiv.appendChild(backTopicsBtn);
+             const actionsDiv = document.createElement('div');
+             actionsDiv.className = 'review-actions quiz-buttons'; // Use shared button container class
+
+             // Back to Results Button
+             const backResultsBtn = document.createElement('button');
+             backResultsBtn.className = 'btn back-btn';
+             backResultsBtn.textContent = '← Back to Results';
+             backResultsBtn.onclick = displayResults;
+             actionsDiv.appendChild(backResultsBtn);
+
+             // Back to Topics Button (Right aligned potentially)
+             const backTopicsBtn = document.createElement('button');
+             backTopicsBtn.className = 'btn back-to-topics-btn';
+             backTopicsBtn.textContent = '⬅️ Back to Topics';
+             backTopicsBtn.onclick = showTopicList;
+             actionsDiv.appendChild(backTopicsBtn);
+
              quizButtonsContainerElement.appendChild(actionsDiv);
+             quizContainerElement.scrollIntoView({ behavior: 'smooth', block: 'start' }); // Scroll to top of review
          }
-        function calculateReviewStatus(question, userAnswer) {
-            let cl='incorrect',st='✗ Incorrect',ok=!1;try{switch(question.type){case"matching":const cp=question.answer||{},tot=Object.keys(cp).length;let ct=0;if(tot>0&&userAnswer&&"object"==typeof userAnswer)for(const pIdx in cp)userAnswer.hasOwnProperty(pIdx)&&userAnswer[pIdx]===cp[pIdx]&&ct++;ok=tot>0&&ct===tot,ok?(cl="correct",st="✓ Correct"):ct>0&&(cl="partial",st=`~ Partial (${ct}/${tot})`);break;case"ordering":userAnswer&&Array.isArray(userAnswer)&&question.answer&&Array.isArray(question.answer)&&(ok=JSON.stringify(userAnswer)===JSON.stringify(question.answer)),cl=ok?"correct":"incorrect",st=ok?"✓ Correct":"✗ Incorrect";break;case"multiple_choice":default:null!==userAnswer&&question.options&&question.answer&&(ok=question.options[userAnswer]===question.answer),cl=ok?"correct":"incorrect",st=ok?"✓ Correct":"✗ Incorrect"}}catch(e){console.error("CalcReviewStatus Error:",e)}return{correctnessClass:cl,statusText:st};
+        function calculateReviewStatus(question, userAnswer) { /* ... (same as before) ... */
+            let correctnessClass = 'incorrect';
+            let statusText = '✗ Incorrect';
+            let isCorrect = false;
+            let isPartial = false; // For matching
+
+            try {
+                switch (question.type) {
+                    case "matching":
+                        const correctPairs = question.answer || {};
+                        const totalCorrectPairs = Object.keys(correctPairs).length;
+                        let correctlyMatchedCount = 0;
+
+                        if (totalCorrectPairs > 0 && userAnswer && typeof userAnswer === 'object') {
+                            for (const pIdx in correctPairs) {
+                                if (userAnswer.hasOwnProperty(pIdx) && userAnswer[pIdx] === correctPairs[pIdx]) {
+                                    correctlyMatchedCount++;
+                                }
+                            }
+                        }
+                         // Consider it fully correct only if all pairs are matched correctly
+                        isCorrect = totalCorrectPairs > 0 && correctlyMatchedCount === totalCorrectPairs && Object.keys(userAnswer || {}).length === totalCorrectPairs;
+                        isPartial = totalCorrectPairs > 0 && correctlyMatchedCount > 0 && !isCorrect;
+
+                        if (isCorrect) {
+                            correctnessClass = "correct";
+                            statusText = "✓ Correct";
+                        } else if (isPartial) {
+                            correctnessClass = "partial";
+                            statusText = `~ Partial (${correctlyMatchedCount}/${totalCorrectPairs})`;
+                        }
+                        // Default 'incorrect' handles the 0 correct case.
+                        break;
+
+                    case "ordering":
+                        // userAnswer should be the array of item texts in the user's chosen order
+                        if (userAnswer && Array.isArray(userAnswer) && question.answer && Array.isArray(question.answer)) {
+                            isCorrect = JSON.stringify(userAnswer) === JSON.stringify(question.answer);
+                        }
+                         if (userAnswer === null || !Array.isArray(userAnswer)) { // Handle case where user didn't complete ordering
+                              statusText = ' अधूरा'; // Incomplete
+                              correctnessClass = 'incorrect'; // Treat as incorrect for styling
+                         } else if (isCorrect) {
+                             correctnessClass = "correct";
+                             statusText = "✓ Correct";
+                         }
+                        break;
+
+                    case "multiple_choice":
+                    default:
+                        // userAnswer is the index of the selected option
+                        if (userAnswer !== null && question.options && question.answer) {
+                            isCorrect = question.options[userAnswer] === question.answer;
+                        }
+                         if (userAnswer === null) { // Handle case where user didn't select an answer
+                              statusText = 'अनुत्तरित'; // Unanswered
+                              correctnessClass = 'incorrect'; // Treat as incorrect for styling
+                         } else if (isCorrect) {
+                             correctnessClass = "correct";
+                             statusText = "✓ Correct";
+                         }
+                        break;
+                }
+            } catch (e) {
+                console.error("CalculateReviewStatus Error:", e);
+                // Fallback to incorrect status if error occurs
+                correctnessClass = 'incorrect';
+                statusText = 'Error evaluating';
+            }
+            return { correctnessClass, statusText };
          }
-        function reviewMultipleChoiceReview(question, userAnswerIndex, container) {
-            const div=document.createElement("div");div.className="review-mc-answer";const userTxt=null!==userAnswerIndex&&question.options?.[userAnswerIndex]!==void 0?question.options[userAnswerIndex]:"No answer",isOk=null!==userAnswerIndex&&userTxt===question.answer;div.innerHTML=`<p><strong>Your answer:</strong> <span class="user-answer-text ${isOk?"correct":null!==userAnswerIndex?"incorrect":""}">${userTxt}</span></p>${isOk?"":`<p><strong>Correct answer:</strong> <span class="correct-answer-text">${question.answer||"N/A"}</span></p>`}`,container.appendChild(div);
+        function reviewMultipleChoiceReview(question, userAnswerIndex, container) { /* ... (same as before) ... */
+            const div = document.createElement("div");
+            div.className = "review-mc-answer";
+
+            const userSelectedText = (userAnswerIndex !== null && question.options?.[userAnswerIndex] !== undefined)
+                                      ? question.options[userAnswerIndex]
+                                      : "No answer selected";
+            const isCorrect = (userAnswerIndex !== null && userSelectedText === question.answer);
+
+            let userAnswerHTML = `<span class="user-answer-text`;
+            if (userAnswerIndex === null) {
+                userAnswerHTML += `">`; // No extra class needed for 'no answer'
+            } else if (isCorrect) {
+                 userAnswerHTML += ` correct">`;
+            } else {
+                 userAnswerHTML += ` incorrect">`; // Incorrect class adds line-through via CSS
+            }
+             userAnswerHTML += `${userSelectedText}</span>`;
+
+
+            div.innerHTML = `<p><strong>Your answer:</strong> ${userAnswerHTML}</p>`;
+
+            if (!isCorrect) {
+                div.innerHTML += `<p><strong>Correct answer:</strong> <span class="correct-answer-text">${question.answer || "N/A"}</span></p>`;
+            }
+
+            container.appendChild(div);
          }
-        function reviewMatchingReview(question, userPairs, container) {
-             const div=document.createElement("div");div.className="review-matching-answer",div.innerHTML="<p><strong>Matching Review:</strong></p>";const grid=document.createElement("div");grid.className="review-matching-grid";const pCol=document.createElement("div");pCol.className="review-matching-column";const mCol=document.createElement("div");mCol.className="review-matching-column";const correct=question.answer||{};(question.prompts||[]).forEach((pTxt,pIdx)=>{const userMIdx=userPairs?userPairs[pIdx]:null,correctMIdx=correct[pIdx],isPairOk=null!==userMIdx&&userMIdx===correctMIdx,pDiv=document.createElement("div");pDiv.textContent=pTxt;const mDiv=document.createElement("div"),userMTxt=null!==userMIdx&&question.matches?.[userMIdx]?question.matches[userMIdx]:"(No match)",correctMTxt=void 0!==correctMIdx&&question.matches?.[correctMIdx]?question.matches[correctMIdx]:"(N/A)";isPairOk?(pDiv.className="review-matched-pair-correct",mDiv.textContent=correctMTxt,mDiv.className="review-matched-pair-correct"):(pDiv.className="review-matched-pair-incorrect",mDiv.innerHTML=`<span style="text-decoration: line-through; color: var(--incorrect-text);">${userMTxt}</span> <span style="color: var(--correct-text);">(${correctMTxt})</span>`,mDiv.className="review-matched-pair-incorrect"),pCol.appendChild(pDiv),mCol.appendChild(mDiv)}),grid.append(pCol,mCol),div.appendChild(grid),container.appendChild(div);
+        function reviewMatchingReview(question, userPairs, container) { /* ... (same as before) ... */
+             const div=document.createElement("div");div.className="review-matching-answer";
+             div.innerHTML="<p><strong>Matching Review:</strong> (Your Matches vs Correct)</p>";
+
+             const grid=document.createElement("div");grid.className="review-matching-grid";
+             const pCol=document.createElement("div"); pCol.className="review-matching-column"; // pCol.innerHTML = "<h5>Item</h5>";
+             const mCol=document.createElement("div"); mCol.className="review-matching-column"; // mCol.innerHTML = "<h5>Your Match (Correct Match)</h5>";
+
+             const correctPairs=question.answer||{};
+             const prompts = question.prompts || [];
+             const matches = question.matches || [];
+
+             // Iterate through prompts to ensure all are listed
+             prompts.forEach((promptText, promptIndex) => {
+                 const userMatchIndex = userPairs ? userPairs[promptIndex] : null; // User's selected match index for this prompt
+                 const correctMatchIndex = correctPairs[promptIndex]; // Correct match index for this prompt
+
+                 const isPairCorrect = (userMatchIndex !== null && userMatchIndex === correctMatchIndex);
+
+                 // Create display elements
+                 const pDiv = document.createElement("div"); pDiv.textContent = `${promptIndex + 1}. ${promptText}`;
+                 const mDiv = document.createElement("div");
+
+                 const userMatchText = (userMatchIndex !== null && matches[userMatchIndex] !== undefined)
+                                       ? matches[userMatchIndex]
+                                       : "(No match / Invalid)";
+                 const correctMatchText = (correctMatchIndex !== undefined && matches[correctMatchIndex] !== undefined)
+                                          ? matches[correctMatchIndex]
+                                          : "(N/A)";
+
+                 if (isPairCorrect) {
+                     // Correctly matched pair
+                     pDiv.className = "review-matched-pair-correct";
+                     mDiv.textContent = correctMatchText; // Just show the correct match
+                     mDiv.className = "review-matched-pair-correct";
+                 } else {
+                     // Incorrectly matched pair (or no match)
+                     pDiv.className = "review-matched-pair-incorrect";
+                     // Show user's incorrect match crossed out, followed by the correct one
+                     mDiv.innerHTML = `<span style="text-decoration: line-through; opacity: 0.7;">${userMatchText}</span> <span style="color: var(--correct-text); font-weight:500;">(${correctMatchText})</span>`;
+                     mDiv.className = "review-matched-pair-incorrect";
+                 }
+
+                 pCol.appendChild(pDiv);
+                 mCol.appendChild(mDiv);
+             });
+
+             grid.append(pCol, mCol);
+             div.appendChild(grid);
+             container.appendChild(div);
          }
-        function reviewOrderingReview(question, userOrderedItems, container) {
-             const div=document.createElement("div");div.className="review-ordering-answer";const correctOrd=question.answer||[],isOk=userOrderedItems&&JSON.stringify(userOrderedItems)===JSON.stringify(correctOrd);div.innerHTML="<p><strong>Ordering Review:</strong></p>";const list=document.createElement("div");list.className="review-ordering-list",correctOrd.forEach((corrTxt,corrIdx)=>{const item=document.createElement("div");item.className="review-ordering-list-item";const userIdx=userOrderedItems?userOrderedItems.indexOf(corrTxt):-1,userNum=-1!==userIdx?userIdx+1:null,correctNum=corrIdx+1;let numSpan="";numSpan=userNum===correctNum?`<span class="review-order-number review-order-correct">${userNum}.</span>`:null!==userNum?`<span class="review-order-number review-order-incorrect">${userNum}.</span> <span class="review-order-number review-order-correct">(${correctNum}.)</span>`:`<span class="review-order-number review-order-incorrect">(N/P)</span> <span class="review-order-number review-order-correct">(${correctNum}.)</span>`,item.innerHTML=`${numSpan} ${corrTxt}`,list.appendChild(item)}),div.appendChild(list),!isOk&&userOrderedItems&&(div.innerHTML+=`<p style="margin-top:10px;"><strong>Your Order:</strong> ${userOrderedItems.join(" → ")}</p>`),container.appendChild(div);
+        function reviewOrderingReview(question, userOrderedItems, container) { // Improved display
+             const div = document.createElement("div");
+             div.className = "review-ordering-answer";
+             const correctOrder = question.answer || [];
+             const isFullyCorrect = userOrderedItems && JSON.stringify(userOrderedItems) === JSON.stringify(correctOrder);
+
+             div.innerHTML = `<p><strong>Ordering Review:</strong></p>`;
+
+             const list = document.createElement("div");
+             list.className = "review-ordering-list";
+
+             // Display based on the CORRECT order
+             correctOrder.forEach((correctItemText, correctIndex) => {
+                 const itemDiv = document.createElement("div");
+                 itemDiv.className = "review-ordering-list-item";
+
+                 const userIndex = userOrderedItems ? userOrderedItems.indexOf(correctItemText) : -1;
+                 const userPosition = (userIndex !== -1) ? userIndex + 1 : null; // 1-based position chosen by user
+                 const correctPosition = correctIndex + 1; // 1-based correct position
+
+                 let numberSpanHTML = '';
+                 if (userPosition === correctPosition) {
+                     // Correct position chosen by user
+                     numberSpanHTML = `<span class="review-order-number review-order-correct">${correctPosition}.</span>`;
+                     itemDiv.style.backgroundColor = 'var(--correct-bg)'; // Background hint
+                 } else if (userPosition !== null) {
+                     // Incorrect position chosen by user
+                     numberSpanHTML = `<span class="review-order-number review-order-incorrect">${userPosition}.</span> <span class="review-order-number review-order-correct">(${correctPosition}.)</span>`;
+                     itemDiv.style.backgroundColor = 'var(--incorrect-bg)'; // Background hint
+                 } else {
+                     // User did not place this item (or didn't complete the ordering)
+                     numberSpanHTML = `<span class="review-order-number review-order-incorrect">(Not Placed)</span> <span class="review-order-number review-order-correct">(${correctPosition}.)</span>`;
+                     itemDiv.style.backgroundColor = 'var(--partial-bg)'; // Different hint
+                 }
+
+                 itemDiv.innerHTML = `${numberSpanHTML} ${correctItemText}`;
+                 list.appendChild(itemDiv);
+             });
+
+             div.appendChild(list);
+
+             // Optionally, show the user's full sequence if it was incorrect and provided
+            // if (!isFullyCorrect && userOrderedItems && userOrderedItems.length > 0) {
+            //     div.innerHTML += `<p style="margin-top:15px; font-size: 14px;"><strong>Your order:</strong> ${userOrderedItems.join(" → ")}</p>`;
+            // } else if (!userOrderedItems) {
+            //     div.innerHTML += `<p style="margin-top:15px; font-size: 14px; color: var(--incorrect-text);">Ordering was not completed.</p>`;
+            // }
+
+
+             container.appendChild(div);
          }
+
 
         // --- Error Display ---
         function showError(subject, unit, lesson, message = '') { // Renders error into quiz container
              if (!quizContainerElement || !feedbackContainerElement || !quizButtonsContainerElement || !quizTitleElement) return;
-             showQuizView(); quizTitleElement.textContent = 'Error';
-             quizContainerElement.innerHTML = ''; feedbackContainerElement.classList.add('hidden'); quizButtonsContainerElement.innerHTML = '';
-             const msg = message || `Sorry, no questions available for ${lesson} in ${unit}.`;
-             const errDiv = document.createElement('div'); errDiv.className = 'error-display'; errDiv.innerHTML = `<div class="error-message">${msg}</div>`;
-             const backBtn = document.createElement('button'); backBtn.className = 'btn back-to-topics-btn'; backBtn.textContent = 'Back to Topics'; backBtn.onclick = showTopicList; errDiv.appendChild(backBtn);
+             // Ensure quiz view is visible to show the error
+             showQuizView();
+
+             quizTitleElement.textContent = 'Error';
+             quizContainerElement.innerHTML = ''; // Clear any previous quiz content
+             feedbackContainerElement.classList.add('hidden');
+             quizButtonsContainerElement.innerHTML = ''; // Clear buttons
+
+             const defaultMsg = `Sorry, no questions are currently available for "${lesson}" in the "${unit}" unit.`;
+             const displayMsg = message || defaultMsg;
+
+             const errDiv = document.createElement('div');
+             errDiv.className = 'error-display'; // Use existing error styling
+             errDiv.innerHTML = `<div class="error-message">${displayMsg}</div>`;
+
+             // Add a button to go back
+             const backBtn = document.createElement('button');
+             backBtn.className = 'btn back-to-topics-btn';
+             backBtn.textContent = '⬅️ Back to Topics';
+             backBtn.onclick = showTopicList;
+             errDiv.appendChild(backBtn);
+
              quizContainerElement.appendChild(errDiv);
         }
 
         // --- Get Questions Data ---
-        function getQuestions(subject, unitTitle, lessonTitle) { // Adds default type if missing
-             const semBtn = document.querySelector('.semester-btn.active'); if (!semBtn) { console.error("No active semester."); return []; } const sem = semBtn.dataset.semester;
-             if (!subject || !unitTitle || !lessonTitle || !sem) { console.error("Missing params for getQuestions."); return []; }
+        function getQuestions(subject, unitTitle, lessonTitle) { // Adds default type if missing (Sanitize ID access)
+             const activeSemesterBtn = document.querySelector('.semester-btn.active');
+             if (!activeSemesterBtn) {
+                 console.error("No active semester selected.");
+                 return [];
+             }
+             const activeSemester = activeSemesterBtn.dataset.semester;
+
+             if (!subject || !unitTitle || !lessonTitle || !activeSemester) {
+                 console.error("Missing parameters for getQuestions:", { subject, unitTitle, lessonTitle, activeSemester });
+                 return [];
+             }
+
              try {
-                 const semData = topicsData[subject]?.[sem]; const units = semData?.units; if (!units) { console.warn(`Data missing: ${subject} -> ${sem}`); return []; }
-                 const unit = units.find(u => u?.title === unitTitle); const lessons = unit?.lessons; if (!lessons) { console.warn(`Unit "${unitTitle}" or lessons missing.`); return []; }
-                 const lesson = lessons.find(l => l?.title === lessonTitle); if (!lesson) { console.warn(`Lesson "${lessonTitle}" missing.`); return []; }
-                 if (lesson.questions?.length) { return lesson.questions.map(q => ({ ...(q.type ? {} : {type: 'multiple_choice'}), ...q })); } else { return []; } // Default to MC if type missing
-             } catch (e) { console.error("Error finding questions:", e); return []; }
+                 const semesterData = topicsData[subject]?.[activeSemester];
+                 const units = semesterData?.units;
+                 if (!units) {
+                     console.warn(`Data structure error: Units missing for ${subject} -> ${activeSemester}`);
+                     return [];
+                 }
+
+                 const unit = units.find(u => u?.title === unitTitle);
+                 const lessons = unit?.lessons;
+                 if (!lessons) {
+                     console.warn(`Unit "${unitTitle}" or its lessons missing in ${subject} -> ${activeSemester}.`);
+                     return [];
+                 }
+
+                 const lesson = lessons.find(l => l?.title === lessonTitle);
+                 if (!lesson) {
+                     console.warn(`Lesson "${lessonTitle}" missing in unit "${unitTitle}".`);
+                     return [];
+                 }
+
+                 // Ensure questions is an array and add default type if missing
+                 if (Array.isArray(lesson.questions) && lesson.questions.length > 0) {
+                     return lesson.questions.map(q => ({
+                         ...(q.type ? {} : { type: 'multiple_choice' }), // Default to multiple_choice if type is absent
+                         ...q
+                     }));
+                 } else {
+                     // Lesson exists but has no questions or invalid questions format
+                     console.log(`No questions found for lesson "${lessonTitle}" in unit "${unitTitle}".`);
+                     return [];
+                 }
+             } catch (e) {
+                 console.error("Error accessing question data:", e);
+                 return []; // Return empty array on error
+             }
          }
 
         // --- END OF questions.js ---
